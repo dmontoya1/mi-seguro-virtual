@@ -1,17 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from insurances.models import Insurer
 
 
 class Broker(models.Model):
     """Almacena los corredores de seguros.
     """
-    insurer = models.ManyToManyField(
-        Insurer,
-        help_text='Enlace a la aseguradora',
-        verbose_name='Aseguradora'
 
-    )
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
