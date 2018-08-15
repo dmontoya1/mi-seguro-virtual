@@ -3,12 +3,23 @@ from django.contrib.auth.models import User
 
 
 class Broker(models.Model):
-    """stores brokers for insures
+    """Almacena los corredores de seguros.
     """
 
-    user=models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    cellphone = models.CharField(max_length=13)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        help_text='Enlace al usuario',
+        verbose_name='Usuario'
+    )
+    name = models.CharField(
+        'Nombre',
+        max_length=50
+    )
+    cellphone_number = models.CharField(
+        'Número de celular',
+        max_length=13
+    )
 
     class Meta:
         verbose_name = 'Corredor'
@@ -19,17 +30,32 @@ class Broker(models.Model):
 
 
 class Customer(models.Model):
-    """strores customers of app
+    """almacena los clientes que desean adquirir seguros
     """
 
-    User=models.OneToOneField(User, on_delete=models.CASCADE)
-    cellphone = models.CharField(max_length=13)
-    document_type = models.CharField(max_length=20)
-    document_number = models.CharField(max_length=15)
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE,
+        help_text='Enlace al usuario',
+        verbose_name='Usuario'
+    )
+    cellphone_number = models.CharField(
+        'Número de celular',
+        max_length=13
+    )
+    document_type = models.CharField(
+        'Tipo de documento',
+        max_length=20,
+        help_text = 'Tipo de documento de identidad'
+    )
+    document_number = models.CharField(
+        'Numero de documento',
+        max_length=15
+    )
 
-    class Meta:
-        verbose_name = 'Cliente'
-        verbose_name_plural = 'Clientes'
+    def __str__(self):
+        return self.document_number
+
 
     def get_full_name(self):
         full_name = '%s %s' % (self.user.first_name, self.user.last_name)
@@ -37,7 +63,4 @@ class Customer(models.Model):
 
     
     def get_short_name(self):
-        return self.User.first_name
-
-    def __str__(self):
-        return self.document_number
+        return self.user.first_name
