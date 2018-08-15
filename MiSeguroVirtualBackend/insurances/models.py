@@ -1,8 +1,8 @@
 from django.db import models
 
 
-class CategoryInsurance(models.Model):
-    """almacena las categorias que tendran los seguros
+class InsuranceCategory(models.Model):
+    """Almacena las categorias que tendran los seguros
     """
 
     name = models.CharField(
@@ -11,15 +11,15 @@ class CategoryInsurance(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Categoria Seguro'
-        verbose_name_plural = 'Categoria Seguros'
+        verbose_name = 'Categoria de seguro'
+        verbose_name_plural = 'Categoria de seguros'
     
     def __str__(self):
         return self.name
 
 
 class Insurer(models.Model):
-    """almacena las aseguradoras
+    """Almacena las aseguradoras
     """
 
     name = models.CharField(
@@ -40,7 +40,7 @@ class Insurer(models.Model):
 
 
 class Insurance(models.Model):
-    """almacena los seguros para la venta
+    """Almacena los seguros para la venta
     """
     insurer = models.ForeignKey(
         Insurer,
@@ -51,7 +51,7 @@ class Insurance(models.Model):
 
     )
     category = models.OneToOneField(
-        CategoryInsurance,
+        InsuranceCategory,
         on_delete=models.CASCADE,
         help_text='Enlace a la categoria del seguro',
         verbose_name='Categoria seguro'
@@ -66,7 +66,7 @@ class Insurance(models.Model):
 
 
 class CustomerInsurance(models.Model):
-    """almacena las pólizas creadas
+    """Almacena las pólizas creadas
     """
 
     insurance = models.OneToOneField(
