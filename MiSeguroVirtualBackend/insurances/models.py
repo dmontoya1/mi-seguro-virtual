@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import Broker
 
 
 class InsuranceCategory(models.Model):
@@ -21,7 +22,11 @@ class InsuranceCategory(models.Model):
 class Insurer(models.Model):
     """Almacena las aseguradoras
     """
+    brokers = models.ManyToManyField(
+        Broker,
+        verbose_name='Corredores'
 
+    )
     name = models.CharField(
         'Nombre',
         max_length=50
