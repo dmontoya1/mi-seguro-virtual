@@ -6,7 +6,7 @@ class Broker(models.Model):
     """stores brokers for insures
     """
 
-    User=models.OneToOneField(User, on_delete=models.CASCADE)
+    user=models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     cellphone = models.CharField(max_length=13)
 
@@ -33,7 +33,7 @@ class Customer(models.Model):
 
     def get_full_name(self):
         full_name = '%s %s' % (self.user.first_name, self.user.last_name)
-        return full_name.strip()
+        return full_name
 
     
     def get_short_name(self):
