@@ -17,6 +17,6 @@ class InsuranceDocumentAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'name']
 
 
-@admin.register(CategoryInsurance)
+@admin.register(InsuranceCategory)
 class CategoryInsuranceAdmin(admin.ModelAdmin):
     list_display = ['name']
