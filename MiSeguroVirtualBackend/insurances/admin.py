@@ -9,7 +9,7 @@ class InsuranceAdmin(admin.ModelAdmin):
 
 @admin.register(Insurer)
 class InsurerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'cellphone_number', 'email', 'insurance']
+    list_display = ['name', 'cellphone_number', 'email']
 
 
 @admin.register(CustomerInsurance)
