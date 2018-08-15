@@ -12,7 +12,7 @@ class InsurerAdmin(admin.ModelAdmin):
     list_display = ['name', 'cellphone_number', 'email', 'insurance']
 
 
-@admin.register(InsuranceDocument)
+@admin.register(CustomerInsurance)
 class InsuranceDocumentAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'name']
 

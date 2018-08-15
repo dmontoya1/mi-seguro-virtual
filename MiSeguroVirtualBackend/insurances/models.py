@@ -18,10 +18,38 @@ class CategoryInsurance(models.Model):
         return self.name
 
 
+class Insurer(models.Model):
+    """almacena las aseguradoras
+    """
+
+    name = models.CharField(
+        'Nombre',
+        max_length=50
+    )
+    cellphone_number = models.CharField(
+        'Numero de celular',
+        max_length=13,
+        default=None
+    )
+    email = models.EmailField(
+        'Correo electronico'
+    )
+    
+    def __str__(self):
+        return self.name
+
+
 class Insurance(models.Model):
     """almacena los seguros para la venta
     """
+    insurer = models.ForeignKey(
+        Insurer,
+        on_delete=models.CASCADE,
+        help_text='Enlace a la aseguradora',
+        verbose_name='Aseguradora',
+        default=None
 
+    )
     category = models.OneToOneField(
         CategoryInsurance,
         on_delete=models.CASCADE,
@@ -37,33 +65,7 @@ class Insurance(models.Model):
         return self.name
 
 
-class Insurer(models.Model):
-    """almacena las aseguradoras
-    """
-
-    insurance = models.ForeignKey(
-        Insurance,
-        on_delete=models.CASCADE,
-        help_text='Enlace a los seguros',
-        verbose_name='Seguros'
-    )
-    name = models.CharField(
-        'Nombre',
-        max_length=50
-    )
-    cellphone_number = models.CharField(
-        'Numero de celular',
-        max_length=13
-    )
-    email = models.EmailField(
-        'Correo electronico'
-    )
-    
-    def __str__(self):
-        return self.name
-
-
-class InsuranceDocument(models.Model):
+class CustomerInsurance(models.Model):
     """almacena las pólizas creadas
     """
 
@@ -78,8 +80,8 @@ class InsuranceDocument(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Documento Seguro'
-        verbose_name_plural = 'Documento Seguros'
+        verbose_name = 'Seguro de usuario'
+        verbose_name_plural = 'Seguros de usuario'
 
     def __str__(self):
         return self.name
