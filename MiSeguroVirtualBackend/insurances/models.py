@@ -24,7 +24,6 @@ class Insurer(models.Model):
     """
     brokers = models.ManyToManyField(
         Broker,
-        help_text='Enlace a los corredores, ',
         verbose_name='Corredores'
 
     )
