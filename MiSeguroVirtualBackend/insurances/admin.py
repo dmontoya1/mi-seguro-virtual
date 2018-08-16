@@ -20,3 +20,13 @@ class InsuranceDocumentAdmin(admin.ModelAdmin):
 @admin.register(InsuranceCategory)
 class CategoryInsuranceAdmin(admin.ModelAdmin):
     list_display = ['name']
+
+
+@admin.register(AuthorizedPoint)
+class AuthorizedPointAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+
+@admin.register(HistoryRequestInsurance)
+class HistoryRequestInsuranceAdmin(admin.ModelAdmin):
+    pass
