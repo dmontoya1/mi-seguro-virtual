@@ -22,6 +22,7 @@ class InsuranceCategory(models.Model):
 class Insurer(models.Model):
     """Almacena las aseguradoras
     """
+    
     brokers = models.ManyToManyField(
         Broker,
         verbose_name='Corredores'

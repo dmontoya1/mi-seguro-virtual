@@ -6,6 +6,11 @@ class Broker(models.Model):
     """Almacena los corredores de seguros.
     """
 
+    insurances = models.ManyToManyField(
+        'insurances.Insurance',
+        verbose_name='Seguros'
+
+    )
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
