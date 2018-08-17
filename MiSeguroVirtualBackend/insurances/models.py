@@ -163,13 +163,6 @@ class HistoryRequestInsurance(models.Model):
         verbose_name='Punto Autorizado',
         default=None
     )    
-    insurer = models.OneToOneField(
-        Insurer,
-        on_delete=models.CASCADE,
-        help_text='Enlace a la aseguradora',
-        verbose_name='Aseguradora',
-        default=None
-    )
     state = models.CharField(
         'Estado',
         max_length=2,
@@ -179,9 +172,5 @@ class HistoryRequestInsurance(models.Model):
     request_date = models.DateField(
         'Fecha de solicitud',
         default=None
-    )
-    effective_date = models.DateField(
-        'Fecha de vigencia',
-        default=None
-    )    
+    )   
 
