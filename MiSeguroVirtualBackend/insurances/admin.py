@@ -14,7 +14,7 @@ class InsurerAdmin(admin.ModelAdmin):
 
 @admin.register(CustomerPolicy)
 class CustomerPolicyAdmin(admin.ModelAdmin):
-    list_display = ['effective_date']
+    list_display = ['insurer', 'insurance', 'effective_date']
 
 
 @admin.register(InsuranceCategory)
@@ -24,7 +24,7 @@ class CategoryInsuranceAdmin(admin.ModelAdmin):
 
 @admin.register(AuthorizedPoint)
 class AuthorizedPointAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'mail', 'cellphone_number', 'code']
 
 
 @admin.register(HistoryRequestInsurance)

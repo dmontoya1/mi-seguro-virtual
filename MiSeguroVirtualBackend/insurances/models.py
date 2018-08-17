@@ -4,7 +4,6 @@ from datetime import date, timedelta
 from users.models import Broker, Customer
 
 
-
 class InsuranceCategory(models.Model):
     """Almacena las categorias que tendran los seguros
     """
@@ -82,7 +81,7 @@ class Insurer(models.Model):
     def __str__(self):
         return self.name
 
-        
+
 class AuthorizedPoint(models.Model):
     """Almacena los puntos de venta autorizados para los seguros
     """
@@ -174,6 +173,10 @@ class HistoryRequestInsurance(models.Model):
 
 
 class CustomerPolicy(models.Model):
+    """Almacena las polizas que caragan los corredores
+    para cada uno de sus clientes
+    """
+
     image = models.ImageField(
         'Imagen',
         blank=True
@@ -211,6 +214,7 @@ class CustomerPolicy(models.Model):
         verbose_name = 'Póliza cliente'
         verbose_name_plural = 'Póliza clientes'
     
+
     def save(self, *args, **kwargs):
         self.effective_date = timezone.now() + timezone.timedelta(days=1)
         super(CustomerPolicy, self).save(*args, **kwargs)
