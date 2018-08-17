@@ -1,5 +1,8 @@
 from django.db import models
+from django.utils import timezone
+from datetime import date, timedelta
 from users.models import Broker, Customer
+
 
 
 class InsuranceCategory(models.Model):
@@ -15,8 +18,10 @@ class InsuranceCategory(models.Model):
         verbose_name = 'Categoria de seguro'
         verbose_name_plural = 'Categoria de seguros'
     
+
     def __str__(self):
         return self.name
+
 
 class Insurance(models.Model):
     """Almacena los seguros para la venta
@@ -32,7 +37,12 @@ class Insurance(models.Model):
         'Nombre',
         max_length=50
     )
-        
+
+    class Meta:
+        verbose_name = 'Seguro'
+        verbose_name_plural = 'Seguros'   
+
+
     def __str__(self):
         return self.name
 
@@ -64,32 +74,15 @@ class Insurer(models.Model):
         'Correo electronico'
     )
     
-    def __str__(self):
-        return self.name
-
-
-class CustomerInsurance(models.Model):
-    """Almacena las pólizas creadas
-    """
-
-    insurance = models.OneToOneField(
-        Insurance,
-        on_delete=models.CASCADE,
-        help_text='Enlace a el seguro'
-    )
-    name = models.CharField(
-        'Nombre',
-        max_length=50
-    )
-
     class Meta:
-        verbose_name = 'Seguro de usuario'
-        verbose_name_plural = 'Seguros de usuario'
+        verbose_name = 'Aseguradora'
+        verbose_name_plural = 'Aseguradoras'
+
 
     def __str__(self):
         return self.name
 
-
+        
 class AuthorizedPoint(models.Model):
     """Almacena los puntos de venta autorizados para los seguros
     """
@@ -117,6 +110,7 @@ class AuthorizedPoint(models.Model):
     class Meta:
         verbose_name = 'Punto autorizado'
         verbose_name_plural = 'Puntos autorizados'
+
 
     def __str__(self):
         return self.name
@@ -172,5 +166,51 @@ class HistoryRequestInsurance(models.Model):
     request_date = models.DateField(
         'Fecha de solicitud',
         default=None
-    )   
+    )
 
+    class Meta:
+        verbose_name = 'Historial solicitud'
+        verbose_name_plural = 'Historial solicitudes'
+
+
+class CustomerPolicy(models.Model):
+    image = models.ImageField(
+        'Imagen',
+        blank=True
+    )
+    insurer = models.ForeignKey(
+        Insurer,
+        on_delete=models.CASCADE,
+        help_text='Enlace a la aseguradora',
+        verbose_name='Aseguradora'
+    )
+    insurance = models.ForeignKey(
+        Insurance,
+        on_delete=models.CASCADE,
+        help_text='Enlace al seguro',
+        verbose_name='Seguro',
+        default=None
+    )
+    adviser_code = models.CharField(
+        'Codigo asesor',
+        max_length=15,
+        blank=True,
+        help_text='Agregar en caso de que aplique'
+    )
+    adviser_mail = models.EmailField(
+        'Correo asesor',
+        blank=True,
+        help_text='Agregar en caso de que aplique'
+    )
+    effective_date = models.DateField(
+        editable=False,
+        verbose_name="Fecha de vigencia"
+    )
+
+    class Meta:
+        verbose_name = 'Póliza cliente'
+        verbose_name_plural = 'Póliza clientes'
+    
+    def save(self, *args, **kwargs):
+        self.effective_date = timezone.now() + timezone.timedelta(days=1)
+        super(CustomerPolicy, self).save(*args, **kwargs)

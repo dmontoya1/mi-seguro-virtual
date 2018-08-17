@@ -12,9 +12,9 @@ class InsurerAdmin(admin.ModelAdmin):
     list_display = ['name', 'cellphone_number', 'email']
 
 
-@admin.register(CustomerInsurance)
-class InsuranceDocumentAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'name']
+@admin.register(CustomerPolicy)
+class CustomerPolicyAdmin(admin.ModelAdmin):
+    list_display = ['effective_date']
 
 
 @admin.register(InsuranceCategory)
