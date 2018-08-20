@@ -18,6 +18,44 @@ Moved to settings_.
 Basic Commands
 --------------
 
+Getting Up and Running Locally With Docker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* The steps below will get you up and running with a local development environment. All of these commands assume you are in the root of your generated project.
+
+
+Prerequisites
+^^^^^^^^^^^^^
+
+* Docker; if you don’t have it yet, follow the `installation instructions`_;
+* Docker Compose; refer to the official documentation for the `installation guide`_.
+
+.. _installation instructions: https://docs.docker.com/install/#supported-platforms
+.. _installation guide: https://docs.docker.com/compose/install/
+
+Build the Stack
+^^^^^^^^^^^^^^^
+
+* This can take a while, especially the first time you run this particular command on your development system:
+
+    $ docker-compose -f local.yml build
+
+* Generally, if you want to emulate production environment use production.yml instead. And this is true for any other actions you might need to perform: whenever a switch is required, just do it!
+
+Run the Stack
+^^^^^^^^^^^^^
+
+* This brings up both Django and PostgreSQL. The first time it is run it might take a while to get started, but subsequent runs will occur quickly.
+
+* Open a terminal at the project root and run the following for local development:
+
+    $ docker-compose -f local.yml up
+
+* More info `docker cookiecutter instructions`_
+
+.. _docker cookiecutter instructions: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
+
+
 Setting Up Your Users
 ^^^^^^^^^^^^^^^^^^^^^
 
