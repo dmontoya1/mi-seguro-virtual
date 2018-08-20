@@ -36,7 +36,7 @@ Prerequisites
 Build the Stack
 ^^^^^^^^^^^^^^^
 
-* This can take a while, especially the first time you run this particular command on your development system:
+* This can take a while, especially the first time you run this particular command on your development system::
 
     $ docker-compose -f local.yml build
 
@@ -47,9 +47,17 @@ Run the Stack
 
 * This brings up both Django and PostgreSQL. The first time it is run it might take a while to get started, but subsequent runs will occur quickly.
 
-* Open a terminal at the project root and run the following for local development:
+* Open a terminal at the project root and run the following for local development::
 
     $ docker-compose -f local.yml up
+
+* For connecting into a docker container, exec a command like this::
+
+    $ docker exec -it <<container_name || container_id>> sh
+
+* you can see containers info with this command::
+
+    $ docker ps
 
 * More info `docker cookiecutter instructions`_
 
