@@ -36,6 +36,7 @@ class Insurance(models.Model):
         'Nombre',
         max_length=50
     )
+    active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Seguro'
@@ -72,6 +73,7 @@ class Insurer(models.Model):
     email = models.EmailField(
         'Correo electronico'
     )
+    active= models.BooleanField(default=True)
     
     class Meta:
         verbose_name = 'Aseguradora'
