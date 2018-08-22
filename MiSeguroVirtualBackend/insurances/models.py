@@ -181,6 +181,7 @@ class CustomerPolicy(models.Model):
 
     image = models.ImageField(
         'Imagen',
+        upload_to = 'Polizas',
         blank=True
     )
     insurer = models.ForeignKey(

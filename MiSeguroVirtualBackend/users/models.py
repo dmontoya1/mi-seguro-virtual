@@ -25,6 +25,11 @@ class Broker(models.Model):
         'Número de celular',
         max_length=13
     )
+    logo = models.ImageField(
+        'Imagen',
+        upload_to = 'logotipos',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Corredor'
