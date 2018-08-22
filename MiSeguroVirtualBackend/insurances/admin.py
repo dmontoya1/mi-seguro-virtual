@@ -91,4 +91,4 @@ class AuthorizedPointAdmin(admin.ModelAdmin):
 
 @admin.register(HistoryRequestInsurance)
 class HistoryRequestInsuranceAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['insurance', 'customer', 'broker', 'authorized_point', 'state', 'request_date']
