@@ -1,0 +1,3 @@
+rootProject.name = 'mi_seguro_virtual_apps'
+
+include ':app'
