@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect
 
 
 from .models import (
-    AuthorizedPoint,
+    PointOfSale,
     CustomerPolicy,
-    HistoryRequestInsurance,
+    InsuranceRequest,
     Insurance,
     InsuranceCategory,
     Insurer
@@ -84,11 +84,11 @@ class CategoryInsuranceAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
-@admin.register(AuthorizedPoint)
-class AuthorizedPointAdmin(admin.ModelAdmin):
+@admin.register(PointOfSale)
+class PointOfSaleAdmin(admin.ModelAdmin):
     list_display = ['name', 'mail', 'cellphone_number', 'code']
 
 
-@admin.register(HistoryRequestInsurance)
-class HistoryRequestInsuranceAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'customer', 'broker', 'authorized_point', 'state', 'request_date']
+@admin.register(InsuranceRequest)
+class InsuranceRequestAdmin(admin.ModelAdmin):
+    list_display = ['insurance', 'customer', 'broker', 'point_of_sale', 'state', 'request_date']

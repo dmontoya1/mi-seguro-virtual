@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils import timezone
+
+from dateutil.relativedelta import relativedelta
 from datetime import date, timedelta
+
 from users.models import Broker, Customer
 
 
@@ -67,8 +70,7 @@ class Insurer(models.Model):
     )
     cellphone_number = models.CharField(
         'Numero de celular',
-        max_length=13,
-        default=None
+        max_length=13
     )
     email = models.EmailField(
         'Correo electronico'
@@ -84,7 +86,7 @@ class Insurer(models.Model):
         return self.name
 
 
-class AuthorizedPoint(models.Model):
+class PointOfSale(models.Model):
     """Almacena los puntos de venta autorizados para los seguros
     """
 
@@ -117,7 +119,7 @@ class AuthorizedPoint(models.Model):
         return self.name
 
 
-class HistoryRequestInsurance(models.Model):
+class InsuranceRequest(models.Model):
     """Almacena las solicitudes de seguros hechas por los clientes
     """
     PENDING = 'PE'
@@ -134,29 +136,25 @@ class HistoryRequestInsurance(models.Model):
         Insurance,
         on_delete=models.CASCADE,
         help_text='Enlace al seguro',
-        verbose_name='Seguro',
-        default=None
+        verbose_name='Seguro'
     )
     customer = models.OneToOneField(
         Customer,
         on_delete=models.CASCADE,
         help_text='Enlace al cliente',
-        verbose_name='Cliente',
-        default=None
+        verbose_name='Cliente'
     )
     broker = models.OneToOneField(
         Broker,
         on_delete=models.CASCADE,
         help_text='Enlace al corredor',
-        verbose_name='Corredor',
-        default=None
+        verbose_name='Corredor'
     )
-    authorized_point = models.OneToOneField(
-        AuthorizedPoint,
+    point_of_sale = models.OneToOneField(
+        PointOfSale,
         on_delete=models.CASCADE,
         help_text='Enlace al punto autorizado',
-        verbose_name='Punto Autorizado',
-        default=None
+        verbose_name='Punto Autorizado'
     )    
     state = models.CharField(
         'Estado',
@@ -165,8 +163,7 @@ class HistoryRequestInsurance(models.Model):
         default=PENDING,
     )
     request_date = models.DateField(
-        'Fecha de solicitud',
-        default=None
+        'Fecha de solicitud'
     )
 
     class Meta:
@@ -219,5 +216,5 @@ class CustomerPolicy(models.Model):
     
 
     def save(self, *args, **kwargs):
-        self.effective_date = timezone.now() + timezone.timedelta(days=1)
+        self.effective_date = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1)
         super(CustomerPolicy, self).save(*args, **kwargs)

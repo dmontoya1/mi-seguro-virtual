@@ -27,7 +27,7 @@ class Broker(models.Model):
     )
     logo = models.ImageField(
         'Imagen',
-        upload_to = 'logotipos',
+        upload_to='logotipos',
         blank=True
     )
 
