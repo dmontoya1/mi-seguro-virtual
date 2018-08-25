@@ -15,6 +15,8 @@ ALLOWED_HOSTS = []
 
 DJANGO_APPS = [
     'admin_view_permission',
+    'rest_framework',
+    'rest_framework_swagger',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
