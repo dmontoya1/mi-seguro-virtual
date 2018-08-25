@@ -25,6 +25,11 @@ class Broker(models.Model):
         'Número de celular',
         max_length=13
     )
+    logo = models.ImageField(
+        'Imagen',
+        upload_to='logotipos',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Corredor'
@@ -57,6 +62,10 @@ class Customer(models.Model):
         'Numero de documento',
         max_length=15
     )
+
+    class Meta:
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
 
     def __str__(self):
         return self.document_number
