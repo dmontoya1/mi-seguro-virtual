@@ -1,1 +1,2 @@
 from .insurances.insuranceSerializer import InsureranceSerializer
+from .customers.customerSerializer import CustomerSerializer

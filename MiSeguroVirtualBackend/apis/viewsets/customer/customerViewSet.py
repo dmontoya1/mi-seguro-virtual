@@ -2,14 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-from ...serializers import ClientSerializer
-from credits_webapp.users.models import Client
+from ...serializers import CustomerSerializer
+from users.models import Customer
 
-class ClientViewSet(APIView):
+class CustomerViewSet(APIView):
 
     def post(self, request, format=None):
 
-        serializer = ClientSerializer(data=request.data)
+        serializer = CustomerSerializer(data=request.data)
 
         try:
             if serializer.is_valid(raise_exception=True):
