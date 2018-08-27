@@ -10,7 +10,9 @@
     "@expo/vector-icons": "^6.3.1",
     "native-base": "^2.7.2",
     "react": "16.4.1",
-    "react-native": "0.56.0"
+    "react-native": "0.56.0",
+    "react-social-icons": "^3.0.0",
+    "react-social-share-buttons": "^1.0.2"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",
@@ -20,5 +22,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
   }
 }

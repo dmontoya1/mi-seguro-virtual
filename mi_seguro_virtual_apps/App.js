@@ -10,11 +10,12 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import Login from './src/Login';
+import SignUp from './src/Sign_up';
 
 export default class App extends Component {
   render() {
     return (
-      <Login />
+      <SignUp />
     );
   }
 }
