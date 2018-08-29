@@ -2,38 +2,32 @@ import React, { Component } from 'react';
 import { Container, Header, Content, Button, Icon, Text, View,  Form, Item, Input, Label  } from 'native-base';
 import {StyleSheet} from 'react-native';
 
-export default class ButtonIconExample extends Component {
+export default class Login extends Component {
   render() {
     return (
       <Container style={styles.container}>
         <Content>
-        <Text style={styles.title}>MI Seguro Virtual</Text>
-        <View style={styles.button}>
-            <Button iconLeft>
-                <Icon name='home'/>
-                <Text>Home</Text>
-            </Button>
-            <Button iconLeft>
-                <Icon name='home' />
-                <Text>Home</Text>
-            </Button>
+        <Text style={styles.title}>mi SEGURO Virtual</Text>
+        <View style={{paddingLeft:10,paddingRight:30, alignContent: 'center'}}>
+          <Form style={{paddingBottom:40}}>
+              <Item fixedLabel >
+                <Input placeholder="Correo electrónico" placeholderTextColor='rgba(255,255,255,.6)'style={styles.textInput} borderColor='rgba(255,255,255,.6)'/>
+              </Item>
+              <Item fixedLabel>
+                <Input placeholder="Contraseña" placeholderTextColor='rgba(255,255,255,.6)' style={styles.textInput} borderColor='rgba(255,255,255,.6)' secureTextEntry={true} />
+              </Item>
+          </Form>
         </View>
-        <Form>
-            <Item inlineLabel>
-              <Label style={styles.text}>Correo electronico</Label>
-              <Input />
-            </Item>
-            <Item inlineLabel last>
-              <Label style={styles.text}>Contraseña</Label>
-              <Input />
-            </Item>
-        </Form>
-        <Button full danger style={{paddingTop: 30}}>
-            <Text>INICIAR SESIÓN</Text>
-        </Button>
-        <Button full transparent dark style={styles.button2}>
-            <Text>REGISTRARSE</Text>
-        </Button>
+        <View style={{paddingLeft:22,paddingRight:25, paddingBottom:20}}>
+          <Button block danger style={styles.button}>
+              <Text>INICIAR SESIÓN</Text>
+          </Button>
+        </View>
+        <View style={{paddingLeft:22,paddingRight:25, paddingTop:10}}>
+          <Button block transparent style={styles.button2}>
+              <Text style={{color:'white'}}>REGISTRARSE</Text>
+          </Button>
+        </View>
         </Content>
       </Container>
     );
@@ -46,19 +40,21 @@ const styles = StyleSheet.create({
     },
     title: {
       color: 'white',
-      fontSize: 40,
+      fontSize: 39,
+      fontFamily: 'Pacifico-Regular',
       textAlign: 'center',
       paddingTop: 60,
       paddingBottom: 50,
     },
     button: {
-        flexDirection:'row',
-        paddingBottom: 30,
-        paddingLeft: 80,
+      borderRadius: 10,
     },
     button2: {
-        color : 'white',
-        paddingTop: 20,
-        borderColor: 'white',
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: '#fff'
     },
+    textInput: {
+      color: 'rgba(255,255,255,.6)',
+     },
   });
