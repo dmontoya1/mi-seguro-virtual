@@ -1,55 +1,30 @@
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Button, Icon, Card, CardItem, View, Text } from 'native-base';
-import { Image, StyleSheet } from 'react-native';
+import { Accordion, Content,Footer, FooterTab, Container, Header, Left, Body, Right, Button, Icon, Card, CardItem, View, Text } from 'native-base';
+import { Image, StyleSheet,TouchableOpacity } from 'react-native';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  listenOrientationChange as loc,
-  removeOrientationListener as rol
 } from 'react-native-responsive-screen';
 
+
+import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+
 export default class Dashboard extends Component {
+  _menu = null;
 
-  constructor() {
-        super();
-    
-        //this.state = false;
+  setMenuRef = ref => {
+    this._menu = ref;
+  };
 
-        setState = () =>{
-          this.state = !this.state;   
-        }
-  }
+  hideMenu = () => {
+    this._menu.hide();
+  };
 
-  componentDidMount() {
-    //this.setState();
-    loc(this);
-  }
-  
-  componentWillUnMount() {
-    //this.setState();
-    rol();
-  }
+  showMenu = () => {
+    this._menu.show();
+  };
   render() {
-      //let style = {};
-
-      /*if (this.state)s{
-         style = {
-              box : {
-                position: 'absolute',
-                top:5,
-                left:wp('10%')
-              }
-        };
-      }
-      else{
-           style = {
-              box : {
-                position: 'absolute',
-                top:5,
-                left:wp('50%')
-              }
-        };
-      }*/
     return (
       <Container>
         <Header style={styles.container}>
@@ -58,7 +33,7 @@ export default class Dashboard extends Component {
               <Icon name='arrow-back' />
             </Button>
           </Left>
-          <Body >
+          <Body style={{position: 'absolute', left: wp('30%')}}>
             <Image 
                 source={require('../assets/images/logo.png')}
                 resizeMode='contain' 
@@ -66,45 +41,68 @@ export default class Dashboard extends Component {
             />
           </Body>
           <Right>
-              <Button transparent style={{width:70, height:70}}>
-                <Image 
-                    source={require('../assets/icons/cuenta.png')} 
-                    resizeMode='contain' 
-                    style={{width:50, height:50}}
-                />     
-              </Button>    
+          <Menu
+            ref={this.setMenuRef}
+            button={<Button
+                        transparent 
+                        onPress={this.showMenu}
+                        style={{width:70, height:70}} 
+                    >
+                      <Image
+                        source={require('../assets/icons/cuenta.png')} 
+                        resizeMode='contain' 
+                        style={{width:50, height:50}} 
+                      /> 
+                    </Button>
+                  }
+          >
+            <MenuItem onPress={this.hideMenu}>Perfil</MenuItem>
+            <MenuItem onPress={this.hideMenu}>Cerrar sesión</MenuItem>
+          </Menu>   
           </Right>    
         </Header>
-        <View style={{paddingTop:10, paddingLeft:5}}>
-            <Card style={{width: wp('96%')}}>
-                <CardItem cardBody>
-                <Image source={require('../assets/images/imagen.png')} style={{height:  hp('35%'), width:  wp('95%'), flex: 1}}/>
-                </CardItem>
-                <CardItem>
-                    <Text style={{color:'rgba(0,0,0,0.4)'}}>
-                        ¿Aun no tienes tu SOAT asociado?{"\n"}
-                        <Text style={{fontWeight: "bold"}}>Solicitalo acá</Text>
-                    </Text>
-                      <Right>
-                          <Button transparent style={{width:20, height:15, justifyContent: "center"}}>
-                              <Image source={require('../assets/icons/desplegable.png')} style={{height: 50, width: 50, opacity:0.38 }}/>
-                          </Button>
-                      </Right>   
-                </CardItem>
-            </Card>
-        </View>
+        <Content>
+          <View style={{paddingTop:10, paddingLeft:5}}>
+              <Card style={{width: wp('96%')}}>
+                  <CardItem cardBody>
+                    <Image source={require('../assets/images/imagen.png')} style={{height:  hp('35%'), width:  wp('95%'), flex: 1}}/>
+                  </CardItem>
+                  <CardItem style={{ width:wp('90%'), position:'relative', left:10}}>
+                    <Button transparent>
+                      <Text style={{color:'rgba(0,0,0,0.4)'}}>
+                        ¿Aún no tienes tu SOAT asociado?{"\n"}
+                      <Text style={{fontWeight: "bold"}}>Solicitalo acá</Text>
+                      </Text>
+                    </Button>
+                  </CardItem>
+              </Card>
+          </View>
+        </Content>
+        <Footer style={styles.color_footer}>
+          <FooterTab style={styles.color_footer}>
+            <Button>
+            <Image source={require('../assets/icons/call.png')} style={{height:  30, width:  30, flex: 1, opacity:0.38}}/>
+            </Button>
+            <Button>
+            <Image source={require('../assets/icons/compra.png')} style={{height:  30, width:  30, flex: 1, opacity:0.38}}/>
+            </Button>
+            <Button>
+            <Image source={require('../assets/icons/historial.png')} style={{height:  30, width:  30, flex: 1, opacity:0.38}}/>
+            </Button>
+
+          </FooterTab>
+      </Footer>
       </Container>
     );
   }
 }
 
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#05071e',
   },
-  textWrapper: {
-    height: hp('70%'), // 70% of height device screen
-    width: null,  // 80% of width device screen
-    flex: 1
+  color_footer: {
+      backgroundColor: '#e9ebe2',
   },
 });

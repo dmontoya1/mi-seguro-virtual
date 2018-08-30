@@ -14,8 +14,10 @@ import SignUp from './src/Sign_up';
 import Profile from './src/Profile';
 import ProfileEdit from './src/Profile_edit';
 import Dashboard from './src/Dashboard';
+import Request from './src/Request_insurer';
 
 export default class App extends Component {
+  _
   render() {
     return (
       <Dashboard />

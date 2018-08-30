@@ -1,4 +1,5 @@
 {
   "name": "mi_seguro_virtual_apps",
-  "displayName": "mi_seguro_virtual_apps"
+  "displayName": "mi_seguro_virtual_apps",
+  "orientation": "portrait"
 }
