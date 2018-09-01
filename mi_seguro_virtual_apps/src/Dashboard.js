@@ -10,6 +10,8 @@ import {
 
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
+import { Actions } from 'react-native-router-flux';
+
 export default class Dashboard extends Component {
   _menu = null;
 
@@ -26,7 +28,7 @@ export default class Dashboard extends Component {
   };
   render() {
     return (
-      <Container>
+      <Container style={{paddingTop:20}}>
         <Header style={styles.container}>
           <Left>
             <Button transparent>
@@ -56,8 +58,8 @@ export default class Dashboard extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={this.hideMenu}>Perfil</MenuItem>
-            <MenuItem onPress={this.hideMenu}>Cerrar sesión</MenuItem>
+            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>
@@ -68,7 +70,7 @@ export default class Dashboard extends Component {
                     <Image source={require('../assets/images/imagen.png')} style={{height:  hp('35%'), width:  wp('95%'), flex: 1}}/>
                   </CardItem>
                   <CardItem style={{ width:wp('90%'), position:'relative', left:10}}>
-                    <Button transparent>
+                    <Button transparent onPress={() => Actions.request()}>
                       <Text style={{color:'rgba(0,0,0,0.4)'}}>
                         ¿Aún no tienes tu SOAT asociado?{"\n"}
                       <Text style={{fontWeight: "bold"}}>Solicitalo acá</Text>
@@ -101,6 +103,7 @@ export default class Dashboard extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#05071e',
+    paddingTop:5
   },
   color_footer: {
       backgroundColor: '#e9ebe2',

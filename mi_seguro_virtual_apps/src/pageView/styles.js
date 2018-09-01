@@ -27,21 +27,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#304d6d',
+    backgroundColor: '#37394b',
   },
 
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#304d6d',
+    backgroundColor: '#37394b',
   },
 
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#304d6d',
+    backgroundColor: '#37394b',
   },
 
   textContainer: {
@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 30,
+    paddingBottom:150,
   },
 
   text: {
@@ -102,13 +103,24 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 20,
+    paddingTop:60,
   },
 
 
   imageIntro: {
-    height: 200,
+    height: 80,
     marginTop: 10,
     marginBottom: 10,
+    opacity: 0.38
+  },
+
+  imageIntro2: {
+    height: 80,
+    width: 120,
+    marginTop: 10,
+    marginBottom: 10,
+    opacity: 0.38,
+    tintColor: 'white'
   },
 
   dotStyle: {

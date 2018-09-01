@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, Content, Button, Icon, Text, View,  Form, Item, Input, Label  } from 'native-base';
 import {StyleSheet} from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 export default class Login extends Component {
   render() {
     return (
@@ -19,12 +21,12 @@ export default class Login extends Component {
           </Form>
         </View>
         <View style={{paddingLeft:22,paddingRight:25, paddingBottom:20}}>
-          <Button block danger style={styles.button}>
+          <Button block danger style={styles.button} onPress={() => Actions.home()}>
               <Text>INICIAR SESIÓN</Text>
           </Button>
         </View>
         <View style={{paddingLeft:22,paddingRight:25, paddingTop:10}}>
-          <Button block transparent style={styles.button2}>
+          <Button block transparent style={styles.button2} onPress={() => Actions.signUp()}>
               <Text style={{color:'white'}}>REGISTRARSE</Text>
           </Button>
         </View>
@@ -37,6 +39,7 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
     container: {
       backgroundColor: '#192a56',
+      paddingTop:20
     },
     title: {
       color: 'white',

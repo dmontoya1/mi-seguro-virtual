@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, CheckBox, Header, Left, Body, Right, Button, Icon, Title,Form, Item, Input, Label, View } from 'native-base';
 import {StyleSheet,ScrollView,Text} from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 export default class SignUp extends Component {
     constructor() {
         super();
@@ -13,10 +15,10 @@ export default class SignUp extends Component {
     render() {
         const { checked } = this.state;
     return (
-        <Container>
+        <Container style={{paddingTop:20}}>
         <Header style={styles.header}>
           <Left>
-            <Button transparent>
+            <Button transparent onPress={() => Actions.pop()}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -69,7 +71,7 @@ export default class SignUp extends Component {
                 </View>
             </View>
             <View style={{paddingLeft:22,paddingRight:10, paddingBottom:15}}>
-                <Button block danger style={styles.button}>
+                <Button block danger style={styles.button} onPress={() => Actions.logIn()}>
                     <Text style={{color:'white'}}>REGISTRARSE</Text>
                 </Button>
             </View>

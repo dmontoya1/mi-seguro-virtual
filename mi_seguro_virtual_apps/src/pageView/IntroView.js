@@ -38,6 +38,12 @@ export default class IntroView extends Component {
                 </Title>
           </Header>
             <View style={styles.containerInfo2}>
+              <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/icons/pase.png')}
+                  style={ styles.imageIntro }
+                  resizeMode='contain' />
+              </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Bienvenido a nuestra plataforma, {'\n'}
@@ -58,6 +64,13 @@ export default class IntroView extends Component {
                 </Title>
           </Header>
             <View style={styles.containerInfo2}>
+            <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/icons/desplegar.png')}
+                  style={ styles.imageIntro }
+                  resizeMode='contain'
+                   />
+              </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Deslplegar las opciones del {'\n'}
@@ -77,6 +90,11 @@ export default class IntroView extends Component {
                 </Title>
             </Header>
             <View style={styles.containerInfo2}>
+            <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/icons/camara2.png')}
+                  style={ styles.imageIntro2 }/>
+              </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Tomar foto de tu tarjeta de propiedad, {'\n'}
@@ -98,6 +116,12 @@ export default class IntroView extends Component {
                 </Title>
             </Header>
             <View style={styles.containerInfo2}>
+            <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/icons/tiempo.png')}
+                  style={ styles.imageIntro }
+                  resizeMode='contain' />
+              </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Esperar unos minutos a que el {'\n'}
@@ -117,6 +141,12 @@ export default class IntroView extends Component {
                 </Title>
             </Header>
             <View style={styles.containerInfo}>
+            <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/icons/escudo.png')}
+                  style={ styles.imageIntro }
+                  resizeMode='contain' />
+              </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Despues de confirmar tu solicitud{'\n'}
@@ -126,7 +156,7 @@ export default class IntroView extends Component {
               </View> 
             </View>
             <View style={styles.buttonContainer}>
-              <Button light style={{bouderColor: 'white'}}>
+              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.signUp()}>
                 <Text>Finalizar</Text>
               </Button>
             </View>

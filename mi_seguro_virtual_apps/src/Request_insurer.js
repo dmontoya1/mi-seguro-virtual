@@ -7,6 +7,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import { Actions } from 'react-native-router-flux';
+
 
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
@@ -26,10 +28,10 @@ export default class Request extends Component {
   };
   render() {
     return (
-      <Container>
+      <Container style={{paddingTop:20}}>
         <Header style={styles.container}>
           <Left>
-            <Button transparent>
+            <Button transparent onPress={() => Actions.pop()}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -56,8 +58,8 @@ export default class Request extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={this.hideMenu}>Perfil</MenuItem>
-            <MenuItem onPress={this.hideMenu}>Cerrar sesión</MenuItem>
+            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>
