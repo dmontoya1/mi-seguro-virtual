@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path(r'lista-seguros/', InsuranceList.as_view(), name='insurance_list'),
-    path(r'registro/', CustomerViewSet.as_view(), name='registro'),
+    path(r'sign_up/', CustomerViewSet.as_view(), name='sing_up'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)
