@@ -73,7 +73,7 @@ export default class IntroView extends Component {
               </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
-                  Deslplegar las opciones del {'\n'}
+                  Desplegar las opciones del {'\n'}
                   seguro que desea solicitar.
                 </Text>
               </View> 
