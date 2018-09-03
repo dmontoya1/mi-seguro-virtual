@@ -5,6 +5,7 @@ from django.urls import path
 
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
+from rest_framework_jwt.views import obtain_jwt_token
 
 from apis.viewsets import (
     InsuranceList,
@@ -20,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'lista-seguros/', InsuranceList.as_view(), name='insurance_list'),
     path(r'sign_up/', CustomerViewSet.as_view(), name='sing_up'),
+    path(r'api-token-auth/', obtain_jwt_token),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)
