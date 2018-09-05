@@ -12,6 +12,7 @@
     "react": "16.4.1",
     "react-native": "0.56.0",
     "react-native-dropdown": "0.0.6",
+    "react-native-image-picker": "^0.26.7",
     "react-native-material-menu": "^0.4.0",
     "react-native-menu": "^0.23.0",
     "react-native-modal-dropdown": "^0.6.2",
@@ -21,7 +22,8 @@
     "react-native-swiper": "^1.5.13",
     "react-social-icons": "^3.0.0",
     "react-social-share-buttons": "^1.0.2",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "tcomb-form-native": "^0.6.16"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",

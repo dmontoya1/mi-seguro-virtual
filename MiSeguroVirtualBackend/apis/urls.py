@@ -13,5 +13,5 @@ urlpatterns = [
     path(r'^', include(router.urls)),
 
     path(r'^lista-seguros/$', InsuranceList.as_view(), name='insurance_list'),
-    path(r'^personas/$', CustomerViewSet.as_view(), name='registro'),
+    path(r'^sign_up/$', CustomerViewSet.as_view(), name='sing_up'),
 ]

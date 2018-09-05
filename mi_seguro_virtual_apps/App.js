@@ -27,11 +27,10 @@ export default class App extends Component {
     return (
       <Router>
       <Stack key="root">
-        <Scene key="insurance" component={Insurance} hideNavBar={true}/>
         <Scene key="splash" component={Splash} hideNavBar={true}/>
-        <Scene key="intro" component={IntroView} hideNavBar={true}/>
-        <Scene key="signUp" component={SignUp} hideNavBar={true}/>
         <Scene key="logIn" component={Login} hideNavBar={true}/>
+        <Scene key="signUp" component={SignUp} hideNavBar={true}/>
+        <Scene key="intro" component={IntroView} hideNavBar={true}/>
         <Scene key="home" component={Dashboard} hideNavBar={true}/>
         <Scene key="profile" component={Profile} hideNavBar={true}/>
         <Scene key="request" component={Request} hideNavBar={true}/>

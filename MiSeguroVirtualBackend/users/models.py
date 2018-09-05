@@ -47,7 +47,9 @@ class Customer(models.Model):
         User, 
         on_delete=models.CASCADE,
         help_text='Enlace al usuario',
-        verbose_name='Usuario'
+        verbose_name='Usuario',
+        null=True,
+        blank=True
     )
     cellphone_number = models.CharField(
         'Número de celular',

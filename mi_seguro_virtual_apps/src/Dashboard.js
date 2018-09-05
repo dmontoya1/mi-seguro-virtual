@@ -100,7 +100,7 @@ export default class Dashboard extends Component {
     render() {
         return (
 
-        <Container style={{paddingTop:20}}>
+        <Container>
             <View style={styles.container}>
                 <Animated.Modal
                     visible={this.state.visible}

@@ -16,7 +16,7 @@ export default class Splash extends Component {
     return (
       <Container style={styles.container}>
         <Content>
-        <Button transparent onPress={() => Actions.intro()} style={{width:350, height:350,position: 'relative', top:hp('15%')}} >
+        <Button transparent onPress={() => Actions.logIn()} style={{width:350, height:350,position: 'relative', top:hp('15%')}} >
           <Image 
               source={require('../assets/images/LogoO.png')}
               resizeMode='contain'

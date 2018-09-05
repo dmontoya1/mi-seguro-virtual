@@ -12,7 +12,45 @@ import { Actions } from 'react-native-router-flux';
 
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
+import ImagePicker from 'react-native-image-picker';
+
 export default class Request extends Component {
+
+  state = {
+    avatarSource: null
+  };
+
+  selectPhotoTapped = () => {
+    const options = {
+      quality: 1.0,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.warn('Response = ', response);
+
+      if (response.didCancel) {
+        console.warn('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.warn('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.warn('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+        this.setState({
+          avatarSource: source
+        });
+      }
+    });
+  }
+
+
+
   _menu = null;
 
   setMenuRef = ref => {
@@ -26,9 +64,10 @@ export default class Request extends Component {
   showMenu = () => {
     this._menu.show();
   };
+
   render() {
     return (
-      <Container style={{paddingTop:20}}>
+      <Container>
         <Header style={styles.container}>
           <Left>
             <Button transparent onPress={() => Actions.pop()}>
@@ -108,10 +147,13 @@ export default class Request extends Component {
                             </Text>
                         </View>
                         <View style={{position:'relative', top:-15, left:wp('11%')}}>
+                            <Button onPress={this.selectPhotoTapped}>
                             <Image 
                                 source={require('../assets/icons/camara.png')}
                                 style={{width:40, height:40}}
+
                             />
+                            </Button>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', paddingTop:20}}>
