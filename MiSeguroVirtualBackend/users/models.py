@@ -6,11 +6,11 @@ class Broker(models.Model):
     """Almacena los corredores de seguros.
     """
 
-    insurances = models.ManyToManyField(
+    """insurances = models.ManyToManyField(
         'insurances.Insurance',
         verbose_name='Seguros'
 
-    )
+    )"""
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -80,3 +80,19 @@ class Customer(models.Model):
     
     def get_short_name(self):
         return self.user.first_name
+
+class TermsAcceptanceLogs(models.Model):
+    """Almacena los terminos y condiciones de un usuario determinado
+    """
+    customer = models.OneToOneField(
+        Customer,
+        on_delete=models.CASCADE,
+        verbose_name='Cliente'
+    )
+    Acceptance_date = models.DateField(
+        'Fecha de solicitud'
+    )
+    ip_address = models.CharField(
+        'IP de aceptacion del cliente',
+        max_length=20
+    )

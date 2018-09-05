@@ -1,9 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from users.models import Customer
+from users.models import Customer, TermsAcceptanceLogs
 
+class TermsAcceptanceLogsSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer(many=False)
 
+    class Meta:
+        model = TermsAcceptanceLogs
+        fields = ('ip_address', 'Acceptance_date', 'customer')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -7,7 +7,8 @@ from users.forms import UserChangeForm, UserCreationForm
 
 from .models import (
     Broker,
-    Customer
+    Customer,
+    TermsAcceptanceLogs
 )
 
 User = get_user_model()
@@ -43,3 +44,8 @@ class BrokerAdmin(admin.ModelAdmin):
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['cellphone_number']
+
+
+@admin.register(TermsAcceptanceLogs)
+class TermsAcceptanceLogsAdmin(admin.ModelAdmin):
+    list_display = ['ip_address']

@@ -149,3 +149,16 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+subprojects { 
+     afterEvaluate { 
+         project -> if (project.hasProperty("android")) { 
+             android { 
+                 compileSdkVersion 26 
+                buildToolsVersion '26.0.2' 
+             } 
+         } 
+     } 
+ }
+
+ def computeBuildToolsVersion = { -> project.hasProperty("buildToolsVersion") ? buildToolsVersion : "26.0.2" }

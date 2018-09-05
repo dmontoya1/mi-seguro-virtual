@@ -86,7 +86,7 @@ export default class SignUp extends Component<{}> {
     render() {
         const { checked } = this.state;
         return (
-            <Container style={{paddingTop:20}}>
+            <Container>
                 <Header style={styles.header}>
                     <Left>
                         <Button transparent onPress={() => Actions.pop()}>

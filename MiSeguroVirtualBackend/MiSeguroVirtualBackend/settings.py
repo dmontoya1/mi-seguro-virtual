@@ -8,7 +8,7 @@ SECRET_KEY = '-2a8n5@ut6b#@4!qb^cxap1)%#sk-z0h3u&oed&fzh(6!o$bxv'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,8 +79,10 @@ WSGI_APPLICATION = 'MiSeguroVirtualBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'insurances',
+        'USER': 'apptitud',
+        'PASSWORD': 'apptitud',
     }
 }
 
