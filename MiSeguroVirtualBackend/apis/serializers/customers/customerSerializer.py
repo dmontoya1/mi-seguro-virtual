@@ -4,7 +4,7 @@ from rest_framework import serializers
 from users.models import Customer, TermsAcceptanceLogs
 
 class TermsAcceptanceLogsSerializer(serializers.ModelSerializer):
-    customer = CustomerSerializer(many=False)
+    """customer = CustomerSerializer(many=False)"""
 
     class Meta:
         model = TermsAcceptanceLogs

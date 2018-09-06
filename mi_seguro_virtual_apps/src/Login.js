@@ -28,7 +28,7 @@ export default class Login extends Component {
             password
         };
       logInPostAPI(dataToSend).then(data => {
-
+        console.warn(data);
         if (data.errored){
           Alert.alert(
             'Error',

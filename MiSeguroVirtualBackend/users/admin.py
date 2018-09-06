@@ -43,7 +43,7 @@ class BrokerAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['cellphone_number']
+    list_display = ['user']
 
 
 @admin.register(TermsAcceptanceLogs)

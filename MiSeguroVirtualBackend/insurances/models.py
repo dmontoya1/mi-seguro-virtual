@@ -32,7 +32,7 @@ class Insurance(models.Model):
     """Almacena los seguros para la venta
     """
 
-    category = models.OneToOneField(
+    category = models.ForeignKey(
         InsuranceCategory,
         on_delete=models.CASCADE,
         help_text='Enlace a la categoria del seguro',

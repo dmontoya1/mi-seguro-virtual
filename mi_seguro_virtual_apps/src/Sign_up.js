@@ -67,20 +67,38 @@ export default class SignUp extends Component<{}> {
             password
         };
 
-        signUpPostAPI(dataToSend).then(data => {
-            if (data.errored) {
-                console.warn(data);
-            } else {
-                Alert.alert(
-                  'Registro exitoso',
-                  "Ahora puedes solicitar tu SOAT y otros seguros a través de la aplicación y llevarlos en todo momento.",
-                  [
-                    {text: 'Aceptar', onPress: () => Actions.logIn()},
-                  ],
-                  { cancelable: false }
-                )     
-                }
-        });
+        if(this.state.checked){
+            signUpPostAPI(dataToSend).then(data => {
+                if (data.errored) {
+                    Alert.alert(
+                        'Error',
+                        'Debes llenar los campos de registro.',
+                        [
+                          {text: 'OK', onPress: () => console.log('OK Pressed')},
+                        ],
+                        { cancelable: false }
+                      )
+                } else {
+                    Alert.alert(
+                    'Registro exitoso',
+                    "Ahora puedes solicitar tu SOAT y otros seguros a través de la aplicación y llevarlos en todo momento.",
+                    [
+                        {text: 'Aceptar', onPress: () => Actions.logIn()},
+                    ],
+                    { cancelable: false }
+                    )     
+                    }
+            });
+        } else{
+            Alert.alert(
+                'Error',
+                'Debes aceptar los terminos y condiciones.',
+                [
+                  {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: false }
+              )
+        }
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Accordion, Content, Container, Header, Left, Body, Right, Button, Icon, Card, CardItem, View, Text } from 'native-base';
-import { Image, StyleSheet,TouchableOpacity } from 'react-native';
+import { Image, StyleSheet,TouchableOpacity, Alert } from 'react-native';
 
 import {
   widthPercentageToDP as wp,
@@ -17,11 +17,34 @@ import ImagePicker from 'react-native-image-picker';
 export default class Request extends Component {
 
   state = {
-    avatarSource: null
+    image1: null,
+    image2: null,
+    button_photo1:false,
+    button_photo2:false
   };
+
+  submit(){
+    if (this.state.image1 == null || this.state.image2 == null){
+      Alert.alert(
+        'Atención',
+        'Debes cargar las fotografias requeridas.',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      )
+    }else{
+      console.warn("bueno");
+    }
+  }
+  
 
   selectPhotoTapped = () => {
     const options = {
+      title: 'Tomar una foto',
+      takePhotoButtonTitle: 'Tomar una foto',
+      chooseFromLibraryButtonTitle: 'Seleccionar una foto',
+      cancelButtonTitle: 'CANCELAR',
       quality: 1.0,
       storageOptions: {
         skipBackup: true
@@ -29,13 +52,26 @@ export default class Request extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.warn('Response = ', response);
 
       if (response.didCancel) {
-        console.warn('User cancelled photo picker');
+        Alert.alert(
+          'Atención',
+          'Usuario cancelo la captura de foto.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
       }
       else if (response.error) {
-        console.warn('ImagePicker Error: ', response.error);
+        Alert.alert(
+          'Error',
+          'Error al cargar la foto.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
       }
       else if (response.customButton) {
         console.warn('User tapped custom button: ', response.customButton);
@@ -43,12 +79,59 @@ export default class Request extends Component {
       else {
         let source = { uri: response.uri };
         this.setState({
-          avatarSource: source
+          image1: source,
+          button_photo1:true
         });
       }
     });
   }
 
+  selectPhotoTapped2 = () => {
+    const options = {
+      title: 'Tomar una foto',
+      takePhotoButtonTitle: 'Tomar una foto',
+      chooseFromLibraryButtonTitle: 'Seleccionar una foto',
+      cancelButtonTitle: 'CANCELAR',
+      quality: 1.0,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+
+      if (response.didCancel) {
+        Alert.alert(
+          'Atención',
+          'Usuario cancelo la captura de foto.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
+      }
+      else if (response.error) {
+        Alert.alert(
+          'Error',
+          'Error al cargar la foto.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
+      }
+      else if (response.customButton) {
+        console.warn('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+        this.setState({
+          image2: source,
+          button_photo2:true
+        });
+      }
+    });
+  }
 
 
   _menu = null;
@@ -65,7 +148,22 @@ export default class Request extends Component {
     this._menu.show();
   };
 
+
+
   render() {
+    const image1 = require('../assets/icons/camara.png');
+    const image2 = require('../assets/icons/check.png');  
+    let url;
+    if (!this.state.button_photo1) {
+        url = image1
+    } else if(this.state.button_photo1) {
+        url = image2
+    }
+    if (!this.state.button_photo2) {
+      url2 = image1
+    } else if(this.state.button_photo2) {
+      url2 = image2
+    }
     return (
       <Container>
         <Header style={styles.container}>
@@ -147,9 +245,9 @@ export default class Request extends Component {
                             </Text>
                         </View>
                         <View style={{position:'relative', top:-15, left:wp('11%')}}>
-                            <Button onPress={this.selectPhotoTapped}>
+                            <Button transparent onPress={this.selectPhotoTapped}>
                             <Image 
-                                source={require('../assets/icons/camara.png')}
+                                source={url}
                                 style={{width:40, height:40}}
 
                             />
@@ -163,15 +261,22 @@ export default class Request extends Component {
                             </Text>
                         </View>
                         <View style={{position:'relative', top:-15, left:wp('5%')}}>
+                        <Button transparent onPress={this.selectPhotoTapped2}>
                             <Image 
-                                    source={require('../assets/icons/camara.png')}
+                                    source={url2}
                                     style={{width:40, height:40}}
                                 />
+                        </Button>
                         </View>
                     </View>
                   </View>
                 </CardItem>
             </Card>
+            <View style={{paddingLeft:10,paddingRight:10, paddingTop:30}}>
+              <Button block danger style={styles.button} onPress={() => this.submit(this.state.image1,this.state.image2)}>
+                  <Text style={{color:'white'}}>SOLICITAR</Text>
+              </Button>
+            </View>
         </View>
       </Container>
     );
@@ -183,4 +288,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#05071e',
   },
+  button: {
+    borderRadius: 10,
+},
 });

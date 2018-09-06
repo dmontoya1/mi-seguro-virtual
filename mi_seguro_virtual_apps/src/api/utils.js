@@ -20,6 +20,7 @@ APICallback = (dataToSend, endPointAPI, method, successStateCode) => {
 	let options = {
 		method,
 		headers: {
+			'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMywidXNlcm5hbWUiOiJNYXJpb0BwcnVlYmEuY29tIiwiZXhwIjoxNTM2Mjc3MDY3LCJlbWFpbCI6Ik1hcmlvQHBydWViYS5jb20ifQ.Dekur-xHUZLOlMas4ojre9zYmtO8k9ZvnA4SJC8aQ08',
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		}

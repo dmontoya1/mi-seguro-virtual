@@ -42,6 +42,17 @@ class Broker(models.Model):
 class Customer(models.Model):
     """almacena los clientes que desean adquirir seguros
     """
+    CEDULA = 'CC'
+    TARJETA = 'TI'
+    PASAPORTE = 'PA'
+    CEDULAE = 'CE'
+
+    DOCUMENT_CHOICES = (
+        (CEDULA, 'Cedula'),
+        (TARJETA, 'Tarjeta de identidad'),
+        (PASAPORTE, 'Pasaporte'),
+        (CEDULAE, 'Cedula de extrajeria')
+    )
 
     user = models.OneToOneField(
         User, 
@@ -58,6 +69,7 @@ class Customer(models.Model):
     document_type = models.CharField(
         'Tipo de documento',
         max_length=20,
+        choices=DOCUMENT_CHOICES,
         help_text = 'Tipo de documento de identidad'
     )
     document_number = models.CharField(
