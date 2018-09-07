@@ -8,9 +8,9 @@ from rest_framework.schemas import get_schema_view
 
 from apis.viewsets import (
     InsuranceList,
+    InsuranceDetail,
     CustomerViewSet,
-    ObtainJWTView  ,
-    CustomerDetail  
+    ObtainJWTView
 )
 
 schema_view = get_schema_view(title='insurances API')
@@ -21,9 +21,9 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path(r'lista-seguros/', InsuranceList.as_view(), name='insurance_list'),
+    path(r'seguro/detail/', InsuranceDetail.as_view(), name='insurance_detail'),
     path(r'sign_up/', CustomerViewSet.as_view(), name='sing_up'),
-    path('login/', view=ObtainJWTView.as_view(), name='login'),
-    path('customer/detail/', view=CustomerDetail.as_view(), name='details')
+    path('login/', view=ObtainJWTView.as_view(), name='login')
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)

@@ -1,3 +1,3 @@
-from .insurance.insuranceList import InsuranceList
-from .customer.customerViewSet import CustomerViewSet,CustomerDetail
+from .insurance.insuranceList import InsuranceList, InsuranceDetail
+from .customer.customerViewSet import CustomerViewSet
 from .customer.loginViewset import ObtainJWTView

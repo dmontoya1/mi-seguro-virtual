@@ -1,4 +1,4 @@
-APICallback = (dataToSend, endPointAPI, method, successStateCode,token) => {
+APICallbacklogin = (dataToSend, endPointAPI, method, successStateCode) => {
 	let keys = Object.keys(dataToSend);
 
 	var urlParams = '';
@@ -16,12 +16,10 @@ APICallback = (dataToSend, endPointAPI, method, successStateCode,token) => {
 
 
 	let body = JSON.stringify(dataToSend);
-	let jwt = 'JWT '
 
 	let options = {
 		method,
 		headers: {
-			'Authorization': `${jwt}${token}`,
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		}
@@ -41,5 +39,4 @@ APICallback = (dataToSend, endPointAPI, method, successStateCode,token) => {
 		});
 }
 
-
-export default APICallback;
+export default APICallbacklogin;

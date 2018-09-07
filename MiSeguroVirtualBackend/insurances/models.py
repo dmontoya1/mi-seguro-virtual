@@ -147,18 +147,6 @@ class InsuranceRequest(models.Model):
         help_text='Enlace al cliente',
         verbose_name='Cliente'
     )
-    broker = models.OneToOneField(
-        Broker,
-        on_delete=models.CASCADE,
-        help_text='Enlace al corredor',
-        verbose_name='Corredor'
-    )
-    point_of_sale = models.OneToOneField(
-        PointOfSale,
-        on_delete=models.CASCADE,
-        help_text='Enlace al punto autorizado',
-        verbose_name='Punto Autorizado'
-    )    
     state = models.CharField(
         'Estado',
         max_length=2,

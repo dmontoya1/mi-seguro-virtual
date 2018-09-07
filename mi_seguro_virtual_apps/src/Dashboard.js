@@ -22,7 +22,8 @@ import{
     Image,
     StyleSheet,
     TouchableHighlight,
-    Animated
+    Animated,
+    Alert
 } from 'react-native';
 
 import Modal from 'react-native-root-modal';
@@ -36,18 +37,20 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-
+import InsurancePostAPI from '././api/insurance.api';
 
 
 export default class Dashboard extends Component {
 
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+    super(props);
         this.state = {
+            token: '',
             visible: false,
             scale: new Animated.Value(1),
             x: new Animated.Value(0)
         };
+        this.request = this.request.bind(this);
     }
 
     _menu = null;
@@ -95,11 +98,36 @@ export default class Dashboard extends Component {
             });
         }
 
-};
+    };
+
+    request(){
+        let name = 'SOAT';
+        let dataToSend = {
+            name
+        };
+        let token = this.props.token;
+        console.warn("este es el token",token);
+        InsurancePostAPI(dataToSend,token).then(data => {
+            if (data.errored){
+              Alert.alert(
+                'Error',
+                "error.",
+                [
+                  {text: 'Aceptar', onPress: () =>{}},
+                ],
+                { cancelable: false }
+              ) 
+            } else {
+                let seguro = (data.data._55.details)
+                Actions.request(seguro);
+            }
+    
+          });
+    }
 
     render() {
-        return (
-
+        let token = this.props.token;
+        return (  
         <Container>
             <View style={styles.container}>
                 <Animated.Modal
@@ -239,7 +267,7 @@ export default class Dashboard extends Component {
                     <Image source={require('../assets/images/imagen.png')} style={{height:  hp('35%'), width:  wp('95%'), flex: 1}}/>
                   </CardItem>
                   <CardItem style={{ width:wp('90%'), position:'relative', left:10}}>
-                    <Button transparent onPress={() => Actions.request()}>
+                    <Button transparent onPress={this.request}>
                       <Text style={{color:'rgba(0,0,0,0.4)'}}>
                         ¿Aún no tienes tu SOAT asociado?{"\n"}
                       <Text style={{fontWeight: "bold"}}>Solicitalo acá</Text>

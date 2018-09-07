@@ -10,6 +10,7 @@ export default class Login extends Component {
   constructor(props) {
         super(props);
         this.state = {
+            token: '',  
             username:'',
             password:'',
         };
@@ -28,7 +29,6 @@ export default class Login extends Component {
             password
         };
       logInPostAPI(dataToSend).then(data => {
-        console.warn(data);
         if (data.errored){
           Alert.alert(
             'Error',
@@ -39,7 +39,8 @@ export default class Login extends Component {
             { cancelable: false }
           ) 
         } else {
-          Actions.home(data);
+          let token = data.data._55.token;
+          Actions.home({token: token});
         }
 
       });

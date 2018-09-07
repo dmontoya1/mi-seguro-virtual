@@ -5,10 +5,10 @@ from django.utils import timezone
 from rest_framework import generics
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from ...serializers import CustomerSerializer
-from users.models import Customer, TermsAcceptanceLogs
+from ...serializers import RequestSerializer
+from insurances.models import InsuranceRequest
 
-class CustomerViewSet(APIView):
+class RequestViewSet(APIView):
     serializer_class = CustomerSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
@@ -32,12 +32,3 @@ class CustomerViewSet(APIView):
         except Exception as e:
 
             return Response(dict(status='error', details=str(e)), status=400)
-
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip

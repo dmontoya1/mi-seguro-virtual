@@ -91,4 +91,4 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'customer', 'broker', 'point_of_sale', 'state', 'request_date']
+    list_display = ['insurance', 'customer', 'state', 'request_date']

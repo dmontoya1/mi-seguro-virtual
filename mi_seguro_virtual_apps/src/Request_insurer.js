@@ -16,12 +16,13 @@ import ImagePicker from 'react-native-image-picker';
 
 export default class Request extends Component {
 
-  state = {
-    image1: null,
-    image2: null,
-    button_photo1:false,
-    button_photo2:false
-  };
+    state = {
+      token:'',
+      image1: null,
+      image2: null,
+      button_photo1:false,
+      button_photo2:false
+    };
 
   submit(){
     if (this.state.image1 == null || this.state.image2 == null){
@@ -148,9 +149,35 @@ export default class Request extends Component {
     this._menu.show();
   };
 
+  submit(){
+    let name = this.props.seguro.name;
+    let dataToSend = {
+        name
+    };
+    let token = this.props.token;
+    console.warn("este es el token",token);
+    InsurancePostAPI(dataToSend,token).then(data => {
+        if (data.errored){
+          Alert.alert(
+            'Error',
+            "error.",
+            [
+              {text: 'Aceptar', onPress: () =>{}},
+            ],
+            { cancelable: false }
+          ) 
+        } else {
+            let seguro = (data.data._55.details)
+            Actions.request(seguro);
+        }
+
+      });
+  }
+
 
 
   render() {
+    let token = this.props.token;
     const image1 = require('../assets/icons/camara.png');
     const image2 = require('../assets/icons/check.png');  
     let url;
