@@ -82,7 +82,7 @@ class Customer(models.Model):
         verbose_name_plural = 'Clientes'
 
     def __str__(self):
-        return self.document_number
+        return self.user.username
 
 
     def get_full_name(self):

@@ -4,29 +4,39 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from rest_framework import generics
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from django.contrib.auth.models import User
 
 from ...serializers import RequestSerializer
-from insurances.models import InsuranceRequest
+from insurances.models import InsuranceRequest, Insurance
+from users.models import Customer
+
+
+from datetime import date
 
 class RequestViewSet(APIView):
-    serializer_class = CustomerSerializer
+    serializer_class = RequestSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
-    #permission_classes=()
 
     def post(self, request, format=None):
-        ip_user = get_client_ip(request)
-        terms_date = timezone.now()
-        user = dict(username=request.data['username'], first_name=request.data['first_name'], last_name=request.data['last_name'], email=request.data['email'], password=request.data['password'])
-        user_data = dict(document_number=request.data['document_number'], cellphone_number=request.data['cellphone_number'], user=user)
         
+        request_date = date.today()
+        username = request.user
+        state = 'PR'
+        name = request.data['name']
 
-        serializer = CustomerSerializer(data=user_data)
+        user = User.objects.get(username=username)
+        customer = Customer.objects.get(user=user.id)
+        insurance = Insurance.objects.get(name=name)
+
+    
+        request = dict(state=state, request_date=request_date, customer=customer.id, insurance=insurance.id)
+        
+        serializer = RequestSerializer(data=request)
 
         try:
             if serializer.is_valid(raise_exception=True):
-                customer = serializer.save()
-                TermsAcceptanceLogs.objects.create(customer=customer , ip_address=ip_user, Acceptance_date=terms_date )
+                request_insurance = serializer.save()
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:

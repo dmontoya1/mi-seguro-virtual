@@ -14,6 +14,8 @@ import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import ImagePicker from 'react-native-image-picker';
 
+import RequestInsurancePostAPI from '././api/request_insurance.api';
+
 export default class Request extends Component {
 
     state = {
@@ -155,20 +157,12 @@ export default class Request extends Component {
         name
     };
     let token = this.props.token;
-    console.warn("este es el token",token);
-    InsurancePostAPI(dataToSend,token).then(data => {
+    console.warn("token en la view", name)
+    RequestInsurancePostAPI(dataToSend,token).then(data => {
         if (data.errored){
-          Alert.alert(
-            'Error',
-            "error.",
-            [
-              {text: 'Aceptar', onPress: () =>{}},
-            ],
-            { cancelable: false }
-          ) 
+          console.warn(data);
         } else {
-            let seguro = (data.data._55.details)
-            Actions.request(seguro);
+            console.warn("hecho");
         }
 
       });
@@ -192,7 +186,7 @@ export default class Request extends Component {
       url2 = image2
     }
     return (
-      <Container>
+      <Container style={{paddingTop:20}}>
         <Header style={styles.container}>
           <Left>
             <Button transparent onPress={() => Actions.pop()}>
@@ -314,6 +308,7 @@ export default class Request extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#05071e',
+    paddingTop:20
   },
   button: {
     borderRadius: 10,

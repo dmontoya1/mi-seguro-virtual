@@ -19,7 +19,10 @@ import {
 } from './styles';
 
 export default class IntroView extends Component {
+  
   render(){
+    let token = this.props.token;
+    console.warn("este es el token", token);
     return (
       <Swiper style={styles.wrapper} 
         showsButtons={true}
@@ -156,7 +159,7 @@ export default class IntroView extends Component {
               </View> 
             </View>
             <View style={styles.buttonContainer}>
-              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.signUp()}>
+              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.home({token: token})}>
                 <Text>Finalizar</Text>
               </Button>
             </View>

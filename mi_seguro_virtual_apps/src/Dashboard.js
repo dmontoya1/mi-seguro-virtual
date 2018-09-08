@@ -106,7 +106,6 @@ export default class Dashboard extends Component {
             name
         };
         let token = this.props.token;
-        console.warn("este es el token",token);
         InsurancePostAPI(dataToSend,token).then(data => {
             if (data.errored){
               Alert.alert(
@@ -119,7 +118,7 @@ export default class Dashboard extends Component {
               ) 
             } else {
                 let seguro = (data.data._55.details)
-                Actions.request(seguro);
+                Actions.request({seguro: seguro,token: token});
             }
     
           });
@@ -340,7 +339,8 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: '#05071e',
-        paddingTop:5
+        paddingTop:5,
+        paddingTop:20
     },
     color_footer: {
       backgroundColor: '#e9ebe2',

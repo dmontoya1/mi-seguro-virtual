@@ -1,3 +1,4 @@
 from .insurances.insuranceSerializer import InsureranceSerializer
+from .insurances.requestSerializer import RequestSerializer
 from .customers.customerSerializer import CustomerSerializer
 from .customers.loginSerializer import JWTSerializer
