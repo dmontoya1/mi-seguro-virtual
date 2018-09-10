@@ -152,20 +152,38 @@ export default class Request extends Component {
   };
 
   submit(){
-    let name = this.props.seguro.name;
+    let name = this.props.seguro[0].name;
     let dataToSend = {
         name
     };
     let token = this.props.token;
-    console.warn("token en la view", name)
-    RequestInsurancePostAPI(dataToSend,token).then(data => {
+    if (this.state.image1 != null && this.state.image2 != null){
+        RequestInsurancePostAPI(dataToSend, token, this.state.image1, this.state.image2).then(data => { 
         if (data.errored){
           console.warn(data);
         } else {
-            console.warn("hecho");
+          Alert.alert(
+            'Información',
+            "Solicitud hecha con exito.",
+            [
+              {text: 'Aceptar', onPress:() => Actions.home({token: token})},
+            ],
+            { cancelable: false }
+          )
         }
 
-      });
+      }); 
+    } else {
+      Alert.alert(
+        'Error',
+        "Por favor adjuntar las imagines requeridas para realizar la solicitud.",
+        [
+          {text: 'Aceptar', onPress: () =>{}},
+        ],
+        { cancelable: false }
+      )
+    }
+    
   }
 
 

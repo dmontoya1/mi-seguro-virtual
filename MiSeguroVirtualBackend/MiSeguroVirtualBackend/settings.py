@@ -83,6 +83,8 @@ DATABASES = {
         'NAME': 'insurances',
         'USER': 'apptitud',
         'PASSWORD': 'apptitud',
+        'HOST': 'localhost', # the missing piece of the puzzle 
+        'PORT': '',
     }
 }
 
@@ -104,6 +106,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+#Email settings sendGrid
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 # Internationalization

@@ -19,7 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
 
-
     class Meta:
         model = Customer
         fields = ('cellphone_number', 'document_number', 'user')

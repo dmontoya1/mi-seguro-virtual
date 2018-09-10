@@ -22,7 +22,6 @@ export default class IntroView extends Component {
   
   render(){
     let token = this.props.token;
-    console.warn("este es el token", token);
     return (
       <Swiper style={styles.wrapper} 
         showsButtons={true}

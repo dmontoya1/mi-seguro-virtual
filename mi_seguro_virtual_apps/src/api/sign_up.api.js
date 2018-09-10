@@ -1,9 +1,9 @@
-import APICallback from './utils';
+import APICallbacklogin from './utils_login';
 
 let signUpPostAPI = (dataToSend) => {
 	let method = "POST", successStateCode = 200 ;
-	let endPointAPI = 'http://192.168.0.21:8000/sign_up/';	
-	return APICallback(dataToSend, endPointAPI, method, successStateCode);
+	let endPointAPI = 'http://192.168.0.108:8000/sign_up/';	
+	return APICallbacklogin(dataToSend, endPointAPI, method, successStateCode);
 }
 
 export default signUpPostAPI;

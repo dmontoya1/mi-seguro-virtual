@@ -1,10 +1,9 @@
-import APICallback from './utils';
+import APICallbackRequest from './utils_request';
 
-let RequestInsurancePostAPI = (dataToSend,token) => {
+let RequestInsurancePostAPI = (dataToSend, token, photo1, photo2) => {
     let method = "POST", successStateCode = 200 ;
-    console.warn(token);
-	let endPointAPI = 'http://192.168.0.21:8000/insurance/request/';
-	return APICallback(dataToSend, endPointAPI, method, successStateCode,token);
+	let endPointAPI = 'http://192.168.0.108:8000/insurance/request/';
+	return APICallbackRequest(dataToSend, endPointAPI, method, successStateCode,token, photo1.uri, photo2.uri);
 }
 
 export default RequestInsurancePostAPI;

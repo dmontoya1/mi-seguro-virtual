@@ -135,13 +135,13 @@ class InsuranceRequest(models.Model):
         (APPROVED, 'Aprobado')
     )
 
-    insurance = models.OneToOneField(
+    insurance = models.ForeignKey(
         Insurance,
         on_delete=models.CASCADE,
         help_text='Enlace al seguro',
         verbose_name='Seguro'
     )
-    customer = models.OneToOneField(
+    customer = models.ForeignKey(
         Customer,
         on_delete=models.CASCADE,
         help_text='Enlace al cliente',
@@ -160,6 +160,26 @@ class InsuranceRequest(models.Model):
     class Meta:
         verbose_name = 'Historial solicitud'
         verbose_name_plural = 'Historial solicitudes'
+
+class DocumentsRequest(models.Model):
+    """Alamcena las imagenes de los documentos asociados a
+    solicitud
+    """
+    insurance_request = models.OneToOneField(
+        InsuranceRequest,
+        on_delete=models.CASCADE,
+        verbose_name='Solicitud'
+    )
+    property_card = models.ImageField(
+        'Imagen',
+        upload_to = 'Solicitudes/tarjetas',
+        blank=True
+    )
+    drive_license = models.ImageField(
+        'Imagen',
+        upload_to = 'Solicitudes/licencias',
+        blank=True
+    ) 
 
 
 class CustomerPolicy(models.Model):

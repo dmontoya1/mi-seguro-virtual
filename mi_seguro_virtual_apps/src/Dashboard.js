@@ -118,7 +118,7 @@ export default class Dashboard extends Component {
               ) 
             } else {
                 let seguro = (data.data._55.details)
-                Actions.request({seguro: seguro,token: token});
+                Actions.request({seguro: seguro, token: token});
             }
     
           });

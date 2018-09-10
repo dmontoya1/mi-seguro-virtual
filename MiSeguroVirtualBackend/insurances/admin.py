@@ -9,7 +9,8 @@ from .models import (
     InsuranceRequest,
     Insurance,
     InsuranceCategory,
-    Insurer
+    Insurer,
+    DocumentsRequest
 )
 
 
@@ -77,6 +78,10 @@ class InsurerAdmin(admin.ModelAdmin):
 @admin.register(CustomerPolicy)
 class CustomerPolicyAdmin(admin.ModelAdmin):
     list_display = ['insurer', 'insurance', 'effective_date']
+
+@admin.register(DocumentsRequest)
+class DocumentsRequestAdmin(admin.ModelAdmin):
+    list_display = ['insurance_request']
 
 
 @admin.register(InsuranceCategory)

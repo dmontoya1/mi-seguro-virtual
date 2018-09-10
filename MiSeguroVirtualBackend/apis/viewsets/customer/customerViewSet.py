@@ -10,9 +10,7 @@ from users.models import Customer, TermsAcceptanceLogs
 
 class CustomerViewSet(APIView):
     serializer_class = CustomerSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (JSONWebTokenAuthentication,)
-    #permission_classes=()
+    permission_classes = ()
 
     def post(self, request, format=None):
         ip_user = get_client_ip(request)
