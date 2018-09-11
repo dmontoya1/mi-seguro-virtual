@@ -77,6 +77,7 @@ class InsurerAdmin(admin.ModelAdmin):
 
 @admin.register(CustomerPolicy)
 class CustomerPolicyAdmin(admin.ModelAdmin):
+    exclude = ['expiration_date']
     list_display = ['insurer', 'insurance', 'effective_date']
 
 @admin.register(DocumentsRequest)
