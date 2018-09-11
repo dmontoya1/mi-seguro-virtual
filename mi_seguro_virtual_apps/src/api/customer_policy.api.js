@@ -1,9 +1,9 @@
 import APICallback from './utils';
 
-let InsurancePostAPI = (dataToSend,token) => {
+let CustomerPolicyPostAPI = (dataToSend,token) => {
 	let method = "GET", successStateCode = 200 ;
-	let endPointAPI = 'http://192.168.0.21:8000/seguro/detail/';
+	let endPointAPI = 'http://192.168.0.21:8000/customer/policy/detail/';
 	return APICallback(dataToSend, endPointAPI, method, successStateCode,token);
 }
 
-export default InsurancePostAPI;
+export default CustomerPolicyPostAPI;

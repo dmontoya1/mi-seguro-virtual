@@ -147,6 +147,19 @@ class InsuranceRequest(models.Model):
         help_text='Enlace al cliente',
         verbose_name='Cliente'
     )
+    broker = models.ForeignKey(
+        Broker,
+        on_delete=models.CASCADE,
+        verbose_name='Corredores',
+        default=''
+
+    )
+    adviser_code = models.CharField(
+        'Codigo asesor',
+        max_length=15,
+        blank=True,
+        help_text='Agregar en caso de que aplique'
+    )
     state = models.CharField(
         'Estado',
         max_length=2,
@@ -192,6 +205,12 @@ class CustomerPolicy(models.Model):
         upload_to = 'Polizas',
         blank=True
     )
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.CASCADE,
+        verbose_name='Cliente',
+        default = None
+    )
     insurer = models.ForeignKey(
         Insurer,
         on_delete=models.CASCADE,
@@ -211,14 +230,23 @@ class CustomerPolicy(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
+    licensed_plate =models.CharField(
+        'placa',
+        max_length=8,
+        default='###-###'
+    )
     adviser_mail = models.EmailField(
         'Correo asesor',
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
+    expiration_date = models.DateField(
+        default = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1),
+        verbose_name="Fecha de vencimiento"
+    )
     effective_date = models.DateField(
-        editable=False,
-        verbose_name="Fecha de vigencia"
+        default= timezone.now,
+        verbose_name="Fecha inicio de vigencia"
     )
 
     class Meta:

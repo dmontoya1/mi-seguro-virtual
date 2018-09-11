@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 from ...serializers import RequestSerializer
 from insurances.models import InsuranceRequest, Insurance, DocumentsRequest
-from users.models import Customer
+from users.models import Customer, Broker
 
 
 from datetime import date
@@ -29,13 +29,15 @@ class RequestViewSet(APIView):
         username = request.user
         state = 'PR'
         name = request.data['name']
+        adviser_code = request.data['adviser_code']
 
         user = User.objects.get(username=username)
         customer = Customer.objects.get(user=user.id)
         insurance = Insurance.objects.get(name=name)
+        broker = Broker.objects.get(name='Quality')
 
     
-        request = dict(state=state, request_date=request_date, customer=customer.id, insurance=insurance.id)
+        request = dict(state=state, request_date=request_date, customer=customer.id, insurance=insurance.id, broker=broker.id, adviser_code=adviser_code)
         
         serializer = RequestSerializer(data=request)
 
@@ -45,8 +47,6 @@ class RequestViewSet(APIView):
                 document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
                 document_request.save()
                 documents = document_request
-                print("docuemntos", documents)
-                sendMail(username, foto1, foto2)
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:

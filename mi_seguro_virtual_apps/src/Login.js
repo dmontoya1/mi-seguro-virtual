@@ -40,7 +40,7 @@ export default class Login extends Component {
           ) 
         } else {
           let token = data.data._55.token;
-          Actions.intro({token: token});
+          Actions.home({token: token});
         }
 
       });

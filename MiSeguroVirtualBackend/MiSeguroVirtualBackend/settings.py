@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'insurances',
         'USER': 'apptitud',
         'PASSWORD': 'apptitud',
-        'HOST': 'localhost', # the missing piece of the puzzle 
+        'HOST': 'localhost', 
         'PORT': '',
     }
 }

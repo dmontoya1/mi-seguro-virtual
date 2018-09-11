@@ -25,7 +25,6 @@ import{
     Animated
 } from 'react-native';
 
-import Modal from 'react-native-root-modal';
 
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
@@ -35,6 +34,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+import Swiper from 'react-native-swiper';
 
 
 
@@ -56,12 +57,14 @@ export default class Insurance extends Component {
       };
 
     render() {
+        let token = this.props.token;
+        let policy = this.props.policy[0];
         return (
 
-        <Container>
+        <Container style={{paddingTop:20}}>
         <Header style={styles.container}>
           <Left>
-            <Button transparent>
+            <Button transparent onPress={() => Actions.pop({token:token})}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -84,26 +87,46 @@ export default class Insurance extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={() => {}}>Perfil</MenuItem>
             <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>
-        <View style={{position:'relative', top:30,left: wp('15%')}}>
-          <Image 
-            source={require('../assets/images/imagen.png')}
-            style={{width:250, height:300}}
-          />
-        </View>
-        <View style={{paddingTop:10}}>
-          <Text style={styles.line}>───────────────────────────────</Text>
         <View>
-          <Text>Placa</Text>
-          <Text>###-###</Text>
-        </View>
-        </View>
+          <Image
+            source={require('../assets/images/imagen.png')}
+            style={{position:'relative', left:wp('17.5%'), top:40,  width:wp('65%'), height:hp('50%')}} 
+          />
+          <View style={{position:'relative', top: 50 }}>
+            <Text style={{color: 'rgba(0,0,0,0.3)', paddingTop:30}}>───────────────────────────────</Text>
+            <View style={styles.textContainer}>
+              <View>
+                <Text style={{opacity:0.38}}>Aseguradora</Text>
+              </View>
+              <View style={{paddingLeft: wp('42%')}}>
+                <Text>{policy.insurer}</Text>
+              </View>
+            </View>
 
-        
+            <View style={styles.textContainer}>
+              <View>
+                <Text style={{opacity:0.38}}>Seguro</Text>
+              </View>
+              <View style={{paddingLeft: wp('54%')}}>
+                <Text>{policy.insurance}</Text>
+              </View>
+            </View>
+
+            <View style={styles.textContainer}>
+              <View>
+                <Text style={{opacity:0.38}}>Fecha vencimiento</Text>
+              </View>
+              <View style={{paddingLeft: wp('30%')}}>
+                <Text>{policy.expiration_date}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
       </Container>
 
     );
@@ -113,8 +136,7 @@ export default class Insurance extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#05071e',
-        paddingTop:5
+        backgroundColor: '#05071e'
     },
     color_footer: {
       backgroundColor: '#e9ebe2',
@@ -123,6 +145,35 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,0.4)',
         position: 'absolute',
         top: hp('8%'),
+    },
+    imageContainer: {
+      flex:2,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    textContainer: {
+      width: wp('80%'),
+      flexDirection: 'row',
+      paddingHorizontal: 20,
+      paddingTop:15
+    },
+    dotStyle: {
+      backgroundColor: 'rgba(0,0,0,.3)', 
+      width: 10, 
+      height: 10, 
+      borderRadius: 7, 
+      marginLeft: 7, 
+      marginRight: 7
+    },
+  
+    dotActivateStyle: {
+      backgroundColor: '#000', 
+      width: 10, 
+      height: 10, 
+      borderRadius: 7, 
+      marginLeft: 7, 
+      marginRight: 7
     },
 
 });

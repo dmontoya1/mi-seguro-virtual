@@ -38,6 +38,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import InsurancePostAPI from '././api/insurance.api';
+import CustomerPolicyPostAPI from '././api/customer_policy.api';
 
 
 export default class Dashboard extends Component {
@@ -51,6 +52,7 @@ export default class Dashboard extends Component {
             x: new Animated.Value(0)
         };
         this.request = this.request.bind(this);
+        this.requestPolicy = this.requestPolicy.bind(this);
     }
 
     _menu = null;
@@ -119,6 +121,26 @@ export default class Dashboard extends Component {
             } else {
                 let seguro = (data.data._55.details)
                 Actions.request({seguro: seguro, token: token});
+            }
+    
+          });
+    }
+    requestPolicy(){
+        let dataToSend = {};
+        let token = this.props.token;
+        CustomerPolicyPostAPI(dataToSend,token).then(data => {
+            if (data.errored){
+              Alert.alert(
+                'Error',
+                "error.",
+                [
+                  {text: 'Aceptar', onPress: () =>{}},
+                ],
+                { cancelable: false }
+              ) 
+            } else {
+                let policy = (data.data._55.details)
+                Actions.insurance({policy: policy, token: token});
             }
     
           });
@@ -226,11 +248,6 @@ export default class Dashboard extends Component {
             </View>
 
         <Header style={styles.container}>
-          <Left>
-            <Button transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
           <Body style={{position: 'absolute', left: wp('30%')}}>
             <Image 
                 source={require('../assets/images/logo.png')}
@@ -254,7 +271,7 @@ export default class Dashboard extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={() => {}}>Perfil</MenuItem>
             <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
@@ -281,7 +298,7 @@ export default class Dashboard extends Component {
             <Button onPress={this.scaleModal}>
             <Image source={require('../assets/icons/call.png')} style={{height:  30, width:  30, flex: 1, opacity:0.38}}/>
             </Button>
-            <Button>
+            <Button  onPress={this.requestPolicy}>
             <Image source={require('../assets/icons/compra.png')} style={{height:  30, width:  30, flex: 1, opacity:0.38}}/>
             </Button>
             <Button>

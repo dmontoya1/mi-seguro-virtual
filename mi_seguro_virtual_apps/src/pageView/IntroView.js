@@ -3,7 +3,8 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 
 import { Container, Header, Title, Content, Button, Icon, Left, Body, Text } from "native-base";
@@ -22,6 +23,9 @@ export default class IntroView extends Component {
   
   render(){
     let token = this.props.token;
+    AsyncStorage.setItem('flag_stepper', 'false');
+    const value = AsyncStorage.getItem('flag_stepper');
+    console.warn(value);
     return (
       <Swiper style={styles.wrapper} 
         showsButtons={true}
@@ -158,7 +162,7 @@ export default class IntroView extends Component {
               </View> 
             </View>
             <View style={styles.buttonContainer}>
-              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.home({token: token})}>
+              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.logIn()}>
                 <Text>Finalizar</Text>
               </Button>
             </View>

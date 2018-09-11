@@ -1,13 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage} from 'react-native';
 
 import { Router, Scene, Stack } from 'react-native-router-flux';
 
@@ -22,17 +15,16 @@ import IntroView from './src/pageView/IntroView';
 import Insurance from './src/Insure_Bought';
 
 export default class App extends Component {
-  _
+  
   render() {
     return (
       <Router>
       <Stack key="root">
-        <Scene key="splash" component={Splash} hideNavBar={true}/>
+        <Scene key="intro" component={IntroView} hideNavBar={true}/>
         <Scene key="logIn" component={Login} hideNavBar={true}/>
         <Scene key="signUp" component={SignUp} hideNavBar={true}/>
-        <Scene key="intro" component={IntroView} hideNavBar={true}/>
         <Scene key="home" component={Dashboard} hideNavBar={true}/>
-        <Scene key="profile" component={Profile} hideNavBar={true}/>
+        <Scene key="insurance" component={Insurance} hideNavBar={true}/>
         <Scene key="request" component={Request} hideNavBar={true}/>
       </Stack>
     </Router>

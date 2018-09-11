@@ -15,6 +15,7 @@ APICallbackRequest = (dataToSend, endPointAPI, method, successStateCode, token, 
 
 	let body = new FormData();
 	body.append('name', dataToSend.name);
+	body.append('adviser_code', dataToSend.adviser_code);
 	body.append('photo1', {
     uri: photo1,
     type: 'image/jpeg', // or photo.type

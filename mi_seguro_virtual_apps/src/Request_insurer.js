@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Accordion, Content, Container, Header, Left, Body, Right, Button, Icon, Card, CardItem, View, Text } from 'native-base';
+import { Accordion, Content, Container, Header, Left, Body, Right, Button, Icon, Card, CardItem, View, Text, Form, Input, Item } from 'native-base';
 import { Image, StyleSheet,TouchableOpacity, Alert } from 'react-native';
 
 import {
@@ -23,7 +23,8 @@ export default class Request extends Component {
       image1: null,
       image2: null,
       button_photo1:false,
-      button_photo2:false
+      button_photo2:false,
+      adviser_code:''
     };
 
   submit(){
@@ -153,8 +154,10 @@ export default class Request extends Component {
 
   submit(){
     let name = this.props.seguro[0].name;
+    let adviser_code = this.state.adviser_code;
     let dataToSend = {
-        name
+        name,
+        adviser_code
     };
     let token = this.props.token;
     if (this.state.image1 != null && this.state.image2 != null){
@@ -162,7 +165,7 @@ export default class Request extends Component {
         if (data.errored){
           console.warn(data);
         } else {
-          Alert.alert(
+            Alert.alert(
             'Información',
             "Solicitud hecha con exito.",
             [
@@ -234,7 +237,7 @@ export default class Request extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={() => {}}>Perfil</MenuItem>
             <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
@@ -273,8 +276,8 @@ export default class Request extends Component {
                     </View>
                   </View>
                 </CardItem>
-                </Card>
-                <Card style={{width: wp('96%')}}>
+              </Card>
+              <Card style={{width: wp('96%')}}>
                 <CardItem style={{ width:wp('90%'), position:'relative', left:10}}>
                 <View style={{paddingTop:20, flex:1}}>
                     <View style={{flexDirection: 'row'}}>
@@ -310,6 +313,14 @@ export default class Request extends Component {
                     </View>
                   </View>
                 </CardItem>
+            </Card>
+            <Card>
+              <CardItem>
+                  <Input 
+                    placeholder='Codigo Asesor'
+                    placeholderTextColor='rgba(0,0,0,0.4)'
+                    onChangeText={(adviser_code) => this.setState({adviser_code})} />
+              </CardItem>
             </Card>
             <View style={{paddingLeft:10,paddingRight:10, paddingTop:30}}>
               <Button block danger style={styles.button} onPress={() => this.submit(this.state.image1,this.state.image2)}>

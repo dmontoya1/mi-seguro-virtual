@@ -11,7 +11,8 @@ from apis.viewsets import (
     InsuranceDetail,
     CustomerViewSet,
     ObtainJWTView,
-    RequestViewSet
+    RequestViewSet,
+    CusotmerPolicyDetail
 )
 
 schema_view = get_schema_view(title='insurances API')
@@ -25,7 +26,8 @@ urlpatterns = [
     path(r'seguro/detail/', InsuranceDetail.as_view(), name='insurance_detail'),
     path(r'sign_up/', CustomerViewSet.as_view(), name='sing_up'),
     path(r'login/', view=ObtainJWTView.as_view(), name='login'),
-    path(r'insurance/request/', view=RequestViewSet.as_view(), name='request')
+    path(r'insurance/request/', view=RequestViewSet.as_view(), name='request'),
+    path(r'customer/policy/detail/', view=CusotmerPolicyDetail.as_view(), name='policy_detail')
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)
