@@ -255,5 +255,5 @@ class CustomerPolicy(models.Model):
     
 
     def save(self, *args, **kwargs):
-        self.effective_date = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1)
+        self.expiration_date = self.effective_date + timezone.timedelta(days=1) + relativedelta(years=1)
         super(CustomerPolicy, self).save(*args, **kwargs)

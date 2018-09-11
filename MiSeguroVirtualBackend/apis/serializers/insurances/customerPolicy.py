@@ -15,4 +15,4 @@ class CustomerPolicySerializer(serializers.ModelSerializer):
 
 
         model = CustomerPolicy
-        fields = ('customer', 'insurer', 'insurance', 'adviser_code', 'adviser_mail', 'expiration_date', 'effective_date')
+        fields = ('customer', 'insurer', 'insurance', 'adviser_code', 'adviser_mail', 'expiration_date', 'effective_date', 'licensed_plate')
