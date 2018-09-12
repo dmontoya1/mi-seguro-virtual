@@ -30,6 +30,7 @@ class Broker(models.Model):
         upload_to='logotipos',
         blank=True
     )
+    active= models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Corredor'
