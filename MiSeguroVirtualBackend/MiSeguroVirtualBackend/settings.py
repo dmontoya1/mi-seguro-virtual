@@ -81,10 +81,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'insurances',
-        'USER': 'apptitud',
-        'PASSWORD': 'apptitud',
-        'HOST': 'localhost', 
-        'PORT': '',
     }
 }
 
