@@ -8,6 +8,7 @@ from users.forms import UserChangeForm, UserCreationForm
 from .models import (
     Broker,
     Customer,
+    Influencer,
     TermsAcceptanceLogs
 )
 
@@ -49,3 +50,13 @@ class CustomerAdmin(admin.ModelAdmin):
 @admin.register(TermsAcceptanceLogs)
 class TermsAcceptanceLogsAdmin(admin.ModelAdmin):
     list_display = ['ip_address']
+
+
+
+@admin.register(Influencer)
+class Influencer(admin.ModelAdmin):
+    """
+    """
+
+    model = Influencer
+    list_display = ('user', 'document_number', 'code')

@@ -1,33 +1,19 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
-from apis.viewsets import (
-    InsuranceList,
-    InsuranceDetail,
-    CustomerViewSet,
-    ObtainJWTView,
-    RequestViewSet,
-    CusotmerPolicyDetail
-)
 
 schema_view = get_schema_view(title='insurances API')
 
 urlpatterns = [
-	path(r'schema/', schema_view),
-
-
+	path('schema/', schema_view),
+    path('api', include('apis.urls', namespace='api'), name='api'),
     path('admin/', admin.site.urls),
-    path(r'lista-seguros/', InsuranceList.as_view(), name='insurance_list'),
-    path(r'seguro/detail/', InsuranceDetail.as_view(), name='insurance_detail'),
-    path(r'sign_up/', CustomerViewSet.as_view(), name='sing_up'),
-    path(r'login/', view=ObtainJWTView.as_view(), name='login'),
-    path(r'insurance/request/', view=RequestViewSet.as_view(), name='request'),
-    path(r'customer/policy/detail/', view=CusotmerPolicyDetail.as_view(), name='policy_detail')
+    path('', include('webclient.urls', namespace='webclient'), name='webclient'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)

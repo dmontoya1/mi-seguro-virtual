@@ -20,14 +20,17 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
 
 PROJECT_APPS = [
+    'apis',
     'insurances',
     'users',
+    'webclient'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
@@ -58,7 +61,7 @@ ROOT_URLCONF = 'MiSeguroVirtualBackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'MiSeguroVirtualBackend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,6 +124,9 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, "MiSeguroVirtualBackend/static")
+]
 
 # User uploades files
 MEDIA_URL = '/media/'
