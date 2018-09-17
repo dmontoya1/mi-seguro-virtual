@@ -11,7 +11,8 @@ schema_view = get_schema_view(title='insurances API')
 
 urlpatterns = [
 	path('schema/', schema_view),
-    path('api', include('apis.urls', namespace='api'), name='api'),
+    path('jet/', include('jet.urls', namespace='jet'), name='jet'),
+    path('api/', include('apis.urls', namespace='api'), name='api'),
     path('admin/', admin.site.urls),
     path('', include('webclient.urls', namespace='webclient'), name='webclient'),
 

@@ -17,6 +17,7 @@ DJANGO_APPS = [
     'admin_view_permission',
     'rest_framework',
     'rest_framework_swagger',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,6 +88,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -131,3 +133,6 @@ STATICFILES_DIRS = [
 # User uploades files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, "MiSeguroVirtualBackend/media")
+
+
+AUTH_USER_MODEL = 'users.User'

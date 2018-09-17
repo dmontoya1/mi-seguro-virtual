@@ -10,5 +10,5 @@ urlpatterns = [
     path('lista-seguros/', views.InsuranceList.as_view(), name='insurance_list'),
     path('seguro/detail/', views.InsuranceDetail.as_view(), name='insurance_detail'),
     path('insurance/request/', views.RequestViewSet.as_view(), name='request'),
-    path('customer/policy/detail/', views.CustomerPolicyDetail.as_view(), name='policy_detail')
+    path('customer/policy/detail/', views.UserPolicyDetail.as_view(), name='policy_detail')
 ]

@@ -2,8 +2,8 @@
 {% load humanize %}
 {% load static %}
 
-{% block nav_class %}
-    class="navbar scrolled"
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -11,21 +11,66 @@
     <div class="container profile mt-5">
         <div class="row content-row">
             <div class="col-12 mb-4 text-center">
-                <h1>Perfil</h1>               
+                <h1 class="my-profile-title">Mi Perfil</h1>               
             </div>
         </div>
         <div class="row mb-5">
             <div class="container-fluid profile-content">
                 <div class="row p-2 mt-2 mb-5">
-                    <div class="col-12 col-lg-9 mb-4">
+                    <div class="col-12 col-lg-12 mb-4">
+                        <div class="row mb-3 ml-2">
+                            <div class="col-12">
+                                <span class="section-info">Datos Personales</span>
+                                <button class="primary-btn d-inline-flex align-items-center float-right" data-toggle="modal" data-target="#modal-company">Editar</button>
+                            </div>
+                        </div>
                         <div class="row mb-4">
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_name">Nombres</label>
-                                    <a class="float-right btn-edit" href="#" data-toggle="modal" data-target="#modal-name">Editar</a>
                                     <input type="email" class="form-control" readonly id="profile_name" placeholder="{{request.user.first_name|default:"Sin Nombre"}}">
                                 </div>
                             </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_email">Mi Cófigo Influencer</label>
+                                    <input type="text" class="form-control" readonly id="influencer_code" placeholder="{{request.user.related_influencer.code}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_name">Tipo Documento</label>
+                                    <input type="text" class="form-control" readonly id="profile_doc_type" placeholder="{{request.user.related_|default:"Sin nombre"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_employees">Número Documento</label>
+                                    <input type="text" class="form-control" readonly id="profile_doc_id" placeholder="{{request.user.company.get_employees_number_display|default:"Sin empleados"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_sector">Teléfono</label>
+                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.company.sector.name|default:"Sin sector"}}">
+                                </div>
+                            </div>
+                                    
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="row p-2 mt-2 mb-2">
+                    <div class="col-12 mb-4">
+                        <div class="row mb-3 ml-2">
+                            <div class="col-12">
+                                <span class="section-info">Datos de autenticación</span>
+                                <!-- <button class="btn-action-company float-right" data-toggle="modal" data-target="#modal-company">Editar</button> -->
+                            </div>
+                        </div>
+                        <div class="row mb-4">
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_email">Correo Electrónico</label>
@@ -40,14 +85,6 @@
                                     <input type="password" class="form-control" readonly id="profile_password" placeholder="***********">
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="form-group">
-                                    <label for="profile_email">Mi Cófigo Influencer</label>
-                                    <a class="float-right btn-edit" href="#" data-toggle="modal" data-target="#modal-email">Editar</a>
-                                    <input type="text" class="form-control" readonly id="profile_email" placeholder="{{request.user.related_influencer.code}}">
-                                </div>
-                            </div>
-                                    
                         </div>
                         
                     </div>
@@ -57,39 +94,7 @@
                     <div class="col-12 mb-4">
                         <div class="row mb-3 ml-2">
                             <div class="col-12">
-                                <span class="company-info">Datos Personales</span>
-                                <button class="btn-action-company float-right" data-toggle="modal" data-target="#modal-company">Editar</button>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label for="profile_company_name">Tipo Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_name" placeholder="{{request.user.company|default:"Sin nombre"}}">
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label for="profile_company_employees">Número Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.company.get_employees_number_display|default:"Sin empleados"}}">
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label for="profile_company_sector">Teléfono</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.company.sector.name|default:"Sin sector"}}">
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="dropdown-divider"></div>
-                <div class="row p-2 mt-2 mb-2">
-                    <div class="col-12 mb-4">
-                        <div class="row mb-3 ml-2">
-                            <div class="col-12">
-                                <span class="company-info">Datos Bancarios</span>
+                                <span class="section-info">Datos Bancarios</span>
                                 <button class="btn-action-company float-right" data-toggle="modal" data-target="#modal-company">Editar</button>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.views import ObtainJSONWebToken
 
-from users.models import Customer, TermsAcceptanceLogs
+from users.models import User, TermsAcceptanceLogs
 
 from .serializers import CustomerSerializer, JWTSerializer
 

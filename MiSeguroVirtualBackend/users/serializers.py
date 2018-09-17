@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_jwt.serializers import JSONWebTokenSerializer, jwt_payload_handler, jwt_encode_handler
 
-from users.models import Customer, TermsAcceptanceLogs
+from users.models import User, TermsAcceptanceLogs
 
 
 class JWTSerializer(JSONWebTokenSerializer):
@@ -45,6 +45,7 @@ class TermsAcceptanceLogsSerializer(serializers.ModelSerializer):
         model = TermsAcceptanceLogs
         fields = ('ip_address', 'Acceptance_date', 'customer')
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -55,7 +56,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
 
     class Meta:
-        model = Customer
+        model = User
         fields = ('cellphone_number', 'document_number', 'user')
     
 

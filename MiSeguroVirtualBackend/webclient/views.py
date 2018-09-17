@@ -23,7 +23,7 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from users.models import Influencer, TermsAcceptanceLogs
+from users.models import User, TermsAcceptanceLogs
 
 
 class HomePageView(TemplateView):
@@ -63,8 +63,8 @@ class LoginView(TemplateView):
         email = request.POST['email']
         password = request.POST['password']
         try:
-            user = Influencer.objects.get(user__email=email)
-        except Influencer.DoesNotExist:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
             response = {'error': 'El correo no se encuentra registrado en la plataforma como influencer'}
             return JsonResponse(response, status=400)
         user = authenticate(email=email, password=password)

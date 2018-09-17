@@ -2,7 +2,6 @@
 from datetime import date
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
@@ -13,14 +12,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from users.models import Customer, Broker
+from users.models import User
 
-from .models import CustomerPolicy, Insurance, DocumentsRequest
-from .serializers import CustomerPolicySerializer, InsureranceSerializer, RequestSerializer
+from .models import UserPolicy, Insurance, DocumentsRequest
+from .serializers import UserPolicySerializer, InsureranceSerializer, RequestSerializer
 
 
-class CustomerPolicyDetail(APIView):
-    serializer_class = CustomerPolicySerializer
+class UserPolicyDetail(APIView):
+    serializer_class = UserPolicySerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
@@ -28,10 +27,9 @@ class CustomerPolicyDetail(APIView):
         try:
             username = str(request.user)
             user = User.objects.get(username=username)
-            customer = Customer.objects.get(user=user)
-            policy = CustomerPolicy.objects.filter(customer=customer)
+            policy = UserPolicy.objects.filter(user=user)
             print(policy)
-            serializer = CustomerPolicySerializer(policy, many=True)
+            serializer = UserPolicySerializer(policy, many=True)
             return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
@@ -95,12 +93,11 @@ class RequestViewSet(APIView):
         adviser_code = request.data['adviser_code']
 
         user = User.objects.get(username=username)
-        customer = Customer.objects.get(user=user.id)
         insurance = Insurance.objects.get(name=name)
         broker = Broker.objects.get(name='Quality')
 
     
-        request = dict(state=state, request_date=request_date, customer=customer.id, insurance=insurance.id, broker=broker.id, adviser_code=adviser_code)
+        request = dict(state=state, request_date=request_date, user=user.pk, insurance=insurance.id, broker=broker.id, adviser_code=adviser_code)
         
         serializer = RequestSerializer(data=request)
 

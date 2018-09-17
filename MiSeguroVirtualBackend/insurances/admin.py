@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 
 from .models import (
     PointOfSale,
-    CustomerPolicy,
+    UserPolicy,
     InsuranceRequest,
     Insurance,
     InsuranceCategory,
@@ -75,8 +75,8 @@ class InsurerAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(CustomerPolicy)
-class CustomerPolicyAdmin(admin.ModelAdmin):
+@admin.register(UserPolicy)
+class UserPolicyAdmin(admin.ModelAdmin):
     list_display = ['insurer', 'insurance', 'effective_date']
 
 @admin.register(DocumentsRequest)
@@ -96,4 +96,4 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'customer', 'state', 'request_date']
+    list_display = ['insurance', 'client', 'state', 'request_date']

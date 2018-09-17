@@ -1,10 +1,12 @@
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
+
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-from dateutil.relativedelta import relativedelta
-from datetime import date, timedelta
 
-from users.models import Broker, Customer
+from users.models import User
 
 
 class InsuranceCategory(models.Model):
@@ -62,10 +64,9 @@ class Insurer(models.Model):
         verbose_name='Seguros',
 
     )
-    brokers = models.ManyToManyField(
-        Broker,
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
         verbose_name='Corredores'
-
     )
     name = models.CharField(
         'Nombre',
@@ -108,8 +109,8 @@ class PointOfSale(models.Model):
         'Codigo',
         max_length=10
     )
-    brokers = models.ManyToManyField(
-        Broker,
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
         verbose_name='Corredores'
     )
 
@@ -141,18 +142,19 @@ class InsuranceRequest(models.Model):
         help_text='Enlace al seguro',
         verbose_name='Seguro'
     )
-    customer = models.ForeignKey(
-        Customer,
+    client = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         help_text='Enlace al cliente',
-        verbose_name='Cliente'
+        verbose_name='Cliente',
+        related_name='related_insurances_client'
     )
-    broker = models.ForeignKey(
-        Broker,
+    brokers = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Corredores',
-        default=''
-
+        default='',
+        related_name='related_insurances_broker',
     )
     adviser_code = models.CharField(
         'Codigo asesor',
@@ -195,7 +197,7 @@ class DocumentsRequest(models.Model):
     ) 
 
 
-class CustomerPolicy(models.Model):
+class UserPolicy(models.Model):
     """Almacena las polizas que caragan los corredores
     para cada uno de sus clientes
     """
@@ -204,9 +206,9 @@ class CustomerPolicy(models.Model):
         'Imagen',
         upload_to = 'Polizas',
         blank=True
-    )
-    customer = models.ForeignKey(
-        Customer,
+    ) 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Cliente',
         default = None
@@ -256,4 +258,4 @@ class CustomerPolicy(models.Model):
 
     def save(self, *args, **kwargs):
         self.effective_date = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1)
-        super(CustomerPolicy, self).save(*args, **kwargs)
+        super(UserPolicy, self).save(*args, **kwargs)
