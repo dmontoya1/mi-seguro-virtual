@@ -21,39 +21,39 @@
                         <div class="row mb-3 ml-2">
                             <div class="col-12">
                                 <span class="section-info">Datos Personales</span>
-                                <button class="primary-btn d-inline-flex align-items-center float-right" data-toggle="modal" data-target="#modal-company">Editar</button>
+                                <button class="primary-btn d-inline-flex align-items-center float-right" data-toggle="modal" data-target="#modal-basic-data">Editar</button>
                             </div>
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_name">Nombres</label>
-                                    <input type="email" class="form-control" readonly id="profile_name" placeholder="{{request.user.first_name|default:"Sin Nombre"}}">
+                                    <input type="email" class="form-control" readonly id="profile_name" placeholder="{{request.user.get_full_name|default:"Sin Nombre"}}">
                                 </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_email">Mi Cófigo Influencer</label>
-                                    <input type="text" class="form-control" readonly id="influencer_code" placeholder="{{request.user.related_influencer.code}}">
+                                    <input type="text" class="form-control" readonly id="influencer_code" placeholder="{{request.user.code|default:"Sin código"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_name">Tipo Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_doc_type" placeholder="{{request.user.related_|default:"Sin nombre"}}">
+                                    <input type="text" class="form-control" readonly id="profile_doc_type" placeholder="{{request.user.get_document_type_display|default:"Sin documento"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_employees">Número Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_doc_id" placeholder="{{request.user.company.get_employees_number_display|default:"Sin empleados"}}">
+                                    <input type="text" class="form-control" readonly id="profile_doc_id" placeholder="{{request.user.company.document_id|default:"Sin documento"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_sector">Teléfono</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.company.sector.name|default:"Sin sector"}}">
+                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.phone_number|default:"Sin teĺefono"}}">
                                 </div>
                             </div>
                                     
@@ -102,19 +102,19 @@
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_name">Banco</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_name" placeholder="{{request.user.company|default:"Sin nombre"}}">
+                                    <input type="text" class="form-control" readonly id="profile_company_name" placeholder="{{request.user.bank|default:"Sin banco"}}">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_employees">Tipo cuenta</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.company.get_employees_number_display|default:"Sin cuenta"}}">
+                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.company.get_account_type_display|default:"Sin cuenta"}}">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_sector">Número de cuenta</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.company.sector.name|default:"Sin cuenta"}}">
+                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.account_number|default:"Sin cuenta"}}">
                                 </div>
                             </div>
                         </div>
@@ -125,28 +125,57 @@
         </div>
     </div>
 </section>
-<!-- Modal Editar Nombre -->
-<div class="modal fade" id="modal-name" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal Editar info básica  -->
+<div class="modal" tabindex="-1" role="dialog" id="modal-basic-data">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edita tu nombre</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="name_form" class="form-horizontal" >
-                <div class="form-group">
-                    <label for="first_name">Nombre</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}">
+            <div class="modal-header">
+                <h5 class="modal-title">Edita tu información básica</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data-form" class="form-horizontal" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value={{request.user.pk}}>
+                    <div class="form-group">
+                        <label for="first_name">Nombres</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}" value="{{request.user.first_name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Apellidos</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{request.user.last_name}}" value="{{request.user.last_name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="code">Código Influenciador</label>
+                        <input type="text" class="form-control" id="code" name="code" value="{{request.user.code}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="doc_type">Tipo de documento</label>
+                        <select class="form-control" id="doc_type" name="document_type">
+                            <option disabled value="">Selecciona tipo de documento</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TE">Tarjeta de identidad</option>
+                            <option value="CE">Cédula Extranjera</option>
+                            <option value="PA">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="doc_id">Número de documento</label>
+                        <input type="text" class="form-control" id="doc_id" name="document_id" placeholder="Ingresa tu número de documento" value="{{request.user.document_number}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Número de teléfono</label>
+                        <input type="text" class="form-control" id="phone_number" placeholder="ingresa tu número de teléfono" name="document_id" value="{{request.user.phone_number}}">
+                    </div>
                 </div>
-        </div>
-        <div class="modal-footer">
+
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-action">Guardar</button>
             </form>
-        </div>
+            </div>
         </div>
     </div>
 </div>
@@ -251,7 +280,7 @@
     </div>
 </div>
 
-<!-- Modal Editar Empresa -->
+<!-- Modal Editar datos bancarios -->
 <div class="modal fade" id="modal-company" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -384,26 +413,44 @@
             $('#validEmail').html(checkEmailValid($('#email1').val(), $('#email2').val()))
         })
 
-        $("#name_form").on('submit', function(ev){
+        $("#data-form").on('submit', function(ev){
             ev.preventDefault()
+            console.log("Submit")
             data = new FormData($(this)[0])
-            axios.patch("{% url 'api:users:user_name_update' pk=request.user.pk %}", data)
+            axios.patch("{% url 'api:users:influencer_update' pk=request.user.pk %}", data)
                 .then(function(response){
-                    toastr.success("Se ha actualizado la información exitosamente")
+                    $.notify(
+                        "Se ha actualizado la información exitosamente",
+                        {
+                            type:"success", 
+                            align:"center", verticalAlign:"top",
+                            delay:3500,
+                            animation:true,
+                            animationType:"scale"
+                        }
+                    );
                     setTimeout(function(){
-                        $('#modal-name').modal('toggle')
+                        $('#modal-basic-data').modal('toggle')
                         location.reload()
                     }, 1000);
                 })
                 .catch(function(error){
                     console.log(error.response.data.error)
-                    toastr.error(error.response.data.error)
+                    $.notify(
+                        error.response.data.error,
+                        {
+                            type:"danger", 
+                            align:"center", verticalAlign:"top",
+                            delay:3500,
+                            animation:true,
+                            animationType:"scale"
+                        }
+                    );
                 });
         })
 
         $("#email_form").on('submit', function(ev){
             ev.preventDefault()
-            console.log("Submit")
             data = $(this).serialize()
             axios.patch("{% url 'api:users:user_change_email' %}", data)
                 .then(function(response){
@@ -414,8 +461,16 @@
                     }, 1000);
                 })
                 .catch(function(error){
-                    console.log(error.response.data.error)
-                    toastr.error(error.response.data.error)
+                    $.notify(
+                        error.response.data.error,
+                        {
+                            type:"danger", 
+                            align:"center", verticalAlign:"top",
+                            delay:3500,
+                            animation:true,
+                            animationType:"scale"
+                        }
+                    );
                 });
         })
 
@@ -433,8 +488,16 @@
                 })
                 .catch(function(error){
                     console.log("Error")
-                    console.log(error.response.data)
-                    toastr.error(error.response.data)
+                    $.notify(
+                        error.response.data,
+                        {
+                            type:"danger", 
+                            align:"center", verticalAlign:"top",
+                            delay:3500,
+                            animation:true,
+                            animationType:"scale"
+                        }
+                    );
                 });
         })
 

@@ -1,4 +1,6 @@
 
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.utils import timezone
 
@@ -12,7 +14,7 @@ from rest_framework_jwt.views import ObtainJSONWebToken
 
 from users.models import User, TermsAcceptanceLogs
 
-from .serializers import CustomerSerializer, JWTSerializer
+from .serializers import CustomerSerializer, JWTSerializer, InfluencerSerializer, ChangePasswordSerializer
 
 
 class CustomerViewSet(APIView):
@@ -21,17 +23,22 @@ class CustomerViewSet(APIView):
 
     def post(self, request, format=None):
         ip_user = get_client_ip(request)
-        terms_date = timezone.now()
-        user = dict(username=request.data['username'], first_name=request.data['first_name'], last_name=request.data['last_name'], email=request.data['email'], password=request.data['password'])
-        user_data = dict(document_number=request.data['document_number'], cellphone_number=request.data['cellphone_number'], user=user)
-        
+        user_data = dict(
+            username=request.data['username'],
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
+            email=request.data['email'],
+            password=request.data['password'],
+            document_number=request.data['document_number'],
+            cellphone_number=request.data['cellphone_number'],
+        )
 
         serializer = CustomerSerializer(data=user_data)
 
         try:
             if serializer.is_valid(raise_exception=True):
-                customer = serializer.save()
-                TermsAcceptanceLogs.objects.create(user=customer.user, ip_address=ip_user)
+                user = serializer.save()
+                TermsAcceptanceLogs.objects.create(user=user, ip_address=ip_user)
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
@@ -49,3 +56,42 @@ def get_client_ip(request):
 
 class ObtainJWTView(ObtainJSONWebToken):
     serializer_class = JWTSerializer
+
+
+class InfluencerUpdate(generics.UpdateAPIView):
+    """ Api para actualizar el nombre
+    """
+
+    serializer_class = InfluencerSerializer
+    queryset = get_user_model().objects.all()
+
+
+class UserChangeEmail(generics.UpdateAPIView):
+    """Api para actualizar el email de un usuario
+    """
+
+    serializer_class = InfluencerSerializer
+    queryset = get_user_model().objects.all()
+
+    def get_object(self):
+        email = self.request.data.get('old_email')
+        user = get_user_model().objects.get(email=email)
+        try:
+            obj = get_user_model().objects.get(pk=user.pk)
+        except:
+            raise ValidationError('No existe un usuario con ese correo')
+        return obj
+
+
+class UserChangePassword(generics.UpdateAPIView):
+    """Api para actualizar el email de un usuario
+    """
+
+    serializer_class = ChangePasswordSerializer
+    queryset = get_user_model().objects.all()
+
+
+    def get_object(self):
+        email = self.request.data.get('email')
+        user = User.objects.get(email=email)
+        return user

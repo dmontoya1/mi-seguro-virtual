@@ -54,7 +54,7 @@
 									{% if request.user.is_authenticated %}
 										<a href="{% url 'webclient:home' %}">Home</a>
 										<a href="{% url 'webclient:profile' %}">Mi perfil</a>
-										<a href="{% url 'webclient:signup' %}">Mis ganancias</a>
+										<a href="{% url 'webclient:influencer_profits' %}">Mis ganancias</a>
 										<a href="{% url 'webclient:logout' %}">Cerrar Sesión</a>
 									{% else %}
 										<a href="{% url 'webclient:home' %}">Home</a>
@@ -151,7 +151,8 @@
 		<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 		<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
 		<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <script src="{% static 'js/main.js' %}"></script>
+		<script src="{% static 'js/main.js' %}"></script>
+		<script src="{% static 'js/notify.min.js' %}"></script>
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
