@@ -60,7 +60,16 @@ class InfluencerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'first_name', 'last_name', 'code', 'document_type', 'document_id', 'email' )
+        fields = ('pk', 'first_name', 'last_name', 'code', 'document_type', 'document_id', 'email', 'phone_number' )
+
+
+class InfluencerBankSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    class Meta:
+        model = User
+        fields = ('pk', 'bank', 'account_type', 'account_number')
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

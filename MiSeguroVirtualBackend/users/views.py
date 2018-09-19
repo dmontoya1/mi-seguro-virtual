@@ -14,7 +14,8 @@ from rest_framework_jwt.views import ObtainJSONWebToken
 
 from users.models import User, TermsAcceptanceLogs
 
-from .serializers import CustomerSerializer, JWTSerializer, InfluencerSerializer, ChangePasswordSerializer
+from .serializers import CustomerSerializer, JWTSerializer, InfluencerSerializer, ChangePasswordSerializer,\
+                         InfluencerBankSerializer
 
 
 class CustomerViewSet(APIView):
@@ -42,6 +43,8 @@ class CustomerViewSet(APIView):
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
+            print (e)
+            print ("Exception")
             return Response(dict(status='error', details=str(e)), status=400)
 
 
@@ -59,10 +62,18 @@ class ObtainJWTView(ObtainJSONWebToken):
 
 
 class InfluencerUpdate(generics.UpdateAPIView):
-    """ Api para actualizar el nombre
+    """ Api para actualizar los datos básicos del influencer
     """
 
     serializer_class = InfluencerSerializer
+    queryset = get_user_model().objects.all()
+
+
+class InfluencerBankUpdate(generics.UpdateAPIView):
+    """ Api para actualizar los datos bancarios del influencer
+    """
+
+    serializer_class = InfluencerBankSerializer
     queryset = get_user_model().objects.all()
 
 

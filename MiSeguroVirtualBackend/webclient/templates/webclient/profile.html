@@ -34,26 +34,26 @@
                             
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="profile_email">Mi Cófigo Influencer</label>
-                                    <input type="text" class="form-control" readonly id="influencer_code" placeholder="{{request.user.code|default:"Sin código"}}">
+                                    <label for="profile_code">Mi Cófigo Influencer</label>
+                                    <input type="text" class="form-control" id="profile_code" readonly id="influencer_code" placeholder="{{request.user.code|default:"Sin código"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="profile_company_name">Tipo Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_doc_type" placeholder="{{request.user.get_document_type_display|default:"Sin documento"}}">
+                                    <label for="doc_type_info">Tipo Documento</label>
+                                    <input type="text" class="form-control" readonly id="doc_type_info" placeholder="{{request.user.get_document_type_display|default:"Sin documento"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="profile_company_employees">Número Documento</label>
-                                    <input type="text" class="form-control" readonly id="profile_doc_id" placeholder="{{request.user.company.document_id|default:"Sin documento"}}">
+                                    <label for="doc_number">Número Documento</label>
+                                    <input type="text" class="form-control" readonly id="doc_number" placeholder="{{request.user.document_id|default:"Sin documento"}}">
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="profile_company_sector">Teléfono</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.phone_number|default:"Sin teĺefono"}}">
+                                    <label for="phone_number_info">Teléfono</label>
+                                    <input type="text" class="form-control" readonly id="phone_number_info" placeholder="{{request.user.phone_number|default:"Sin teĺefono"}}">
                                 </div>
                             </div>
                                     
@@ -95,7 +95,7 @@
                         <div class="row mb-3 ml-2">
                             <div class="col-12">
                                 <span class="section-info">Datos Bancarios</span>
-                                <button class="btn-action-company float-right" data-toggle="modal" data-target="#modal-company">Editar</button>
+                                <button class="btn-action-company float-right" data-toggle="modal" data-target="#modal-bank">Editar</button>
                             </div>
                         </div>
                         <div class="row mb-4">
@@ -108,7 +108,7 @@
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="profile_company_employees">Tipo cuenta</label>
-                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.company.get_account_type_display|default:"Sin cuenta"}}">
+                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.get_account_type_display|default:"Sin cuenta"}}">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -136,24 +136,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="data-form" class="form-horizontal" method="POST">
+                <form id="data-form" class="form-horizontal">
                     {% csrf_token %}
                     <input type="hidden" name="pk" value={{request.user.pk}}>
                     <div class="form-group">
                         <label for="first_name">Nombres</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}" value="{{request.user.first_name}}">
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}" value="{{request.user.first_name}}" required>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Apellidos</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{request.user.last_name}}" value="{{request.user.last_name}}">
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{request.user.last_name}}" value="{{request.user.last_name}}" required>
                     </div>
                     <div class="form-group">
                         <label for="code">Código Influenciador</label>
-                        <input type="text" class="form-control" id="code" name="code" value="{{request.user.code}}">
+                        <input type="text" class="form-control" id="code" name="code" value="{{request.user.code}}" required>
                     </div>
                     <div class="form-group">
                         <label for="doc_type">Tipo de documento</label>
-                        <select class="form-control" id="doc_type" name="document_type">
+                        <select class="form-control" id="doc_type" name="document_type" required>
                             <option disabled value="">Selecciona tipo de documento</option>
                             <option value="CC">Cédula de Ciudadanía</option>
                             <option value="TE">Tarjeta de identidad</option>
@@ -163,13 +163,13 @@
                     </div>
                     <div class="form-group">
                         <label for="doc_id">Número de documento</label>
-                        <input type="text" class="form-control" id="doc_id" name="document_id" placeholder="Ingresa tu número de documento" value="{{request.user.document_number}}">
+                        <input type="text" class="form-control" id="doc_id" name="document_id" placeholder="Ingresa tu número de documento" value="{{request.user.document_id}}" required>
                     </div>
                     <div class="form-group">
                         <label for="phone_number">Número de teléfono</label>
-                        <input type="text" class="form-control" id="phone_number" placeholder="ingresa tu número de teléfono" name="document_id" value="{{request.user.phone_number}}">
+                        <input type="text" class="form-control" id="phone_number" placeholder="ingresa tu número de teléfono" name="phone_number" value="{{request.user.phone_number}}" required>
                     </div>
-                </div>
+            </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -281,7 +281,7 @@
 </div>
 
 <!-- Modal Editar datos bancarios -->
-<div class="modal fade" id="modal-company" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-bank" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -291,36 +291,25 @@
             </button>
         </div>
         <div class="modal-body">
-            <form id="company_form" class="form-horizontal" >
+            <form id="bank_form" class="form-horizontal">
                 {% csrf_token %}
                 <input type="hidden" name="pk" value={{request.user.pk}}>
                 <div class="form-group">
-                    <label for="company_name">Nombre empresa</label>
-                    <input type="text" class="form-control" id="company_name" name="name" placeholder="Ingresa el nombre de tu empresa" value="{{request.user.company.name}}">
+                    <label for="company_name">Banco</label>
+                    <input type="text" class="form-control" id="bank" name="bank" placeholder="Ingresa tu banco" value="{{request.user.bank|default:''}}">
                 </div>
                 <div class="form-group">
-                    <label for="employees_number">Número de empleados</label>
-                    <select class="form-control" id="employees_number" name="employees_number">
-                        <option disabled selected value="">Selecciona el número de empleados</option>
-                        <option value="1">Menos de 10</option>
-                        <option value="2">Entre 10 y 20</option>
-                        <option value="3">Entre 20 y 50</option>
-                        <option value="4">Más de 50</option>
+                    <label for="account_type">Tipo de cuenta</label>
+                    <select class="form-control" id="account_type" name="account_type">
+                        <option disabled value="">Tipo de cuenta</option>
+                        <option {% if account_type == 'AH' %}selected{% endif%} value="AH">Ahorros</option>
+                        <option {% if account_type == 'CO' %}selected{% endif%} value="CO">Corriente</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="sector_company">Sector</label>
-                    <select class="form-control" id="sector_company" name="sector">
-                        <option disabled selected value="">Selecciona un sector</option>
-                        
-                    </select>
+                    <label for="sector_company">Número de cuenta</label>
+                    <input type="text" class="form-control" name="account_number" id="account_number" placeholder="Ingresa el número de cuenta" value="{{reques.user.account_number}}">
                 </div>
-                <div class="form-group">
-                    <label for="company_description">Descripción</label>
-                    <textarea class="form-control" name="description" id="company_description" rows="3" placeholder="Ingresa una descripción de tu empresa"
-                     value="{{request.user.company.description}}">{{request.user.company.description}}</textarea>
-                </div>
-            
         </div>
         <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -337,7 +326,7 @@
 
 {% block extra_js %}
 
-    <script type="text/javascript">
+    <script>
         function checkStrength(password) {
             var strength = 0
             if (password.length < 6) {
@@ -415,63 +404,55 @@
 
         $("#data-form").on('submit', function(ev){
             ev.preventDefault()
-            console.log("Submit")
             data = new FormData($(this)[0])
             axios.patch("{% url 'api:users:influencer_update' pk=request.user.pk %}", data)
-                .then(function(response){
-                    $.notify(
-                        "Se ha actualizado la información exitosamente",
-                        {
-                            type:"success", 
-                            align:"center", verticalAlign:"top",
-                            delay:3500,
-                            animation:true,
-                            animationType:"scale"
-                        }
-                    );
-                    setTimeout(function(){
-                        $('#modal-basic-data').modal('toggle')
-                        location.reload()
-                    }, 1000);
-                })
-                .catch(function(error){
-                    console.log(error.response.data.error)
-                    $.notify(
-                        error.response.data.error,
-                        {
-                            type:"danger", 
-                            align:"center", verticalAlign:"top",
-                            delay:3500,
-                            animation:true,
-                            animationType:"scale"
-                        }
-                    );
+            .then(function(response){
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado la información exitosamente",
+                    hideTimeout: 5000,
                 });
+                setTimeout(function(){
+                    $('#modal-basic-data').modal('toggle')
+                    location.reload()
+                }, 1000);
+            })
+            .catch(function(error){
+                console.log(error.response)
+                console.log(error.response.data.error)
+                BootstrapAlert.warning({
+                    title: "Ups",
+                    message: "Hemos detectado un error, intenta nuevamente",
+                    hideTimeout: 5000,
+                });
+                
+            });
         })
 
         $("#email_form").on('submit', function(ev){
             ev.preventDefault()
+            console.log("Submit")
             data = $(this).serialize()
             axios.patch("{% url 'api:users:user_change_email' %}", data)
-                .then(function(response){
-                    toastr.success("Se ha actualizado tu correo exitosamente")
-                    setTimeout(function(){
-                        $('#modal-email').modal('toggle')
-                        location.reload()
-                    }, 1000);
-                })
-                .catch(function(error){
-                    $.notify(
-                        error.response.data.error,
-                        {
-                            type:"danger", 
-                            align:"center", verticalAlign:"top",
-                            delay:3500,
-                            animation:true,
-                            animationType:"scale"
-                        }
-                    );
+            .then(function(response){
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado tu correo exitosamente",
+                    hideTimeout: 5000,
                 });
+                setTimeout(function(){
+                    $('#modal-email').modal('toggle')
+                    location.reload()
+                }, 1000);
+            })
+            .catch(function(error){
+                console.log(error.response)
+                BootstrapAlert.error({
+                    title: "Ups",
+                    message: error.response.data.error,
+                    hideTimeout: 5000,
+                });
+            });
         })
 
         $("#password_form").on('submit', function(ev){
@@ -479,8 +460,16 @@
             data = $(this).serialize()
             axios.patch("{% url 'api:users:user_change_password' %}", data)
                 .then(function(response){
-                    toastr.success("Se ha actualizado tu contraseña exitosamente")
-                    toastr.success("Por favor inicia sesión nuevamente")
+                    BootstrapAlert.success({
+                        title: "Éxito",
+                        message: "Se ha actualizado tu contraseña exitosamente",
+                        hideTimeout: 5000,
+                    });
+                    BootstrapAlert.success({
+                        title: "Éxito",
+                        message: "Por favor inicia sesión nuevamente",
+                        hideTimeout: 5000,
+                    });
                     setTimeout(function(){
                         $('#modal-password').modal('toggle')
                         location.reload()
@@ -488,77 +477,45 @@
                 })
                 .catch(function(error){
                     console.log("Error")
-                    $.notify(
-                        error.response.data,
-                        {
-                            type:"danger", 
-                            align:"center", verticalAlign:"top",
-                            delay:3500,
-                            animation:true,
-                            animationType:"scale"
-                        }
-                    );
+                    BootstrapAlert.error({
+                        title: "Ups",
+                        message: error.response.data.error,
+                        hideTimeout: 5000,
+                    });
                 });
         })
 
-        $("#company_form").on('submit', function(ev){
+        $('#bank_form').on('submit',function(ev){
             ev.preventDefault()
-            console.log("Submit")
             data = new FormData($(this)[0])
-            axios.post("{% url 'api:users:company_update' %}", data)
-                .then(function(response){
-                    toastr.success("La compañía se actualizó correctamente")
-                    setTimeout(function(){
-                        $('#modal-company').modal('toggle')
-                        location.reload()
-                    }, 1000);
-                })
-                .catch(function(error){
-                    console.log("Error")
-                    console.log(error.response.data)
-                    toastr.error(error.response.data)
-                });
-        })
-
-        function get_sector_list(sector_id){
-            axios.get("{% url 'api:users:sector_list' %}")
+            axios.patch("{% url 'api:users:influencer_bank_update' pk=request.user.pk %}", data)
             .then(function(response){
-                $('#sector_company').empty()
-                $(response.data).each(function(i,v){
-                    if (v.id == sector_id){
-                        $('#sector_company').append(
-                            `
-                                <option value='${v.id}' selected>${v.name}</option>
-                            `
-                        )
-                    }
-                    else {
-                        $('#sector_company').append(
-                            `
-                                <option value='${v.id}'>${v.name}</option>
-                            `
-                        )
-                    }
-                })
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado la información bancaria exitosamente",
+                    hideTimeout: 5000,
+                });
+                setTimeout(function(){
+                    $('#modal-bank').modal('toggle')
+                    location.reload()
+                }, 1000);
             })
             .catch(function(error){
-                console.log("Error")
-                console.log(error.response.data)
-                toastr.error(error.response.data)
+                console.log(error.response)
+                console.log(error.response.data.error)
+                BootstrapAlert.warning({
+                    title: "Ups",
+                    message: "Hemos tenido un error.",
+                    hideTimeout: 5000,
+                });
+                
             });
-        }
+            
+        })
 
 
         $(document).ready(function(){
-            sector_id = '{{request.user.company.sector.id}}'
-            if (sector_id)
-            get_sector_list(sector_id)
 
-            employees = '{{request.user.company.employees_number}}'
-            console.log(employees)
-            if (employees){
-                $('#employees_number').find(`option[value=${employees}]`).attr('selected', true)
-            }
         })
 
 
