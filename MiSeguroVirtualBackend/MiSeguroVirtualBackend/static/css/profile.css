@@ -19,3 +19,21 @@
     font-size: 1.1em;
     font-weight: 600;
 }
+
+.btn-edit {
+    background-color: #e76b7d;
+    border: 1px solid #e76b7d;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 32px;
+    color: #fff;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #df8794;
+}
