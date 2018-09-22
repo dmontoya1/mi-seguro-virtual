@@ -23,8 +23,13 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.humanize',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 PROJECT_APPS = [
@@ -90,7 +95,10 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'users.User'
 
+SITE_ID = 1
+
 AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -140,3 +148,28 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, "MiSeguroVirtualBackend/media")
 
 
 AUTH_USER_MODEL = 'users.User'
+
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email','public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'es_CO',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'
+        }
+    }
+
+#facebook
+SOCIAL_AUTH_FACEBOOK_KEY = '1705416796237021'
+SOCIAL_AUTH_FACEBOOK_SECRET ='f3fe0a12248ea9b858219b8f5f3a48e7'
+
+LOGIN_REDIRECT_URL = "webclient:profile" 

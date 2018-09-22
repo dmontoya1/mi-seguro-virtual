@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/', include('apis.urls', namespace='api'), name='api'),
     path('admin/', admin.site.urls),
     path('', include('webclient.urls', namespace='webclient'), name='webclient'),
+    path('accounts/',include('allauth.urls')),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,
  document_root=settings.MEDIA_ROOT)

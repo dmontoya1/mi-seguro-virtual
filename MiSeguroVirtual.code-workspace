@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"python.pythonPath": "/Users/apptitud/.virtualenvs/mi-seguro-virtual/bin/python3"
+		"python.pythonPath": "/home/daniel/virtualenvs/jwt-auth-qo-Pdpfy/bin/python"
 	}
 }

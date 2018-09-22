@@ -1,5 +1,7 @@
 {% load static %}
 {% load humanize %}
+{% load socialaccount %}
+{% providers_media_js %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -43,6 +45,11 @@
                     <span class="login100-form-title p-b-34 p-t-27">
                         Iniciar sesión Influencer
                     </span>
+
+                    <a href="{% provider_login_url "facebook" method="js_sdk" %}" class="btn btn-block btn-social btn-facebook">
+                        <span class="fa fa-facebook"></span>
+                            Iniciar sesión con Facebook
+                    </a>
 
                     <div class="wrap-input100 validate-input" data-validate="Debes ingresar tu email">
                         <input class="input100" type="email" name="email" placeholder="Email">

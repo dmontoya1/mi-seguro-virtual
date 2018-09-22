@@ -546,5 +546,10 @@ iframe {
   }
 }
 
-
+.btn-facebook {
+  background-color: #3b5998;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 60px;
+}
 
