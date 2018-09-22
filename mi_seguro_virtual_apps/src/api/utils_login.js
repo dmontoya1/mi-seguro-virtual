@@ -1,6 +1,6 @@
 APICallbacklogin = (dataToSend, endPointAPI, method, successStateCode) => {
 	let keys = Object.keys(dataToSend);
-
+	let api_url = 'http://192.168.0.21:8000';
 	var urlParams = '';
 
 	for (var i = 0; i < keys.length; i++) {
@@ -29,7 +29,7 @@ APICallbacklogin = (dataToSend, endPointAPI, method, successStateCode) => {
 		options.body = body;
 	}
 
-	return fetch(`${endPointAPI}${urlParams}`, options)
+	return fetch(`${api_url}/${endPointAPI}${urlParams}`, options)
 		.then((response) => {
 			return {
 				errored: response.status != successStateCode,
