@@ -1,4 +1,5 @@
 
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
@@ -46,27 +47,52 @@ class TermsAcceptanceLogsSerializer(serializers.ModelSerializer):
         fields = ('ip_address', 'Acceptance_date', 'customer')
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'password', 'first_name', 'last_name', 'email')
-
-
 class CustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False)
 
     class Meta:
         model = User
-        fields = ('cellphone_number', 'document_number', 'user')
-    
+        fields = ('username', 'password', 'first_name', 'last_name', 'email', 'cellphone_number', 'document_number')
 
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user_primary_data = dict(username = user_data['username'], password = user_data['password'])
-        user = User.objects.create_user(**user_primary_data)
-        user.first_name = user_data['first_name']
-        user.last_name = user_data['last_name']
-        user.email = user_data['email']
-        user.save()
-        customer = Customer.objects.create(user = user, **validated_data)
-        return customer
+
+class InfluencerSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    class Meta:
+        model = User
+        fields = ('pk', 'first_name', 'last_name', 'code', 'document_type', 'document_id', 'email', 'phone_number' )
+
+
+class InfluencerBankSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    class Meta:
+        model = User
+        fields = ('pk', 'bank', 'account_type', 'account_number')
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+	"""Serializador para cambiar el password de un usuario
+	"""
+
+	class Meta:
+		model = User
+		fields = ('password',)
+
+	def save(self):
+		change_password = self.context['request'].data.get('password',None)
+		if change_password != None:
+			user = User.objects.get(
+				email=self.context['request'].data['email']
+			)
+			if self.context['request'].data['old_password'] == change_password:
+				raise serializers.ValidationError("La contraseña nueva es igual a la anterior, por favor verifica tu información")
+			check = check_password(self.context['request'].data['old_password'], user.password)
+			if check == True:
+				user.set_password(self.context['request'].data['password'])
+				user.save()
+			else:
+				raise serializers.ValidationError("La contraseña ingresada no corresponde a la de tu cuenta")
+			return user
+		super(ChangePasswordSerializer, self).save()

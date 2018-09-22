@@ -16,6 +16,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.template import Template, Context, loader
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -60,14 +61,15 @@ class LoginView(TemplateView):
     template_name = "webclient/login.html"
 
     def post(self, request, *args, **kwargs):
-        email = request.POST['email']
+        username = request.POST['email']
         password = request.POST['password']
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(username=username, user_type=User.INFLUENCER)
         except User.DoesNotExist:
             response = {'error': 'El correo no se encuentra registrado en la plataforma como influencer'}
             return JsonResponse(response, status=400)
-        user = authenticate(email=email, password=password)
+        print (user)
+        user = authenticate(username=username, password=password)
         print (user)
         if user is not None:
             url = reverse('webclient:profile')
@@ -94,13 +96,16 @@ class SignupView(TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             user = User()
-            user.email = request.POST['email']
-            user.username = request.POST['email']
-            user.set_password(request.POST['password1'])
+            username = request.POST['email']
+            password = request.POST['password1']
+            user.email = username
+            user.username = username
+            user.set_password(password)
+            user.user_type = User.INFLUENCER
+            user.code = get_random_string(length=10)
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             user.save()
-
-            # Token.objects.create(user=user)
+            user = authenticate(username=username, password=password)
 
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
@@ -127,8 +132,15 @@ class SignupView(TemplateView):
             return JsonResponse(response, status=400)
 
 
-class ProfileView( TemplateView):
+class ProfileView(LoginRequiredMixin, TemplateView):
 
     template_name = "webclient/profile.html"
     login_url = 'webclient:login'
 
+
+class InfluencerProfits(LoginRequiredMixin, TemplateView):
+    """
+    """
+
+    template_name = "webclient/influencer_profits.html"
+    login_url = "webclient:login"

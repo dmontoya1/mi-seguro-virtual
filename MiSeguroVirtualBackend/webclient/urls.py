@@ -15,4 +15,5 @@ urlpatterns = [
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('policies/<str:type>/', views.PoliciesView.as_view(), name='policies'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('profites/', views.InfluencerProfits.as_view(), name='influencer_profits'),
 ]

@@ -54,7 +54,7 @@
 									{% if request.user.is_authenticated %}
 										<a href="{% url 'webclient:home' %}">Home</a>
 										<a href="{% url 'webclient:profile' %}">Mi perfil</a>
-										<a href="{% url 'webclient:signup' %}">Mis ganancias</a>
+										<a href="{% url 'webclient:influencer_profits' %}">Mis ganancias</a>
 										<a href="{% url 'webclient:logout' %}">Cerrar Sesión</a>
 									{% else %}
 										<a href="{% url 'webclient:home' %}">Home</a>
@@ -132,12 +132,6 @@
 							<img src="{% static 'img/logo.png' %}" alt="">
 						</div>
 						<div class="copy-right-text">Copyright &copy; 2017  |  All rights reserved to Dinomuz inc. This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></div>
-						<div class="footer-social">
-							<a href="#"><i class="fa fa-facebook"></i></a>
-							<a href="#"><i class="fa fa-twitter"></i></a>
-							<a href="#"><i class="fa fa-dribbble"></i></a>
-							<a href="#"><i class="fa fa-behance"></i></a>
-						</div>
 					</div>
 				</div>
 			</footer>
@@ -151,39 +145,30 @@
 		<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 		<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
 		<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <script src="{% static 'js/main.js' %}"></script>
+		<script src="{% static 'js/main.js' %}"></script>
+		<script src="{% static 'js/BootstrapAlert.min.js' %}"></script>
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-        {% if messages  %}
-            {% for message in messages %}
-                <script>
-                    toastr.options = {
-                        "closeButton": false,
-                        "debug": false,
-                        "newestOnTop": false,
-                        "progressBar": false,
-                        "positionClass": "toast-top-full-width",
-                        "preventDuplicates": false,
-                        "onclick": null,
-                        "showDuration": "1000",
-                        "hideDuration": "1000",
-                        "timeOut": "5000",
-                        "extendedTimeOut": "1000",
-                        "showEasing": "swing",
-                        "hideEasing": "linear",
-                        "showMethod": "fadeIn",
-                        "hideMethod": "fadeOut"
-                    }
-                    toastr.info('{{message}}')
-                </script>
-            {% endfor %}
-        {% endif %}
-
+		
+        {% if messages %}
+			{% for message in messages %}
+			<script>
+				BootstrapAlert.info({
+					title: "Información!. ",
+					message: "{{message}}",
+					hideTimeout: 5000,
+				});
+				
+			</script>
+			{% endfor %}
+		{% endif %}
+		<script>
+			axios.defaults.headers.common['X-CSRFToken'] = '{{csrf_token}}'
+		</script>
         
         
-        {% block extra-js %}
+        {% block extra_js %}
         {% endblock %}
 	</body>
 </html>
