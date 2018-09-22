@@ -30,8 +30,9 @@ class CustomerViewSet(APIView):
             last_name=request.data['last_name'],
             email=request.data['email'],
             password=request.data['password'],
-            document_number=request.data['document_number'],
-            cellphone_number=request.data['cellphone_number'],
+            document_id=request.data['document_id'],
+            phone_number=request.data['phone_number'],
+            user_type = User.CLIENTE,
         )
 
         serializer = CustomerSerializer(data=user_data)

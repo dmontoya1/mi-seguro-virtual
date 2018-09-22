@@ -1,4 +1,5 @@
 
+from django.contrib.auth import authenticate, user_logged_in
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 
@@ -10,14 +11,16 @@ from users.models import User, TermsAcceptanceLogs
 
 class JWTSerializer(JSONWebTokenSerializer):
     def validate(self, attrs):
+        print("Validation")
         credentials = {
             self.username_field: attrs.get(self.username_field),
             'password': attrs.get('password')
         }
+        print (credentials)
 
         if all(credentials.values()):
             user = authenticate(request=self.context['request'], **credentials)
-
+            print (user)
             if user:
                 if not user.is_active:
                     msg = 'User account is disabled.'
@@ -51,7 +54,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'first_name', 'last_name', 'email', 'cellphone_number', 'document_number')
+        fields = ('username', 'password', 'first_name', 'last_name', 'email', 'phone_number', 'document_id', 'user_type')
 
 
 class InfluencerSerializer(serializers.ModelSerializer):

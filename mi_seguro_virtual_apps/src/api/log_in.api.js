@@ -2,7 +2,7 @@ import APICallbacklogin from './utils_login';
 
 let logInPostAPI = (dataToSend) => {
 	let method = "POST", successStateCode = 200 ;
-	let endPointAPI = 'login/';	
+	let endPointAPI = 'api/users/login/';	
 	return APICallbacklogin(dataToSend, endPointAPI, method, successStateCode);
 }
 

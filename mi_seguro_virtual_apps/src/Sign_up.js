@@ -13,8 +13,8 @@ export default class SignUp extends Component<{}> {
             checked: false,
             first_name:'',
             last_name:'',
-            document_number:'',
-            cellphone_number:'',
+            document_id:'',
+            phone_number:'',
             mail:'',
             mail2:'',
             password:'',
@@ -28,8 +28,8 @@ export default class SignUp extends Component<{}> {
         let {
             first_name,
             last_name,
-            document_number,
-            cellphone_number,
+            document_id,
+            phone_number,
             mail,
             mail2,
             password,
@@ -60,8 +60,8 @@ export default class SignUp extends Component<{}> {
         let dataToSend = {
             first_name,
             last_name,
-            document_number,
-            cellphone_number,
+            document_id,
+            phone_number,
             email:mail,
             username:mail,
             password
@@ -138,13 +138,13 @@ export default class SignUp extends Component<{}> {
                                 <Input 
                                     placeholder='Numero de documento' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
-                                    onChangeText={(document_number) => this.setState({document_number})} />
+                                    onChangeText={(document_id) => this.setState({document_id})} />
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 
                                     placeholder='Celular de contacto' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
-                                    onChangeText={(cellphone_number) => this.setState({cellphone_number})} />
+                                    onChangeText={(phone_number) => this.setState({phone_number})} />
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 

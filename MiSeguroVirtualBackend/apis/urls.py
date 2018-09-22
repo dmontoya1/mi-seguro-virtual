@@ -8,6 +8,6 @@ router = routers.DefaultRouter()
 app_name = 'api'
 urlpatterns = [
     path('', include(router.urls)),
-    path('insurances', include('insurances.urls', namespace='insurances'), name='insurances'),
+    path('insurances/', include('insurances.urls', namespace='insurances'), name='insurances'),
     path('users/', include('users.urls', namespace='users'), name='users'),
 ]
