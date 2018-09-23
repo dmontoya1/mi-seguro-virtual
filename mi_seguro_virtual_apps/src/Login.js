@@ -54,6 +54,7 @@ export default class Login extends Component {
           <Form style={{paddingBottom:40}}>
               <Item fixedLabel >
                 <Input 
+                  keyboardType='email-address'
                   placeholder="Correo electrónico" 
                   placeholderTextColor='rgba(255,255,255,.6)'
                   style={styles.textInput} 

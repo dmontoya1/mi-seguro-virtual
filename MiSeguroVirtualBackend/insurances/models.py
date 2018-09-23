@@ -149,7 +149,7 @@ class InsuranceRequest(models.Model):
         verbose_name='Cliente',
         related_name='related_insurances_client'
     )
-    brokers = models.ForeignKey(
+    broker = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Corredores',
@@ -162,7 +162,7 @@ class InsuranceRequest(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
-    state = models.CharField(
+    status = models.CharField(
         'Estado',
         max_length=2,
         choices=STATUS_CHOICES,
@@ -172,9 +172,13 @@ class InsuranceRequest(models.Model):
         'Fecha de solicitud'
     )
 
+    def __str__(self):
+        return "Solicitud del cliente %s" % (self.client)
+
     class Meta:
         verbose_name = 'Historial solicitud'
         verbose_name_plural = 'Historial solicitudes'
+
 
 class DocumentsRequest(models.Model):
     """Alamcena las imagenes de los documentos asociados a
@@ -195,6 +199,13 @@ class DocumentsRequest(models.Model):
         upload_to = 'Solicitudes/licencias',
         blank=True
     ) 
+
+    def __str__(self):
+        return "Documentos de %s" % (self.insurance_request)
+
+    class Meta:
+        verbose_name = "Documento de la solicitud"
+        verbose_name_plural = "Documentos de la solicitud"
 
 
 class UserPolicy(models.Model):
@@ -254,6 +265,9 @@ class UserPolicy(models.Model):
     class Meta:
         verbose_name = 'Póliza cliente'
         verbose_name_plural = 'Póliza clientes'
+
+    def __str__(self):
+        return "Póliza %s del cliente %s" % (self.insurance, self.user)
     
 
     def save(self, *args, **kwargs):

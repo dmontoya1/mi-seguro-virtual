@@ -28,10 +28,11 @@ class UserPolicyDetail(APIView):
             username = str(request.user)
             user = User.objects.get(username=username)
             policy = UserPolicy.objects.filter(user=user)
-            print(policy)
-            serializer = UserPolicySerializer(policy, many=True)
-            return Response(dict(status='done', details=serializer.data), status=200)
-
+            if policy.exists():
+                serializer = UserPolicySerializer(policy, many=True)
+                return Response(dict(status='done', details=serializer.data), status=200)
+            else:
+                return Response(dict(status='error', details=str(e)), status=400)
         except Exception as e:
             return Response(dict(status='error', details=str(e)), status=400)
 
@@ -88,16 +89,22 @@ class RequestViewSet(APIView):
 
         request_date = date.today()
         username = request.user
-        state = 'PR'
+        status = 'PR'
         name = request.data['name']
         adviser_code = request.data['adviser_code']
 
         user = User.objects.get(username=username)
         insurance = Insurance.objects.get(name=name)
-        broker = Broker.objects.get(name='Quality')
+        broker = User.objects.get(username='apptitud')
 
-    
-        request = dict(state=state, request_date=request_date, user=user.pk, insurance=insurance.id, broker=broker.id, adviser_code=adviser_code)
+        request = dict(
+            status=status,
+            request_date=request_date,
+            client=user.pk,
+            insurance=insurance.id,
+            broker=broker.id,
+            adviser_code=adviser_code
+        )
         
         serializer = RequestSerializer(data=request)
 

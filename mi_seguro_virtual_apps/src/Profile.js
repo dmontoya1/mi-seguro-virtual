@@ -60,7 +60,7 @@ export default class Profile extends Component {
           </View>
         </View>
         <View style={{paddingLeft:270, paddingTop: 100}}>
-          <Button transparent style={{width:65, height:65}}>
+          <Button transparent style={{width:65, height:65}} onPress={() => Actions.profile_edit() }>
             <Image 
               source={require('../assets/icons/edit.png')} 
               resizeMode='contain' 

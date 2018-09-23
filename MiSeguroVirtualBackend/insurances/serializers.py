@@ -24,7 +24,7 @@ class InsureranceSerializer(serializers.ModelSerializer):
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = InsuranceRequest
-        fields = ('state', 'request_date', 'user', 'insurance','broker', 'adviser_code')
+        fields = ('status', 'request_date', 'client', 'insurance','broker', 'adviser_code')
 
         def create(self, validated_data):
             request_insurance = InsuranceRequest.objects.create(**validated_data)

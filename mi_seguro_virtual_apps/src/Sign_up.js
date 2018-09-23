@@ -136,24 +136,28 @@ export default class SignUp extends Component<{}> {
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 
+                                    keyboardType='numeric'
                                     placeholder='Numero de documento' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
                                     onChangeText={(document_id) => this.setState({document_id})} />
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 
+                                    keyboardType='number-pad'
                                     placeholder='Celular de contacto' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
                                     onChangeText={(phone_number) => this.setState({phone_number})} />
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 
+                                    keyboardType='email-address'
                                     placeholder='Correo electrónico' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
                                     onChangeText={(mail) => this.setState({mail})} />
                             </Item>
                             <Item fixedLabel style={styles.input}>
                                 <Input 
+                                    keyboardType='email-address'
                                     placeholder='Confirme su correo electrónico' 
                                     placeholderTextColor='rgba(0,0,0,0.4)'
                                     onChangeText={(mail2) => this.setState({mail2})} />

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, Footer, Left, Body, Right, Button, Icon, Title, Text, Input, Item, Label, View } from 'native-base';
 import { Image, StyleSheet, ScrollView } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 export default class ProfileEdit extends Component {
   render() {
     return (
@@ -67,7 +69,7 @@ export default class ProfileEdit extends Component {
         </ScrollView>
         <Footer style={{backgroundColor:'white', borderToColor:'rgba(0,0,0,0.1)'}}>
             <View style={{paddingLeft:120}}>
-                <Button transparent>
+                <Button transparent onPress={() => Actions.profile() }>
                     <Text style={{color: 'rgba(0,0,0,0.3)'}}>Cancelar</Text>
                 </Button>
                 </View>

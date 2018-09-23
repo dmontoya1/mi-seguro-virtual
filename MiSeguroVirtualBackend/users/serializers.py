@@ -11,19 +11,16 @@ from users.models import User, TermsAcceptanceLogs
 
 class JWTSerializer(JSONWebTokenSerializer):
     def validate(self, attrs):
-        print("Validation")
         credentials = {
             self.username_field: attrs.get(self.username_field),
             'password': attrs.get('password')
         }
-        print (credentials)
 
         if all(credentials.values()):
             user = authenticate(request=self.context['request'], **credentials)
-            print (user)
             if user:
                 if not user.is_active:
-                    msg = 'User account is disabled.'
+                    msg = 'La cuenta está desactivada'
                     raise serializers.ValidationError(msg)
 
                 payload = jwt_payload_handler(user)
@@ -34,7 +31,7 @@ class JWTSerializer(JSONWebTokenSerializer):
                     'user': user
                 }
             else:
-                msg = 'Unable to log in with provided credentials.'
+                msg = 'Usuario / contraseña incorrectas'
                 raise serializers.ValidationError(msg)
         else:
             msg = 'Must include "{username_field}" and "password".'

@@ -131,8 +131,8 @@ export default class Dashboard extends Component {
         CustomerPolicyPostAPI(dataToSend,token).then(data => {
             if (data.errored){
               Alert.alert(
-                'Error',
-                "error.",
+                'Atención',
+                "Aún no tienes pólizas creadas. Puedes crear una desde aquí",
                 [
                   {text: 'Aceptar', onPress: () =>{}},
                 ],
@@ -271,7 +271,7 @@ export default class Dashboard extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => {}}>Perfil</MenuItem>
+            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
             <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    

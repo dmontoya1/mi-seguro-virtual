@@ -26,6 +26,8 @@ export default class App extends Component {
         <Scene key="home" component={Dashboard} hideNavBar={true}/>
         <Scene key="insurance" component={Insurance} hideNavBar={true}/>
         <Scene key="request" component={Request} hideNavBar={true}/>
+        <Scene key="profile" component={Profile} hideNavBar={true}/>
+        <Scene key="profile_edit" component={ProfileEdit} hideNavBar={true}/>
       </Stack>
     </Router>
     );

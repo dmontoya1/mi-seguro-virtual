@@ -79,9 +79,12 @@ class InsurerAdmin(admin.ModelAdmin):
 class UserPolicyAdmin(admin.ModelAdmin):
     list_display = ['insurer', 'insurance', 'effective_date']
 
-@admin.register(DocumentsRequest)
-class DocumentsRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance_request']
+
+
+class DocumentsRequestAdmin(admin.StackedInline):
+    
+    model = DocumentsRequest
+    extra = 0
 
 
 @admin.register(InsuranceCategory)
@@ -96,4 +99,5 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'client', 'state', 'request_date']
+    list_display = ['insurance', 'client', 'status', 'request_date']
+    inlines = [DocumentsRequestAdmin, ]

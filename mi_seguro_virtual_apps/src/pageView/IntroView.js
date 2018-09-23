@@ -54,7 +54,7 @@ export default class IntroView extends Component {
                 <Text style={styles.text}>
                   Bienvenido a nuestra plataforma, {'\n'}
                   a continuación te daremos una guía {'\n'}
-                  rápida de uso para adquirir tu se
+                  rápida de uso para adquirir tu seguro
                 </Text>
               </View> 
             </View>

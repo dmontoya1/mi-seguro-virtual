@@ -1,5 +1,6 @@
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.utils import timezone
@@ -24,12 +25,13 @@ class CustomerViewSet(APIView):
 
     def post(self, request, format=None):
         ip_user = get_client_ip(request)
+        password = make_password(request.data['password'])
         user_data = dict(
             username=request.data['username'],
             first_name=request.data['first_name'],
             last_name=request.data['last_name'],
             email=request.data['email'],
-            password=request.data['password'],
+            password=password,
             document_id=request.data['document_id'],
             phone_number=request.data['phone_number'],
             user_type = User.CLIENTE,
