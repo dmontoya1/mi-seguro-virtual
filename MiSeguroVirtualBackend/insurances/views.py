@@ -32,7 +32,7 @@ class UserPolicyDetail(APIView):
                 serializer = UserPolicySerializer(policy, many=True)
                 return Response(dict(status='done', details=serializer.data), status=200)
             else:
-                return Response(dict(status='error', details=str(e)), status=400)
+                return Response(dict(status='error', details=str("No hay pólizas disponibles")), status=400)
         except Exception as e:
             return Response(dict(status='error', details=str(e)), status=400)
 
@@ -94,7 +94,7 @@ class RequestViewSet(APIView):
         adviser_code = request.data['adviser_code']
 
         user = User.objects.get(username=username)
-        insurance = Insurance.objects.get(name=name)
+        insurance = Insurance.objects.filter(name=name).first()
         broker = User.objects.get(username='apptitud')
 
         request = dict(
