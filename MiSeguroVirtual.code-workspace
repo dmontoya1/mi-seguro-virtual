@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"python.pythonPath": "/home/daniel/virtualenvs/jwt-auth-qo-Pdpfy/bin/python"
+		"python.pythonPath": "/usr/local/bin/python3"
 	}
 }
