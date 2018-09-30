@@ -4,16 +4,6 @@ from rest_framework import serializers
 from .models import UserPolicy, Insurance, InsuranceRequest, Insurance
 
 
-class UserPolicySerializer(serializers.ModelSerializer):
-    customer = serializers.StringRelatedField(many=False)
-    insurer = serializers.StringRelatedField(many=False)
-    insurance = serializers.StringRelatedField(many=False)
-
-    class Meta:
-        model = UserPolicy
-        fields = ('customer', 'insurer', 'insurance', 'adviser_code', 'adviser_mail', 'expiration_date', 'effective_date')
-
-
 class InsureranceSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField(many=False)
     class Meta:
@@ -22,6 +12,10 @@ class InsureranceSerializer(serializers.ModelSerializer):
 
 
 class RequestSerializer(serializers.ModelSerializer):
+
+    client = serializers.StringRelatedField(many=False)
+    insurance = serializers.StringRelatedField(many=False)
+
     class Meta:
         model = InsuranceRequest
         fields = ('status', 'request_date', 'client', 'insurance','broker', 'adviser_code')
@@ -29,3 +23,14 @@ class RequestSerializer(serializers.ModelSerializer):
         def create(self, validated_data):
             request_insurance = InsuranceRequest.objects.create(**validated_data)
             return request_insurance
+
+
+class UserPolicySerializer(serializers.ModelSerializer):
+    
+    insurance_request = RequestSerializer(many=False, read_only=True)
+    insurer = serializers.StringRelatedField(many=False)
+
+    
+    class Meta:
+        model = UserPolicy
+        fields = ('insurance_request', 'insurer', 'insurance_file', 'adviser_mail', 'expiration_date', 'effective_date')

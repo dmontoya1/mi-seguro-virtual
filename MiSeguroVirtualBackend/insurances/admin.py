@@ -74,11 +74,11 @@ class InsurerAdmin(admin.ModelAdmin):
         return super().response_change(request, obj)
 
 
+class UserPolicyAdmin(admin.StackedInline):
 
-@admin.register(UserPolicy)
-class UserPolicyAdmin(admin.ModelAdmin):
-    list_display = ['insurer', 'insurance', 'effective_date']
-
+    model = UserPolicy
+    extra = 0
+    readonly_fields = ["expiration_date", ]
 
 
 class DocumentsRequestAdmin(admin.StackedInline):
@@ -100,4 +100,4 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'client', 'status', 'request_date']
-    inlines = [DocumentsRequestAdmin, ]
+    inlines = [DocumentsRequestAdmin, UserPolicyAdmin]

@@ -106,3 +106,11 @@ class TermsAcceptanceLogs(models.Model):
         'IP de aceptacion del cliente',
         max_length=20
     )
+
+    def __str__(self):
+        return "Log de términos de %s" % (self.user)
+
+
+    class Meta:
+        verbose_name = "Log de Términos"
+        verbose_name_plural = "Logs de términos"

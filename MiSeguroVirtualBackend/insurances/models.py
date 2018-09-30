@@ -1,7 +1,8 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -127,13 +128,17 @@ class InsuranceRequest(models.Model):
     """Almacena las solicitudes de seguros hechas por los clientes
     """
     PENDING = 'PE'
-    PROCESS = 'PR'
+    EXPIRE = 'EX'
     APPROVED = 'AP'
+    PROCESS = 'PR'
+    CURRENT = 'CU'
 
     STATUS_CHOICES = (
         (PENDING, 'Pendiente'),
+        (EXPIRE, 'Vencido'),
         (PROCESS, 'En proceso'),
-        (APPROVED, 'Aprobado')
+        (APPROVED, 'Aprobado'),
+        (CURRENT, 'Vigente'),
     )
 
     insurance = models.ForeignKey(
@@ -213,35 +218,21 @@ class UserPolicy(models.Model):
     para cada uno de sus clientes
     """
 
-    image = models.ImageField(
-        'Imagen',
+    insurance_request = models.OneToOneField(
+        InsuranceRequest,
+        on_delete=models.CASCADE,
+        verbose_name='Póliza del cliente'
+    )
+    insurance_file = models.FileField(
+        'Documento del seguro',
         upload_to = 'Polizas',
         blank=True
     ) 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        verbose_name='Cliente',
-        default = None
-    )
     insurer = models.ForeignKey(
         Insurer,
         on_delete=models.CASCADE,
         help_text='Enlace a la aseguradora',
         verbose_name='Aseguradora'
-    )
-    insurance = models.ForeignKey(
-        Insurance,
-        on_delete=models.CASCADE,
-        help_text='Enlace al seguro',
-        verbose_name='Seguro',
-        default=None
-    )
-    adviser_code = models.CharField(
-        'Codigo asesor',
-        max_length=15,
-        blank=True,
-        help_text='Agregar en caso de que aplique'
     )
     licensed_plate =models.CharField(
         'placa',
@@ -253,13 +244,13 @@ class UserPolicy(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
-    expiration_date = models.DateField(
-        default = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1),
-        verbose_name="Fecha de vencimiento"
-    )
     effective_date = models.DateField(
         default= timezone.now,
         verbose_name="Fecha inicio de vigencia"
+    )
+    expiration_date = models.DateField(
+        verbose_name="Fecha de vencimiento",
+        auto_now_add=False
     )
 
     class Meta:
@@ -267,9 +258,15 @@ class UserPolicy(models.Model):
         verbose_name_plural = 'Póliza clientes'
 
     def __str__(self):
-        return "Póliza %s del cliente %s" % (self.insurance, self.user)
-    
+        return "Póliza %s del cliente %s" % (self.insurance_request.insurance, self.insurance_request.client)
 
-    def save(self, *args, **kwargs):
-        self.effective_date = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1)
-        super(UserPolicy, self).save(*args, **kwargs)
+    
+    def clean(self, *args, **kwargs):
+        " Make sure expiry time cannot be in the past "
+        d = self.effective_date
+        dt = datetime(d.year, d.month, d.day)
+        if dt <= datetime.now():
+            raise ValidationError('La fecha de inicio de la vigencia debe ser mayor a hoy')
+        else:
+            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1) 
+            super(UserPolicy, self).save(*args, **kwargs)
