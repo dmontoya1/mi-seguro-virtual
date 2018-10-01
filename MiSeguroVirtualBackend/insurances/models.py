@@ -262,7 +262,7 @@ class UserPolicy(models.Model):
 
     
     def clean(self, *args, **kwargs):
-        " Make sure expiry time cannot be in the past "
+        " Funcion para hacer que la fecha de inicio no sea hoy ni menor a hoy "
         d = self.effective_date
         dt = datetime(d.year, d.month, d.day)
         if dt <= datetime.now():
