@@ -221,7 +221,8 @@ class UserPolicy(models.Model):
     insurance_request = models.OneToOneField(
         InsuranceRequest,
         on_delete=models.CASCADE,
-        verbose_name='Póliza del cliente'
+        verbose_name='Póliza del cliente',
+        blank=True, null=True
     )
     insurance_file = models.FileField(
         'Documento del seguro',
