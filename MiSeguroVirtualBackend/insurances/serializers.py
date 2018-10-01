@@ -13,8 +13,8 @@ class InsureranceSerializer(serializers.ModelSerializer):
 
 class RequestSerializer(serializers.ModelSerializer):
 
-    client = serializers.StringRelatedField(many=False)
-    insurance = serializers.StringRelatedField(many=False)
+    # client = serializers.StringRelatedField(many=False)
+    insurance = InsureranceSerializer(many=False, read_only=True)
 
     class Meta:
         model = InsuranceRequest

@@ -113,7 +113,7 @@ export default class Insurance extends Component {
                 <Text style={{opacity:0.38}}>Seguro</Text>
               </View>
               <View style={{paddingLeft: wp('54%')}}>
-                <Text>{policy.insurance_request.insurance}</Text>
+                <Text>{policy.insurance_request.insurance.name}</Text>
               </View>
             </View>
 

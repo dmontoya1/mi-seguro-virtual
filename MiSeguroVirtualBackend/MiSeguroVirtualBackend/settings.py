@@ -1,4 +1,5 @@
 import os
+import datetime
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -173,3 +174,10 @@ SOCIAL_AUTH_FACEBOOK_KEY = '1705416796237021'
 SOCIAL_AUTH_FACEBOOK_SECRET ='f3fe0a12248ea9b858219b8f5f3a48e7'
 
 LOGIN_REDIRECT_URL = "webclient:profile" 
+
+JWT_AUTH = {
+
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=50),
+
+}

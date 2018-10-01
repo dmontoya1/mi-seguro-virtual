@@ -39,6 +39,7 @@ import {
 
 import InsurancePostAPI from '././api/insurance.api';
 import CustomerPolicyPostAPI from '././api/customer_policy.api';
+import ProfileGetApi from '././api/profile.api';
 
 
 export default class Dashboard extends Component {
@@ -53,6 +54,7 @@ export default class Dashboard extends Component {
         };
         this.request = this.request.bind(this);
         this.requestPolicy = this.requestPolicy.bind(this);
+        this.getProfile = this.getProfile.bind(this);
     }
 
     _menu = null;
@@ -141,6 +143,26 @@ export default class Dashboard extends Component {
             } else {
                 let policy = (data.data._55.details)
                 Actions.insurance({policy: policy, token: token});
+            }
+    
+          });
+    }
+    getProfile(){
+        let dataToSend = {};
+        let token = this.props.token;
+        ProfileGetApi(dataToSend,token).then(data => {
+            if (data.errored){
+              Alert.alert(
+                'Atención',
+                "Ha ocurrido un error al ingresar a tu perfil",
+                [
+                  {text: 'Aceptar', onPress: () =>{}},
+                ],
+                { cancelable: false }
+              ) 
+            } else {
+                let profile = (data.data._55)
+                Actions.profile({profile: profile, token: token});
             }
     
           });
@@ -271,7 +293,7 @@ export default class Dashboard extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => Actions.profile()}>Perfil</MenuItem>
+            <MenuItem onPress={this.getProfile}>Perfil</MenuItem>
             <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    

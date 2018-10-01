@@ -1,7 +1,7 @@
 APICallback = (dataToSend, endPointAPI, method, successStateCode,token) => {
 	let keys = Object.keys(dataToSend);
-	// let api_url = 'http://192.168.0.10:8000'; //Local
-	let api_url = 'http://138.197.86.31:10000'; //Stage
+	let api_url = 'http://192.168.0.10:8000'; //Local
+	// let api_url = 'http://138.197.86.31:10000'; //Stage
 	var urlParams = '';
 
 	for (var i = 0; i < keys.length; i++) {

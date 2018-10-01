@@ -299,7 +299,7 @@ export default class Request extends Component {
                     <View style={{flexDirection: 'row', paddingTop:20}}>
                         <View>
                             <Text style={{color:'rgba(0,0,0,1)', fontSize:13, position:'relative', top:-5, right:10}}>
-                                Fotografía de tu licencua de conducción.
+                                Fotografía de tu licencia de conducción.
                             </Text>
                         </View>
                         <View style={{position:'relative', top:-15, left:wp('5%')}}>
