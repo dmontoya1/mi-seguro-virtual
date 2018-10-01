@@ -85,7 +85,7 @@ class RequestViewSet(APIView):
             status=status,
             request_date=request_date,
             client=user.pk,
-            insurance=insurance.id,
+            insurance=insurance,
             broker=broker.id,
             adviser_code=adviser_code
         )
