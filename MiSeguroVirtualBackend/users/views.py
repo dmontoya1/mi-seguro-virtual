@@ -19,6 +19,18 @@ from .serializers import CustomerSerializer, JWTSerializer, InfluencerSerializer
                          InfluencerBankSerializer
 
 
+class CustomerDetail(generics.RetrieveUpdateAPIView):
+    """Api para ver y actualizar la info de un cliente
+    """
+
+    serializer_class = CustomerSerializer
+    permission_classes = (IsAuthenticated,)
+    model = User
+
+    def get_object(self):
+        return self.request.user
+
+
 class CustomerViewSet(APIView):
     serializer_class = CustomerSerializer
     permission_classes = ()
