@@ -72,13 +72,13 @@ class RequestViewSet(APIView):
         foto1 = request.data['photo1']
         foto2 = request.data['photo2']
 
-        fs_1 = FileSystemStorage()
-        filename_1 = fs_1.save("Solicitudes/licencias/" + foto1.name, foto1)
-        photo1 = fs_1.save(filename_1)
+        # fs_1 = FileSystemStorage()
+        # filename_1 = fs_1.save("Solicitudes/licencias/" + foto1.name, foto1)
+        # photo1 = fs_1.save(filename_1)
 
-        fs_2 = FileSystemStorage()
-        filename_2 = fs_2.save("Solicitudes/licencias/" + foto2.name, foto2)
-        photo2 = fs_2.save(filename_2)
+        # fs_2 = FileSystemStorage()
+        # filename_2 = fs_2.save("Solicitudes/licencias/" + foto2.name, foto2)
+        # photo2 = fs_2.save(filename_2)
 
         request_date = date.today()
         username = request.user
@@ -103,9 +103,9 @@ class RequestViewSet(APIView):
         try:
             if serializer.is_valid(raise_exception=True):
                 request_insurance = serializer.save()
-                document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=photo1, drive_license=photo2)
+                document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
                 document_request.save()
-                sendMail(username, document_request.property_card, foto2)
+                sendMail(username, foto1, foto2)
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
