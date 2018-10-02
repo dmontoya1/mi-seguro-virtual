@@ -52,7 +52,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Tu cámara se utilizará para obtener las fotos de tu documento de identidad y de la tarjeta de propiedad del vehículo</string>
+	<string>Se accederá a tu cámara para tomar las fotos de los documentos solicitados</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pacifico-Regular.ttf</string>

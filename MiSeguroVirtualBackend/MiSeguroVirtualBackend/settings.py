@@ -123,6 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #Email settings sendGrid
 EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_USER = 'Mi Seguro Virtual <no-reply@mi-seguro-virtual.com>'
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587

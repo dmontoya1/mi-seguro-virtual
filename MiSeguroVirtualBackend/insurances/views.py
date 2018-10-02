@@ -2,6 +2,7 @@
 from datetime import date
 
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
@@ -71,6 +72,14 @@ class RequestViewSet(APIView):
         foto1 = request.data['photo1']
         foto2 = request.data['photo2']
 
+        fs_1 = FileSystemStorage()
+        filename_1 = fs_1.save("Solicitudes/licencias/" + foto1.name, foto1)
+        photo1 = fs_1.save(filename_1)
+
+        fs_2 = FileSystemStorage()
+        filename_2 = fs_2.save("Solicitudes/licencias/" + foto2.name, foto2)
+        photo2 = fs_2.save(filename_2)
+
         request_date = date.today()
         username = request.user
         status = 'PR'
@@ -94,7 +103,7 @@ class RequestViewSet(APIView):
         try:
             if serializer.is_valid(raise_exception=True):
                 request_insurance = serializer.save()
-                document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
+                document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=photo1, drive_license=photo2)
                 document_request.save()
                 sendMail(username, document_request.property_card, foto2)
                 return Response(dict(status='done', details=serializer.data), status=200)
@@ -104,7 +113,7 @@ class RequestViewSet(APIView):
 
 
 def sendMail(username, foto1, foto2):
-    subject, from_email, to = 'Solicitud de seguro', settings.EMAIL_HOST_USER, 'dmontoya.web@gmail.com'
+    subject, from_email, to = 'Solicitud de seguro', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
     text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario ' + str(username)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach('licencia.jpeg', foto1.read(), 'image/jpeg')

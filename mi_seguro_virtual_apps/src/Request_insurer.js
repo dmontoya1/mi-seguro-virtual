@@ -167,7 +167,7 @@ export default class Request extends Component {
         } else {
             Alert.alert(
             'Información',
-            "Solicitud hecha con exito.",
+            "Solicitud realizada con exito.",
             [
               {text: 'Aceptar', onPress:() => Actions.home({token: token})},
             ],
