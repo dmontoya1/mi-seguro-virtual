@@ -29,7 +29,8 @@ export default class Login extends Component {
             username,
             password
         };
-      logInPostAPI(dataToSend).then(data => {
+      logInPostAPI(dataToSend)
+      .then(data => {
         if (data.errored){
           Alert.alert(
             'Error',
@@ -46,7 +47,10 @@ export default class Login extends Component {
           Actions.home({token: token});
         }
 
-      });
+      }).catch((error) => {
+        console.log("Api call error");
+        alert(error.message);
+     });
     }
   render() {
     return (

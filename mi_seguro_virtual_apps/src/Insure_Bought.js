@@ -37,10 +37,18 @@ import {
 
 import Swiper from 'react-native-swiper';
 
-
+import ProfileGetApi from '././api/profile.api';
 
 
 export default class Insurance extends Component {
+  constructor(props) {
+    super(props);
+        this.state = {
+          token:'',
+        };
+        this.getProfile = this.getProfile.bind(this);
+        this.userLogout = this.userLogout.bind(this);
+    }
 
     _menu = null;
 
@@ -55,6 +63,32 @@ export default class Insurance extends Component {
     showMenu = () => {
         this._menu.show();
       };
+
+    getProfile(){
+      let dataToSend = {};
+      let token = this.props.token;
+      ProfileGetApi(dataToSend,token).then(data => {
+        if (data.errored){
+          Alert.alert(
+            'Atención',
+            "Ha ocurrido un error al ingresar a tu perfil",
+            [
+              {text: 'Aceptar', onPress: () =>{}},
+            ],
+            { cancelable: false }
+          ) 
+        } else {
+            let profile = (data.data._55)
+            Actions.profile({profile: profile, token: token});
+        }
+
+      });
+    }
+    userLogout() {
+      this.props.deleteJWT();
+      Alert.alert('Has cerrado sesión correctamente!');
+      Actions.logIn();
+    }
 
     render() {
         let token = this.props.token;
@@ -87,8 +121,8 @@ export default class Insurance extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => {}}>Perfil</MenuItem>
-            <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
+            <MenuItem onPress={this.getProfile}>Perfil</MenuItem>
+            <MenuItem onPress={this.userLogout}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>

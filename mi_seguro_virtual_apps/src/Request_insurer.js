@@ -9,23 +9,32 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 
-
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import ImagePicker from 'react-native-image-picker';
 
+import ProfileGetApi from '././api/profile.api';
 import RequestInsurancePostAPI from '././api/request_insurance.api';
 
 export default class Request extends Component {
+  constructor(props) {
+    super(props);
+        this.state = {
+          token:'',
+          image1: null,
+          image2: null,
+          button_photo1:false,
+          button_photo2:false,
+          adviser_code:''
+        };
+        this.submit = this.submit.bind(this);
+        this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
+        this.selectPhotoTapped2 = this.selectPhotoTapped2.bind(this);
+        this.getProfile = this.getProfile.bind(this);
+        this.userLogout = this.userLogout.bind(this);
+    }
 
-    state = {
-      token:'',
-      image1: null,
-      image2: null,
-      button_photo1:false,
-      button_photo2:false,
-      adviser_code:''
-    };
+
 
   submit(){
     if (this.state.image1 == null || this.state.image2 == null){
@@ -153,8 +162,10 @@ export default class Request extends Component {
   };
 
   getProfile(){
+    console.log('Get Profileeee')
     let dataToSend = {};
     let token = this.props.token;
+    console.log(token)
     ProfileGetApi(dataToSend,token).then(data => {
       if (data.errored){
         Alert.alert(
@@ -172,14 +183,12 @@ export default class Request extends Component {
 
     });
   }
-  async userLogout() {
-    try {
-      await AsyncStorage.removeItem('token');
-      Alert.alert('Has cerrado sesión correctamente!');
-      Actions.logIn();
-    } catch (error) {
-      console.log('AsyncStorage error: ' + error.message);
-    }
+
+  userLogout() {
+    console.log(this.props)
+    this.props.deleteJWT();
+    Alert.alert('Has cerrado sesión correctamente!');
+    Actions.logIn();
   }
 
   submit(){
@@ -218,8 +227,6 @@ export default class Request extends Component {
     }
     
   }
-
-
 
   render() {
     let token = this.props.token;

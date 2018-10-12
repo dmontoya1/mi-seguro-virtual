@@ -23,7 +23,8 @@ import{
     StyleSheet,
     TouchableHighlight,
     Animated,
-    Alert
+    Alert, 
+    AsyncStorage
 } from 'react-native';
 
 import Modal from 'react-native-root-modal';
@@ -55,6 +56,14 @@ export default class Dashboard extends Component {
         this.request = this.request.bind(this);
         this.requestPolicy = this.requestPolicy.bind(this);
         this.getProfile = this.getProfile.bind(this);
+        this.userLogout = this.userLogout.bind(this);
+
+        AsyncStorage.getItem('id_token', (err, result) => {
+            console.log(result)
+            this.setState({
+                token: result
+            });
+        });
     }
 
     _menu = null;
@@ -104,12 +113,19 @@ export default class Dashboard extends Component {
 
     };
 
+    userLogout() {
+        console.log(this.props)
+        this.props.deleteJWT();
+        Alert.alert('Has cerrado sesión correctamente!');
+        Actions.logIn();
+    }
+
     request(){
         let name = 'SOAT';
         let dataToSend = {
             name
         };
-        let token = this.props.token;
+        let token = this.state.token
         InsurancePostAPI(dataToSend,token).then(data => {
             if (data.errored){
               Alert.alert(
@@ -129,7 +145,7 @@ export default class Dashboard extends Component {
     }
     requestPolicy(){
         let dataToSend = {};
-        let token = this.props.token;
+        let token = this.state.token
         CustomerPolicyPostAPI(dataToSend,token).then(data => {
             if (data.errored){
               Alert.alert(
@@ -149,7 +165,7 @@ export default class Dashboard extends Component {
     }
     getProfile(){
         let dataToSend = {};
-        let token = this.props.token;
+        let token = this.state.token;
         ProfileGetApi(dataToSend,token).then(data => {
             if (data.errored){
               Alert.alert(
@@ -294,7 +310,7 @@ export default class Dashboard extends Component {
                   }
           >
             <MenuItem onPress={this.getProfile}>Perfil</MenuItem>
-            <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
+            <MenuItem onPress={this.userLogout}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>

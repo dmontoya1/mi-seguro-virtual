@@ -47,8 +47,8 @@ export default class ProfileEdit extends Component {
         };
         token = this.props.token
         axios.defaults.headers.common['Authorization'] = `JWT ${token}`;
-        axios.patch('http://192.168.0.3:8000/api/users/customer/', dataToSend)
-        // axios.patch('http://138.197.86.31:10000/api/users/customer/', dataToSend)
+        // axios.patch('http://192.168.0.3:8000/api/users/customer/', dataToSend)
+        axios.patch('http://138.197.86.31:10000/api/users/customer/', dataToSend)
         .then(function (response) {
             Alert.alert(
                 'Cambio de datos exitoso',

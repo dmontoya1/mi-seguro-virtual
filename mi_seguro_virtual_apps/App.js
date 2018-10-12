@@ -78,9 +78,10 @@ export default class App extends Component {
               component={Dashboard} 
               hideNavBar={true}
               initial={this.state.stepper && this.state.jwt}
+              deleteJWT={this.deleteJWT}
             />
-            <Scene key="insurance" component={Insurance} hideNavBar={true}/>
-            <Scene key="request" component={Request} hideNavBar={true}/>
+            <Scene key="insurance" component={Insurance} hideNavBar={true} deleteJWT={this.deleteJWT}/>
+            <Scene key="request" component={Request} hideNavBar={true} deleteJWT={this.deleteJWT}/>
             <Scene key="profile" component={Profile} hideNavBar={true}/>
             <Scene key="profile_edit" component={ProfileEdit} hideNavBar={true}/>
           </Stack>
