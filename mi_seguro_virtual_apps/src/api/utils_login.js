@@ -1,8 +1,10 @@
+import {AsyncStorage} from 'react-native';
+
 APICallbacklogin = (dataToSend, endPointAPI, method, successStateCode) => {
 	let keys = Object.keys(dataToSend);
-	// let api_url = 'http://192.168.0.10:8000'; //Local
-	let api_url = 'http://138.197.86.31:10000'; //Stage
-	var urlParams = '';
+	let api_url = 'http://192.168.0.3:8000'; //Local
+	// let api_url = 'http://138.1&97.86.31:10000'; //Stage
+  var urlParams = '';
 
 	for (var i = 0; i < keys.length; i++) {
 		let key = keys[i];
@@ -14,7 +16,6 @@ APICallbacklogin = (dataToSend, endPointAPI, method, successStateCode) => {
 
 		urlParams += `${key}=${value}`;
 	}
-
 
 	let body = JSON.stringify(dataToSend);
 

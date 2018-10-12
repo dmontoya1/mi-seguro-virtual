@@ -4,15 +4,19 @@ import {
   StyleSheet,
   View,
   Image,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
+
+import deviceStorage from './../deviceStorage';
+import Login from '../Login';
 
 import { Container, Header, Title, Content, Button, Icon, Left, Body, Text } from "native-base";
 
 
 import Swiper from 'react-native-swiper';
 
-import { Actions } from 'react-native-router-flux';
+import { Router, Scene, Stack, Actions } from 'react-native-router-flux';
 
 import {
   styles,
@@ -20,12 +24,14 @@ import {
 } from './styles';
 
 export default class IntroView extends Component {
+
+  finishStepper(){
+    deviceStorage.saveItem("stepper", 'true');
+    this.props.stepperComplete();
+    Actions.logIn();
+  }
   
   render(){
-    let token = this.props.token;
-    AsyncStorage.setItem('flag_stepper', 'false');
-    const value = AsyncStorage.getItem('flag_stepper');
-    console.warn(value);
     return (
       <Swiper style={styles.wrapper} 
         showsButtons={true}
@@ -75,7 +81,7 @@ export default class IntroView extends Component {
                   source={require('../../assets/icons/desplegar.png')}
                   style={ styles.imageIntro }
                   resizeMode='contain'
-                   />
+                  />
               </View> 
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
@@ -162,7 +168,7 @@ export default class IntroView extends Component {
               </View> 
             </View>
             <View style={styles.buttonContainer}>
-              <Button light style={{bouderColor: 'white'}} onPress={() => Actions.logIn()}>
+              <Button light style={{bouderColor: 'white'}} onPress={() => this.finishStepper()}>
                 <Text>Finalizar</Text>
               </Button>
             </View>

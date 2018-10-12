@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Button, Icon, Text, View,  Form, Item, Input, Label  } from 'native-base';
-import {StyleSheet, Alert} from 'react-native';
+import {StyleSheet, Alert, AsyncStorage} from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
 
+import deviceStorage from './deviceStorage';
 import logInPostAPI from '././api/log_in.api';
 
 export default class Login extends Component {
@@ -40,6 +41,8 @@ export default class Login extends Component {
           ) 
         } else {
           let token = data.data._55.token;
+          deviceStorage.saveItem("id_token", token);
+          this.props.newJWT(token);
           Actions.home({token: token});
         }
 

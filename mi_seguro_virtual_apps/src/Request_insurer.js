@@ -152,6 +152,36 @@ export default class Request extends Component {
     this._menu.show();
   };
 
+  getProfile(){
+    let dataToSend = {};
+    let token = this.props.token;
+    ProfileGetApi(dataToSend,token).then(data => {
+      if (data.errored){
+        Alert.alert(
+          'Atención',
+          "Ha ocurrido un error al ingresar a tu perfil",
+          [
+            {text: 'Aceptar', onPress: () =>{}},
+          ],
+          { cancelable: false }
+        ) 
+      } else {
+          let profile = (data.data._55)
+          Actions.profile({profile: profile, token: token});
+      }
+
+    });
+  }
+  async userLogout() {
+    try {
+      await AsyncStorage.removeItem('token');
+      Alert.alert('Has cerrado sesión correctamente!');
+      Actions.logIn();
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+  }
+
   submit(){
     let name = this.props.seguro[0].name;
     let adviser_code = this.state.adviser_code;
@@ -237,8 +267,8 @@ export default class Request extends Component {
                     </Button>
                   }
           >
-            <MenuItem onPress={() => {}}>Perfil</MenuItem>
-            <MenuItem onPress={() => Actions.logIn()}>Cerrar sesión</MenuItem>
+            <MenuItem onPress={this.getProfile}>Perfil</MenuItem>
+            <MenuItem onPress={this.userLogout}>Cerrar sesión</MenuItem>
           </Menu>   
           </Right>    
         </Header>
