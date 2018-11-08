@@ -16,7 +16,13 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from users.models import User
 
 from .models import UserPolicy, Insurance, DocumentsRequest
-from .serializers import UserPolicySerializer, InsuranceSerializer, RequestSerializer, RequestGetSerializer
+from .serializers import (
+    UserPolicySerializer, 
+    InsuranceSerializer, 
+    RequestSerializer, 
+    RequestGetSerializer,
+    InsuranceDetailSerializer
+)
 
 
 class UserPolicyDetail(APIView):
@@ -42,24 +48,14 @@ class InsuranceList(generics.ListAPIView):
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def get_queryset(self):
-        return Insurance.objects.filter(active=True)
+        return Insurance.objects.filter(is_active=True).order_by('id')
 
 
-class InsuranceDetail(APIView):
-    serializer_class = InsuranceSerializer
+class InsuranceDetail(generics.RetrieveAPIView):
+    serializer_class = InsuranceDetailSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
-
-
-    def get(self, request, format=None):
-        try:
-            name = self.request.query_params.get('name')
-            insurances = Insurance.objects.filter(name=name)
-            serializer = InsuranceSerializer(insurances, many=True)
-            return Response(dict(status='done', details=serializer.data), status=200)
-
-        except Exception as e:
-            return Response(dict(status='error', details=str(e)), status=400)
+    queryset = Insurance.objects.all()
 
 
 class RequestViewSet(APIView):

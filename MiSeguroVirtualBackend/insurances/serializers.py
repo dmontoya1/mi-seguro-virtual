@@ -1,14 +1,48 @@
 from rest_framework import serializers
 
 
-from .models import UserPolicy, Insurance, InsuranceRequest, Insurance
+from .models import (
+    UserPolicy,
+    Insurance, 
+    InsuranceRequest, 
+    Insurance,
+    Metadata,
+    MetadataChoices
+)
+
+class MetadataChoicesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MetadataChoices
+        fields = ('id', 'value')
+
+
+class MetadataSerializer(serializers.ModelSerializer):
+
+    related_choices = MetadataChoicesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Metadata
+        fields = ('id', 'name', 'field_type', 'related_choices', 'is_required')
 
 
 class InsuranceSerializer(serializers.ModelSerializer):
+
     category = serializers.StringRelatedField(many=False)
+
     class Meta:
         model = Insurance
-        fields = ('category','name')
+        fields = ('id', 'category', 'name', 'image')
+
+
+class InsuranceDetailSerializer(serializers.ModelSerializer):
+
+    category = serializers.StringRelatedField(many=False)
+    related_metadata = MetadataSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Insurance
+        fields = ('id', 'category', 'name', 'image', 'related_metadata')
 
 
 class RequestSerializer(serializers.ModelSerializer):

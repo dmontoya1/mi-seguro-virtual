@@ -7,8 +7,8 @@ from . import views
 
 app_name = 'insurances'
 urlpatterns = [
-    path('insurances/', views.InsuranceList.as_view(), name='insurance_list'),
-    path('insurance/detail/', views.InsuranceDetail.as_view(), name='insurance_detail'),
+    path('', views.InsuranceList.as_view(), name='insurance_list'),
+    path('detail/<int:pk>/', views.InsuranceDetail.as_view(), name='insurance_detail'),
     path('insurance/request/', views.RequestViewSet.as_view(), name='request'),
     path('customer/policy/detail/', views.UserPolicyDetail.as_view(), name='policy_detail')
 ]

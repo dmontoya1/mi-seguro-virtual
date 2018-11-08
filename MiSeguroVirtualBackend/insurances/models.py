@@ -10,7 +10,7 @@ from django.utils import timezone
 from users.models import User
 
 
-class InsuranceCategory(models.Model):
+class Category(models.Model):
     """Almacena las categorias que tendran los seguros
     """
 
@@ -26,9 +26,28 @@ class InsuranceCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Subcategory(models.Model):
+    """Almacena las subcategorias que tendran los seguros
+    """
+    category = models.ForeignKey(
+        Category,
+        verbose_name="Categoría",
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        'Nombre',
+        max_length=50
+    )
+
+    class Meta:
+        verbose_name = 'Subcategoría de seguro'
+        verbose_name_plural = 'Subcategorías de seguros'
     
-    def __unicode__(self):
-        return '%s' % (self.name)
+
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.category)
 
 
 class Insurance(models.Model):
@@ -36,16 +55,29 @@ class Insurance(models.Model):
     """
 
     category = models.ForeignKey(
-        InsuranceCategory,
+        Subcategory,
         on_delete=models.CASCADE,
-        help_text='Enlace a la categoria del seguro',
+        help_text='Categoria del seguro',
         verbose_name='Categoria seguro'
     )
     name = models.CharField(
         'Nombre',
-        max_length=50
+        max_length=100
     )
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(
+        'Activo?', 
+        default=True
+    )
+    image = models.ImageField(
+        'Imagen del seguro',
+        upload_to='seguros/images/',
+        blank=True, null=True
+    )
+    min_value_prima = models.IntegerField(
+        'Valor mínimo de la prima',
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Seguro'
@@ -53,7 +85,107 @@ class Insurance(models.Model):
 
 
     def __str__(self):
+        return '{} ({})'.format(self.name, self.category.name)
+
+
+class Metadata(models.Model):
+    """Guarda la lista de campos necesarios para cada seguro
+    """
+
+    TEXT = 'text'
+    NUMBER = 'number'
+    BOOLEAN = 'checkbox'
+    IMAGE = 'image'
+    SELECT = 'select'
+
+    TYPES = (
+        (TEXT, 'Texto'),
+        (NUMBER, 'Numerico'),
+        (BOOLEAN, 'Booleano'),
+        (IMAGE, 'Imagen'),
+        (SELECT, 'Seleccion')
+    )
+
+
+    insurance = models.ForeignKey(
+        Insurance, 
+        verbose_name="Seguro",
+        on_delete=models.CASCADE,
+        related_name='related_metadata'
+    )
+    name = models.CharField(
+        'Nombre del campo',
+        max_length=255
+    )
+    field_type = models.CharField(
+        'Tipo del campo',
+        max_length=10,
+        choices=TYPES
+    )
+    is_required = models.BooleanField(
+        'Es requerido?',
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Campo del seguro'
+        verbose_name_plural = 'Campos de los seguros'
+
+
+    def __str__(self):
+        return '{} del seguro {}'.format(self.name, self.insurance.name)
+
+
+class MetadataChoices(models.Model):
+    """Opciones de cada pregunta cuando es de tipo seleccion
+    """
+
+    field = models.ForeignKey(
+        Metadata, 
+        on_delete=models.CASCADE,
+        verbose_name="Campo",
+        related_name="related_choices"
+    )
+    value = models.CharField("Valor", max_length=255)
+
+
+    class Meta:
+        verbose_name = "Opcion del campo"
+        verbose_name_plural = "Opciones del campo"
+
+    def __str__(self):
+        return "%s" % (self.value)
+
+
+class InsuranceCoverage(models.Model):
+    """Clase para guardar las coverturas de un seguro
+    """
+
+    insurance = models.ForeignKey(
+        Insurance,
+        verbose_name="Seguro",
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        "Nombre de la covertura",
+        max_length=255
+    )
+    min_value = models.IntegerField(
+        "Valor mínimo de la cobertura",
+        blank=True, null=True
+    )
+    is_required = models.BooleanField(
+        "Es requerido?",
+        default=False
+    )
+
+    def __str__(self):
         return self.name
+
+
+    class Meta:
+        verbose_name = 'Cobertura del seguro'
+        verbose_name_plural = 'Coberturas del seguro'
 
 
 class Insurer(models.Model):
@@ -67,7 +199,7 @@ class Insurer(models.Model):
     )
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        verbose_name='Corredores'
+        verbose_name='Corredores',
     )
     name = models.CharField(
         'Nombre',
@@ -80,7 +212,7 @@ class Insurer(models.Model):
     email = models.EmailField(
         'Correo electronico'
     )
-    active= models.BooleanField(default=True)
+    is_active= models.BooleanField(default=True)
     
     class Meta:
         verbose_name = 'Aseguradora'
@@ -158,8 +290,9 @@ class InsuranceRequest(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Corredores',
-        default='',
         related_name='related_insurances_broker',
+        blank=True, 
+        null=True
     )
     adviser_code = models.CharField(
         'Codigo asesor',
@@ -183,6 +316,35 @@ class InsuranceRequest(models.Model):
     class Meta:
         verbose_name = 'Historial solicitud'
         verbose_name_plural = 'Historial solicitudes'
+
+
+class Answer(models.Model):
+    """Guarda las respuestas del formulario de un paciente
+    """
+
+    insurance_request = models.ForeignKey(
+        InsuranceRequest, 
+        verbose_name="Solicitud",
+        on_delete=models.CASCADE)
+    field = models.ForeignKey(
+        Metadata, 
+        verbose_name="Campo",
+        on_delete=models.CASCADE
+    )
+    value = models.TextField(
+        verbose_name="Respueta",
+        help_text='Esta respuesta puede ser de texto abierto, un numero, un booleano,\
+            o un id de una respuesta')
+    choice = models.CharField("Id de la respuesta", max_length=255, blank=True, null=True)
+    
+    class Meta:
+        verbose_name = "Respuesta"
+        verbose_name_plural = "Respuestas"
+        unique_together = ("insurance_request", "field")
+    
+
+    def __str__(self):
+        return "%s" % (self.value)
 
 
 class DocumentsRequest(models.Model):
@@ -214,7 +376,7 @@ class DocumentsRequest(models.Model):
 
 
 class UserPolicy(models.Model):
-    """Almacena las polizas que caragan los corredores
+    """Almacena las polizas que cargan los corredores
     para cada uno de sus clientes
     """
 
