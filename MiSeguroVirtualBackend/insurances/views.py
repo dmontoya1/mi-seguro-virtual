@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from rest_framework import generics   
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -44,8 +44,7 @@ class UserPolicyDetail(APIView):
 
 class InsuranceList(generics.ListAPIView):
     serializer_class = InsuranceSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         return Insurance.objects.filter(is_active=True).order_by('id')
@@ -53,8 +52,7 @@ class InsuranceList(generics.ListAPIView):
 
 class InsuranceDetail(generics.RetrieveAPIView):
     serializer_class = InsuranceDetailSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (AllowAny,)
     queryset = Insurance.objects.all()
 
 
