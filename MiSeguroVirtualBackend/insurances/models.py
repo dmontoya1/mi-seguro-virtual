@@ -1,13 +1,16 @@
+from datetime import date, timedelta, datetime
+from dateutil.relativedelta import relativedelta
+
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from dateutil.relativedelta import relativedelta
-from datetime import date, timedelta
 
-from users.models import Broker, Customer
+from users.models import User
 
 
-class InsuranceCategory(models.Model):
+class Category(models.Model):
     """Almacena las categorias que tendran los seguros
     """
 
@@ -23,9 +26,28 @@ class InsuranceCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Subcategory(models.Model):
+    """Almacena las subcategorias que tendran los seguros
+    """
+    category = models.ForeignKey(
+        Category,
+        verbose_name="Categoría",
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        'Nombre',
+        max_length=50
+    )
+
+    class Meta:
+        verbose_name = 'Subcategoría de seguro'
+        verbose_name_plural = 'Subcategorías de seguros'
     
-    def __unicode__(self):
-        return '%s' % (self.name)
+
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.category)
 
 
 class Insurance(models.Model):
@@ -33,16 +55,29 @@ class Insurance(models.Model):
     """
 
     category = models.ForeignKey(
-        InsuranceCategory,
+        Subcategory,
         on_delete=models.CASCADE,
-        help_text='Enlace a la categoria del seguro',
+        help_text='Categoria del seguro',
         verbose_name='Categoria seguro'
     )
     name = models.CharField(
         'Nombre',
-        max_length=50
+        max_length=100
     )
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(
+        'Activo?', 
+        default=True
+    )
+    image = models.ImageField(
+        'Imagen del seguro',
+        upload_to='seguros/images/',
+        blank=True, null=True
+    )
+    min_value_prima = models.IntegerField(
+        'Valor mínimo de la prima',
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Seguro'
@@ -50,7 +85,107 @@ class Insurance(models.Model):
 
 
     def __str__(self):
+        return '{} ({})'.format(self.name, self.category.name)
+
+
+class Metadata(models.Model):
+    """Guarda la lista de campos necesarios para cada seguro
+    """
+
+    TEXT = 'text'
+    NUMBER = 'number'
+    BOOLEAN = 'checkbox'
+    IMAGE = 'image'
+    SELECT = 'select'
+
+    TYPES = (
+        (TEXT, 'Texto'),
+        (NUMBER, 'Numerico'),
+        (BOOLEAN, 'Booleano'),
+        (IMAGE, 'Imagen'),
+        (SELECT, 'Seleccion')
+    )
+
+
+    insurance = models.ForeignKey(
+        Insurance, 
+        verbose_name="Seguro",
+        on_delete=models.CASCADE,
+        related_name='related_metadata'
+    )
+    name = models.CharField(
+        'Nombre del campo',
+        max_length=255
+    )
+    field_type = models.CharField(
+        'Tipo del campo',
+        max_length=10,
+        choices=TYPES
+    )
+    is_required = models.BooleanField(
+        'Es requerido?',
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Campo del seguro'
+        verbose_name_plural = 'Campos de los seguros'
+
+
+    def __str__(self):
+        return '{} del seguro {}'.format(self.name, self.insurance.name)
+
+
+class MetadataChoices(models.Model):
+    """Opciones de cada pregunta cuando es de tipo seleccion
+    """
+
+    field = models.ForeignKey(
+        Metadata, 
+        on_delete=models.CASCADE,
+        verbose_name="Campo",
+        related_name="related_choices"
+    )
+    value = models.CharField("Valor", max_length=255)
+
+
+    class Meta:
+        verbose_name = "Opcion del campo"
+        verbose_name_plural = "Opciones del campo"
+
+    def __str__(self):
+        return "%s" % (self.value)
+
+
+class InsuranceCoverage(models.Model):
+    """Clase para guardar las coverturas de un seguro
+    """
+
+    insurance = models.ForeignKey(
+        Insurance,
+        verbose_name="Seguro",
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        "Nombre de la covertura",
+        max_length=255
+    )
+    min_value = models.IntegerField(
+        "Valor mínimo de la cobertura",
+        blank=True, null=True
+    )
+    is_required = models.BooleanField(
+        "Es requerido?",
+        default=False
+    )
+
+    def __str__(self):
         return self.name
+
+
+    class Meta:
+        verbose_name = 'Cobertura del seguro'
+        verbose_name_plural = 'Coberturas del seguro'
 
 
 class Insurer(models.Model):
@@ -62,10 +197,9 @@ class Insurer(models.Model):
         verbose_name='Seguros',
 
     )
-    brokers = models.ManyToManyField(
-        Broker,
-        verbose_name='Corredores'
-
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        verbose_name='Corredores',
     )
     name = models.CharField(
         'Nombre',
@@ -78,7 +212,7 @@ class Insurer(models.Model):
     email = models.EmailField(
         'Correo electronico'
     )
-    active= models.BooleanField(default=True)
+    is_active= models.BooleanField(default=True)
     
     class Meta:
         verbose_name = 'Aseguradora'
@@ -108,8 +242,8 @@ class PointOfSale(models.Model):
         'Codigo',
         max_length=10
     )
-    brokers = models.ManyToManyField(
-        Broker,
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
         verbose_name='Corredores'
     )
 
@@ -126,13 +260,17 @@ class InsuranceRequest(models.Model):
     """Almacena las solicitudes de seguros hechas por los clientes
     """
     PENDING = 'PE'
-    PROCESS = 'PR'
+    EXPIRE = 'EX'
     APPROVED = 'AP'
+    PROCESS = 'PR'
+    CURRENT = 'CU'
 
     STATUS_CHOICES = (
         (PENDING, 'Pendiente'),
+        (EXPIRE, 'Vencido'),
         (PROCESS, 'En proceso'),
-        (APPROVED, 'Aprobado')
+        (APPROVED, 'Aprobado'),
+        (CURRENT, 'Vigente'),
     )
 
     insurance = models.ForeignKey(
@@ -141,18 +279,20 @@ class InsuranceRequest(models.Model):
         help_text='Enlace al seguro',
         verbose_name='Seguro'
     )
-    customer = models.ForeignKey(
-        Customer,
+    client = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         help_text='Enlace al cliente',
-        verbose_name='Cliente'
+        verbose_name='Cliente',
+        related_name='related_insurances_client'
     )
     broker = models.ForeignKey(
-        Broker,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name='Corredores',
-        default=''
-
+        related_name='related_insurances_broker',
+        blank=True, 
+        null=True
     )
     adviser_code = models.CharField(
         'Codigo asesor',
@@ -160,7 +300,7 @@ class InsuranceRequest(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
-    state = models.CharField(
+    status = models.CharField(
         'Estado',
         max_length=2,
         choices=STATUS_CHOICES,
@@ -170,9 +310,42 @@ class InsuranceRequest(models.Model):
         'Fecha de solicitud'
     )
 
+    def __str__(self):
+        return "Solicitud del cliente %s" % (self.client)
+
     class Meta:
         verbose_name = 'Historial solicitud'
         verbose_name_plural = 'Historial solicitudes'
+
+
+class Answer(models.Model):
+    """Guarda las respuestas del formulario de un paciente
+    """
+
+    insurance_request = models.ForeignKey(
+        InsuranceRequest, 
+        verbose_name="Solicitud",
+        on_delete=models.CASCADE)
+    field = models.ForeignKey(
+        Metadata, 
+        verbose_name="Campo",
+        on_delete=models.CASCADE
+    )
+    value = models.TextField(
+        verbose_name="Respueta",
+        help_text='Esta respuesta puede ser de texto abierto, un numero, un booleano,\
+            o un id de una respuesta')
+    choice = models.CharField("Id de la respuesta", max_length=255, blank=True, null=True)
+    
+    class Meta:
+        verbose_name = "Respuesta"
+        verbose_name_plural = "Respuestas"
+        unique_together = ("insurance_request", "field")
+    
+
+    def __str__(self):
+        return "%s" % (self.value)
+
 
 class DocumentsRequest(models.Model):
     """Alamcena las imagenes de los documentos asociados a
@@ -194,41 +367,35 @@ class DocumentsRequest(models.Model):
         blank=True
     ) 
 
+    def __str__(self):
+        return "Documentos de %s" % (self.insurance_request)
 
-class CustomerPolicy(models.Model):
-    """Almacena las polizas que caragan los corredores
+    class Meta:
+        verbose_name = "Documento de la solicitud"
+        verbose_name_plural = "Documentos de la solicitud"
+
+
+class UserPolicy(models.Model):
+    """Almacena las polizas que cargan los corredores
     para cada uno de sus clientes
     """
 
-    image = models.ImageField(
-        'Imagen',
+    insurance_request = models.OneToOneField(
+        InsuranceRequest,
+        on_delete=models.CASCADE,
+        verbose_name='Póliza del cliente',
+        blank=True, null=True
+    )
+    insurance_file = models.FileField(
+        'Documento del seguro',
         upload_to = 'Polizas',
         blank=True
-    )
-    customer = models.ForeignKey(
-        Customer,
-        on_delete=models.CASCADE,
-        verbose_name='Cliente',
-        default = None
-    )
+    ) 
     insurer = models.ForeignKey(
         Insurer,
         on_delete=models.CASCADE,
         help_text='Enlace a la aseguradora',
         verbose_name='Aseguradora'
-    )
-    insurance = models.ForeignKey(
-        Insurance,
-        on_delete=models.CASCADE,
-        help_text='Enlace al seguro',
-        verbose_name='Seguro',
-        default=None
-    )
-    adviser_code = models.CharField(
-        'Codigo asesor',
-        max_length=15,
-        blank=True,
-        help_text='Agregar en caso de que aplique'
     )
     licensed_plate =models.CharField(
         'placa',
@@ -240,20 +407,29 @@ class CustomerPolicy(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
-    expiration_date = models.DateField(
-        default = timezone.now() + timezone.timedelta(days=1) + relativedelta(years=1),
-        verbose_name="Fecha de vencimiento"
-    )
     effective_date = models.DateField(
         default= timezone.now,
         verbose_name="Fecha inicio de vigencia"
+    )
+    expiration_date = models.DateField(
+        verbose_name="Fecha de vencimiento",
+        auto_now_add=False
     )
 
     class Meta:
         verbose_name = 'Póliza cliente'
         verbose_name_plural = 'Póliza clientes'
-    
 
-    def save(self, *args, **kwargs):
-        self.expiration_date = self.effective_date - timezone.timedelta(days=1) + relativedelta(years=1)
-        super(CustomerPolicy, self).save(*args, **kwargs)
+    def __str__(self):
+        return "Póliza %s del cliente %s" % (self.insurance_request.insurance, self.insurance_request.client)
+
+    
+    def clean(self, *args, **kwargs):
+        " Funcion para hacer que la fecha de inicio no sea hoy ni menor a hoy "
+        d = self.effective_date
+        dt = datetime(d.year, d.month, d.day)
+        if dt <= datetime.now():
+            raise ValidationError('La fecha de inicio de la vigencia debe ser mayor a hoy')
+        else:
+            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1) 
+            super(UserPolicy, self).save(*args, **kwargs)

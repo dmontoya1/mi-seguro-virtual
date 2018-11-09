@@ -1,5 +1,0 @@
-from .insurances.insuranceSerializer import InsureranceSerializer
-from .insurances.requestSerializer import RequestSerializer
-from .insurances.customerPolicy import CustomerPolicySerializer
-from .customers.customerSerializer import CustomerSerializer
-from .customers.loginSerializer import JWTSerializer

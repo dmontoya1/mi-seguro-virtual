@@ -1,27 +1,47 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-class Broker(models.Model):
-    """Almacena los corredores de seguros.
+class User(AbstractUser):
+    """
     """
 
-    """insurances = models.ManyToManyField(
-        'insurances.Insurance',
-        verbose_name='Seguros'
+    CEDULA = 'CC'
+    TARJETA = 'TI'
+    PASAPORTE = 'PA'
+    CEDULAE = 'CE'
 
-    )"""
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        help_text='Enlace al usuario',
-        verbose_name='Usuario'
+    CORREDOR = 'CO'
+    CLIENTE = 'CL'
+    INFLUENCER = 'IN'
+
+    USER_TYPE = (
+        (CORREDOR, 'Corredor de Seguros'),
+        (INFLUENCER, 'Influenciador'),
+        (CLIENTE, 'Cliente')
     )
-    name = models.CharField(
-        'Nombre',
-        max_length=50
+
+    AHORROS = 'AH'
+    CORRIENTE = 'CO'
+
+    DOCUMENT_CHOICES = (
+        (CEDULA, 'Cédula de Ciudadanía'),
+        (TARJETA, 'Tarjeta de identidad'),
+        (PASAPORTE, 'Pasaporte'),
+        (CEDULAE, 'Cédula de extrajería')
     )
-    cellphone_number = models.CharField(
+
+    ACCOUNT_TYPE = (
+        (AHORROS, 'Ahorros'),
+        (CORRIENTE, 'Corriente')
+    )
+
+    user_type = models.CharField(
+        "Tipo de usuario",
+        choices=USER_TYPE,
+        max_length=2
+    )
+    phone_number = models.CharField(
         'Número de celular',
         max_length=13
     )
@@ -30,82 +50,67 @@ class Broker(models.Model):
         upload_to='logotipos',
         blank=True
     )
-    active= models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = 'Corredor'
-        verbose_name_plural = 'Corredores'
-    
-    def __str__(self):
-        return self.name
-
-
-class Customer(models.Model):
-    """almacena los clientes que desean adquirir seguros
-    """
-    CEDULA = 'CC'
-    TARJETA = 'TI'
-    PASAPORTE = 'PA'
-    CEDULAE = 'CE'
-
-    DOCUMENT_CHOICES = (
-        (CEDULA, 'Cedula'),
-        (TARJETA, 'Tarjeta de identidad'),
-        (PASAPORTE, 'Pasaporte'),
-        (CEDULAE, 'Cedula de extrajeria')
-    )
-
-    user = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE,
-        help_text='Enlace al usuario',
-        verbose_name='Usuario',
-        null=True,
-        blank=True
-    )
-    cellphone_number = models.CharField(
-        'Número de celular',
-        max_length=13
-    )
     document_type = models.CharField(
         'Tipo de documento',
         max_length=20,
         choices=DOCUMENT_CHOICES,
         help_text = 'Tipo de documento de identidad'
     )
-    document_number = models.CharField(
+    document_id = models.CharField(
         'Numero de documento',
         max_length=15
     )
-
-    class Meta:
-        verbose_name = 'Cliente'
-        verbose_name_plural = 'Clientes'
+    bank = models.CharField(
+        "Banco",
+        max_length=255,
+        blank=True, null=True
+    )
+    account_type = models.CharField(
+        "Tipo de cuenta bancaria",
+        max_length=2,
+        choices=ACCOUNT_TYPE,
+        blank=True, null=True
+    )
+    account_number = models.CharField(
+        "Número de cuenta bancaria",
+        max_length=50,
+        blank=True, null=True
+    )
+    code = models.CharField(
+        "Código de influencer",
+        max_length=15,
+        blank=True, null=True
+    )
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
 
-    def get_full_name(self):
-        full_name = '%s %s' % (self.user.first_name, self.user.last_name)
-        return full_name
+    class Meta:
+        verbose_name = 'Usuario'
 
-    
-    def get_short_name(self):
-        return self.user.first_name
 
 class TermsAcceptanceLogs(models.Model):
     """Almacena los terminos y condiciones de un usuario determinado
     """
-    customer = models.OneToOneField(
-        Customer,
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
-        verbose_name='Cliente'
+        verbose_name='Usuario'
     )
     Acceptance_date = models.DateField(
-        'Fecha de solicitud'
+        'Fecha de solicitud',
+        auto_now_add=True
     )
     ip_address = models.CharField(
         'IP de aceptacion del cliente',
         max_length=20
     )
+
+    def __str__(self):
+        return "Log de términos de %s" % (self.user)
+
+
+    class Meta:
+        verbose_name = "Log de Términos"
+        verbose_name_plural = "Logs de términos"

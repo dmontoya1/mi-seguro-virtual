@@ -1,7 +1,0 @@
-{
-    'cellphone_number': '456',
-    'document_number': '789456',
-    'user': [
-        {'username': 'jorge', 'password': 'pass123, 'first_name': 'jorge', 'last_name': 'salazar', 'email': 'jorge@prueba.com' },
-    ],
-}

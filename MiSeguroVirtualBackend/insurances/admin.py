@@ -4,40 +4,79 @@ from django.http import HttpResponseRedirect
 
 
 from .models import (
-    PointOfSale,
-    CustomerPolicy,
-    InsuranceRequest,
+    Category,
+    Subcategory,
     Insurance,
-    InsuranceCategory,
+    Metadata,
+    MetadataChoices,
+    InsuranceCoverage,
     Insurer,
-    DocumentsRequest
+    PointOfSale,
+    InsuranceRequest,
+    Answer,
+    DocumentsRequest,
+    UserPolicy
 )
+
+
+class SubcategoryAdmin(admin.TabularInline):
+
+    model = Subcategory
+    extra = 0
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+
+    list_display = ['name']
+    inlines = [SubcategoryAdmin, ]
+
+
+class MetadataChoicesAdmin(admin.StackedInline):
+    
+    model = MetadataChoices
+    extra = 0
+
+
+@admin.register(Metadata)
+class MetadataAdmin(admin.ModelAdmin):
+
+    list_display = ['name', 'field_type', 'is_required']
+    inlines = [MetadataChoicesAdmin, ]
 
 
 class InsuranceForm(forms.ModelForm):
     class Meta:
         model = Insurance
-        exclude = ["active"]
+        exclude = ["is_active"]
+
+
+class InsuranceCoverageAdmin(admin.StackedInline):
+
+    model = InsuranceCoverage
+    extra = 0
 
 
 @admin.register(Insurance)
 class InsuranceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category','active']
+
+    list_display = ['name', 'category','is_active']
     form = InsuranceForm
     change_form_template = "insurer_changeform.html"
+    inlines = [InsuranceCoverageAdmin, ]
 
     def response_change(self, request, obj):
         if "_enable" in request.POST:
             matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             matching_names_except_this.delete()
-            obj.active = True
+            obj.is_active = True
             obj.save()
             self.message_user(request, "Seguro activado")
             return HttpResponseRedirect(".")
         elif '_disable' in request.POST:
             matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             matching_names_except_this.delete()
-            obj.active = False
+            obj.is_active = False
             obj.save()
             self.message_user(request, "Seguro desactivado")
             return HttpResponseRedirect(".")
@@ -47,12 +86,12 @@ class InsuranceAdmin(admin.ModelAdmin):
 class InsurerForm(forms.ModelForm):
     class Meta:
         model = Insurer
-        exclude = ["active"]
+        exclude = ["is_active"]
 
 
 @admin.register(Insurer)
 class InsurerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'cellphone_number', 'email','active']
+    list_display = ['name', 'cellphone_number', 'email','is_active']
     form = InsurerForm
     change_form_template = "insurer_changeform.html"
 
@@ -60,34 +99,31 @@ class InsurerAdmin(admin.ModelAdmin):
         if "_enable" in request.POST:
             matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             matching_names_except_this.delete()
-            obj.active = True
+            obj.is_active = True
             obj.save()
             self.message_user(request, "Aseguradora activada")
             return HttpResponseRedirect(".")
         elif '_disable' in request.POST:
             matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             matching_names_except_this.delete()
-            obj.active = False
+            obj.is_active = False
             obj.save()
             self.message_user(request, "Aseguradora desactivada")
             return HttpResponseRedirect(".")
         return super().response_change(request, obj)
 
 
+class UserPolicyAdmin(admin.StackedInline):
 
-@admin.register(CustomerPolicy)
-class CustomerPolicyAdmin(admin.ModelAdmin):
-    exclude = ['expiration_date']
-    list_display = ['insurer', 'insurance', 'effective_date']
-
-@admin.register(DocumentsRequest)
-class DocumentsRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance_request']
+    model = UserPolicy
+    extra = 0
+    readonly_fields = ["expiration_date", ]
 
 
-@admin.register(InsuranceCategory)
-class CategoryInsuranceAdmin(admin.ModelAdmin):
-    list_display = ['name']
+class DocumentsRequestAdmin(admin.StackedInline):
+    
+    model = DocumentsRequest
+    extra = 0
 
 
 @admin.register(PointOfSale)
@@ -97,4 +133,5 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
-    list_display = ['insurance', 'customer', 'state', 'request_date']
+    list_display = ['insurance', 'client', 'status', 'request_date']
+    inlines = [DocumentsRequestAdmin, UserPolicyAdmin]
