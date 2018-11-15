@@ -73,7 +73,15 @@ class UserPolicySerializer(serializers.ModelSerializer):
     
     insurance_request = RequestGetSerializer(many=False, read_only=True)
     insurer = serializers.StringRelatedField(many=False)
+    insurance_file_url = serializers.SerializerMethodField()
 
     class Meta:
         model = UserPolicy
-        fields = ('insurance_request', 'insurer', 'insurance_file', 'adviser_mail', 'expiration_date', 'effective_date')
+        fields = ('id', 'insurance_request', 'insurer', 'insurance_file_url', 'adviser_mail',
+                  'expiration_date', 'effective_date', 'licensed_plate'
+        )
+
+    def get_insurance_file_url(self, obj):
+        request = self.context.get('request')
+        insurance_file_url = obj.insurance_file.url
+        return request.build_absolute_uri(insurance_file_url)
