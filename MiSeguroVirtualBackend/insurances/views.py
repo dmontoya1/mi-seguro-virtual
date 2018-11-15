@@ -25,21 +25,16 @@ from .serializers import (
 )
 
 
-class UserPolicyDetail(APIView):
+class UserPolicyDetail(generics.ListAPIView):
     serializer_class = UserPolicySerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def get(self, request, format=None):
-        try:
-            policy = UserPolicy.objects.filter(insurance_request__client=request.user)
-            if policy.exists():
-                serializer = UserPolicySerializer(policy, many=True)
-                return Response(dict(status='done', details=serializer.data), status=200)
-            else:
-                return Response(dict(status='error', details=str("No hay pólizas disponibles")), status=400)
-        except Exception as e:
-            return Response(dict(status='error', details=str(e)), status=400)
+    def get_queryset(self):
+        queryset = UserPolicy.objects.filter(insurance_request__client=self.request.user)
+        if queryset.exists():
+            return queryset
+        return super().get_queryset()
 
 
 class InsuranceList(generics.ListAPIView):
@@ -63,8 +58,10 @@ class RequestViewSet(APIView):
 
     def post(self, request, format=None):
         
-        foto1 = request.data['photo1']
-        foto2 = request.data['photo2']
+        document1 = request.data['document1']
+        document2 = request.data['document2']
+        licence1 = request.data['licence1']
+        licence2 = request.data['licence2']
 
         # fs_1 = FileSystemStorage()
         # filename_1 = fs_1.save("Solicitudes/licencias/" + foto1.name, foto1)
@@ -79,17 +76,18 @@ class RequestViewSet(APIView):
         status = 'PR'
         name = request.data['name']
         adviser_code = request.data['adviser_code']
+        fisico = request.data['fisico']
+        optionId = request.data['optionId']
 
         user = User.objects.get(username=username)
         insurance = Insurance.objects.filter(name=name).first()
-        broker = User.objects.get(username='apptitud')
+        # broker = User.objects.get(username='apptitud')
 
         request = dict(
             status=status,
             request_date=request_date,
             client=user.pk,
             insurance=insurance.id,
-            broker=broker.id,
             adviser_code=adviser_code
         )
         
@@ -97,19 +95,23 @@ class RequestViewSet(APIView):
         try:
             if serializer.is_valid(raise_exception=True):
                 request_insurance = serializer.save()
-                document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
-                document_request.save()
-                sendMail(username, foto1, foto2)
+                # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
+                # document_request.save()
+                sendMail(username, document1, document2, licence1, licence2, optionId, fisico)
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
+            print (e)
             return Response(dict(status='error', details=str(e)), status=400)
 
 
-def sendMail(username, foto1, foto2):
+def sendMail(username, doc1, doc2, lic1, lic2, optionId, fisico):
     subject, from_email, to = 'Solicitud de seguro', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
-    text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario ' + str(username)
+    text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario {}. El codigo del seguro es {}. Este usuario ha \
+    elegido la option de enviar el SOAT en fisico como {}. '.format(str(username), optionId, fisico)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach('licencia.jpeg', foto1.read(), 'image/jpeg')
-    msg.attach('tarjeta.jpeg', foto2.read(), 'image/jpeg')
+    msg.attach('documento1.jpeg', doc1.read(), 'image/jpeg')
+    msg.attach('documeto2.jpeg', doc2.read(), 'image/jpeg')
+    msg.attach('licencia1.jpeg', lic1.read(), 'image/jpeg')
+    msg.attach('licencia2.jpeg', lic2.read(), 'image/jpeg')
     msg.send()
