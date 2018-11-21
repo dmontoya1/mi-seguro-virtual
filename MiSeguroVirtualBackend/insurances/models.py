@@ -309,9 +309,30 @@ class InsuranceRequest(models.Model):
     request_date = models.DateField(
         'Fecha de solicitud'
     )
+    request_code = models.CharField(
+        'Codigo de la referencia',
+        max_length=255,
+        blank=True, null=True
+    )
+    payment_proof = models.ImageField(
+        'Recibo de pago SOAT (si aplica)',
+        upload_to='Solicitudes/SOAT/recibos',
+        blank=True, null=True
+    )
 
     def __str__(self):
         return "Solicitud del cliente %s" % (self.client)
+
+    def save(self, *args, **kwargs):
+        "Funcion para generar el request_code de la solicitud"
+
+        super(InsuranceRequest, self).save(*args, **kwargs)
+        try:
+            d = self.request_date
+            self.request_code = '{}{}{}{}'.format(d.month, d.day, self.client.pk, self.pk)
+        except:
+            pass
+        super(InsuranceRequest, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Historial solicitud'

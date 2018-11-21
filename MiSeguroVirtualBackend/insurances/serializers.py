@@ -85,3 +85,19 @@ class UserPolicySerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         insurance_file_url = obj.insurance_file.url
         return request.build_absolute_uri(insurance_file_url)
+
+
+class InsuranceRequestSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    status = serializers.SerializerMethodField()
+    insurance = InsuranceSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = InsuranceRequest
+        fields = '__all__'
+
+
+    def get_status(self, obj):
+        return obj.get_status_display()
