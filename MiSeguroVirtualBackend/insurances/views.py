@@ -70,6 +70,7 @@ class RequestViewSet(APIView):
         adviser_code = request.data['adviser_code']
         fisico = request.data['fisico']
         optionId = request.data['optionId']
+        price = request.data['price']
 
         user = User.objects.get(username=username)
         insurance = Insurance.objects.filter(name=name).first()
@@ -81,7 +82,8 @@ class RequestViewSet(APIView):
                 request_date=request_date,
                 client=user,
                 insurance=insurance,
-                adviser_code=adviser_code
+                adviser_code=adviser_code,
+                price=price
             )
             request_obj.save()
         

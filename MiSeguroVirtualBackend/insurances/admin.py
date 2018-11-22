@@ -140,5 +140,6 @@ class InsuranceRequestAdmin(admin.ModelAdmin):
         'request_code', 
         'insurance', 
         'client', 
-        'request_date'
+        'request_date',
+        'price'
     ]

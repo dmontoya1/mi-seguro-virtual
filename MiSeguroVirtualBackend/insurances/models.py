@@ -319,6 +319,11 @@ class InsuranceRequest(models.Model):
         upload_to='Solicitudes/SOAT/recibos',
         blank=True, null=True
     )
+    price = models.CharField(
+        'Precio del seguro SOAT (Si aplica)',
+        max_length=20,
+        blank=True, null=True
+    )
 
     def __str__(self):
         return "Solicitud del cliente %s" % (self.client)
