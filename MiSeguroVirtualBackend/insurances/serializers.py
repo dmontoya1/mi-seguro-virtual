@@ -49,12 +49,7 @@ class RequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InsuranceRequest
-        fields = ('status', 'request_date', 'client', 'insurance','broker', 'adviser_code')
-
-        def create(self, validated_data):
-            print ("Create serializer")
-            request_insurance = InsuranceRequest.objects.create(**validated_data)
-            return request_insurance
+        fields = ('status', 'request_date', 'client', 'insurance','broker', 'adviser_code', 'price')
 
 
 class RequestGetSerializer(serializers.ModelSerializer):
