@@ -64,17 +64,8 @@ class RequestViewSet(APIView):
         licence1 = request.data['licence1']
         licence2 = request.data['licence2']
 
-        # fs_1 = FileSystemStorage()
-        # filename_1 = fs_1.save("Solicitudes/licencias/" + foto1.name, foto1)
-        # photo1 = fs_1.save(filename_1)
-
-        # fs_2 = FileSystemStorage()
-        # filename_2 = fs_2.save("Solicitudes/licencias/" + foto2.name, foto2)
-        # photo2 = fs_2.save(filename_2)
-
         request_date = date.today()
         username = request.user
-        status = 'PE'
         name = request.data['name']
         adviser_code = request.data['adviser_code']
         fisico = request.data['fisico']
@@ -84,27 +75,27 @@ class RequestViewSet(APIView):
         insurance = Insurance.objects.filter(name=name).first()
         # broker = User.objects.get(username='apptitud')
 
-        request = dict(
-            status=status,
-            request_date=request_date,
-            client=user.pk,
-            insurance=insurance.id,
-            adviser_code=adviser_code
-        )
-        
-        serializer = RequestSerializer(data=request)
         try:
-            if serializer.is_valid(raise_exception=True):
-                request_insurance = serializer.save()
-                # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
-                # document_request.save()
-                sendMail(username, document1, document2, licence1, licence2, optionId, fisico)
-                return Response(dict(status='done', details=serializer.data), status=200)
+            request_obj = InsuranceRequest(
+                status=InsuranceRequest.PENDING,
+                request_date=request_date,
+                client=user.pk,
+                insurance=insurance.id,
+                adviser_code=adviser_code
+            )
+            request_obj.save()
+        
+            request_obj.save()
+            print (request_obj)
+            # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
+            # document_request.save()
+            sendMail(username, document1, document2, licence1, licence2, optionId, fisico)
+            return Response({'detail':'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             print ("EXception")
             print (e)
-            return Response(dict(status='error', details=str(e)), status=400)
+            return Response({'detail':'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Requests(generics.ListAPIView):
