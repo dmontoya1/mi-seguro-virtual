@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
-from rest_framework import generics   
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -15,13 +15,14 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from users.models import User
 
-from .models import UserPolicy, Insurance, DocumentsRequest
+from .models import UserPolicy, Insurance, DocumentsRequest, InsuranceRequest
 from .serializers import (
     UserPolicySerializer, 
     InsuranceSerializer, 
     RequestSerializer, 
     RequestGetSerializer,
-    InsuranceDetailSerializer
+    InsuranceDetailSerializer,
+    InsuranceRequestSerializer
 )
 
 
@@ -105,6 +106,61 @@ class RequestViewSet(APIView):
             return Response(dict(status='error', details=str(e)), status=400)
 
 
+class Requests(generics.ListAPIView):
+    """Lista de solicitudes de los usuarios
+    """
+
+    model = InsuranceRequest
+    serializer_class = InsuranceRequestSerializer
+
+
+    def get_queryset(self):
+        return InsuranceRequest.objects.filter(client=self.request.user)
+
+
+class RequestDetail(generics.RetrieveAPIView):
+    """Detalle de una solicitud
+    """
+
+    model = InsuranceRequest
+    serializer_class = InsuranceRequestSerializer
+    queryset = InsuranceRequest.objects.all()
+
+
+class UploadPaymentProof(APIView):
+    serializer_class = RequestSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,)
+
+    def post(self, request, format=None):
+        
+        paymentProof = request.data['payment']
+        request_code = request.data['request_code']
+        print (paymentProof)
+        print (request_code)
+        
+        try:
+            request_obj = InsuranceRequest.objects.get(request_code=request_code)
+        except InsuranceRequest.DoesNotExists:
+            request_obj = None
+        
+        print (request_obj)
+        if request_obj:
+            request_obj.payment_proof = paymentProof
+            request_obj.status = InsuranceRequest.PROCESS
+            request_obj.save()
+            sendPaymentMail(request_obj.client.username, request_obj, paymentProof)
+        
+        
+            return Response({
+                'detail': 'Recibo de pago enviado exitosamente'
+            }, status=status.HTTP_200_OK)
+
+        return Response({
+                'detail': 'Ha ocurrido un error al recibir tu recibo de pago'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
 def sendMail(username, doc1, doc2, lic1, lic2, optionId, fisico):
     subject, from_email, to = 'Solicitud de seguro', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
     text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario {}. El codigo del seguro es {}. Este usuario ha \
@@ -114,4 +170,11 @@ def sendMail(username, doc1, doc2, lic1, lic2, optionId, fisico):
     msg.attach('documeto2.jpeg', doc2.read(), 'image/jpeg')
     msg.attach('licencia1.jpeg', lic1.read(), 'image/jpeg')
     msg.attach('licencia2.jpeg', lic2.read(), 'image/jpeg')
+    msg.send()
+
+def sendPaymentMail(username, request_obj, img):
+    subject, from_email, to = 'Recibo de pago SOAT', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
+    text_content = 'Acabas de recibir el recibo de pago del SOAT con codigo {} del usuario {}. '.format(request_obj.request_code, request_obj.client.username)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach('ReciboPago.jpeg', img.read(), 'image/jpeg')
     msg.send()

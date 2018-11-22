@@ -135,3 +135,10 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 class InsuranceRequestAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'client', 'status', 'request_date']
     inlines = [DocumentsRequestAdmin, UserPolicyAdmin]
+
+    readonly_fields = [
+        'request_code', 
+        'insurance', 
+        'client', 
+        'request_date'
+    ]
