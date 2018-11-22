@@ -79,13 +79,12 @@ class RequestViewSet(APIView):
             request_obj = InsuranceRequest(
                 status=InsuranceRequest.PENDING,
                 request_date=request_date,
-                client=user.pk,
+                client=user,
                 insurance=insurance,
                 adviser_code=adviser_code
             )
             request_obj.save()
         
-            request_obj.save()
             print (request_obj)
             # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
             # document_request.save()
