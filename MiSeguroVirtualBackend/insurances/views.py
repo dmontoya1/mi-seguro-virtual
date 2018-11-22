@@ -80,7 +80,7 @@ class RequestViewSet(APIView):
                 status=InsuranceRequest.PENDING,
                 request_date=request_date,
                 client=user.pk,
-                insurance=insurance.id,
+                insurance=insurance,
                 adviser_code=adviser_code
             )
             request_obj.save()
