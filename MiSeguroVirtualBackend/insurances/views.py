@@ -74,7 +74,7 @@ class RequestViewSet(APIView):
 
         request_date = date.today()
         username = request.user
-        status = 'PR'
+        status = 'PE'
         name = request.data['name']
         adviser_code = request.data['adviser_code']
         fisico = request.data['fisico']
