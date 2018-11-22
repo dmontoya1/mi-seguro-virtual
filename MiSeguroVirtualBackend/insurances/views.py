@@ -102,6 +102,7 @@ class RequestViewSet(APIView):
                 return Response(dict(status='done', details=serializer.data), status=200)
 
         except Exception as e:
+            print ("EXception")
             print (e)
             return Response(dict(status='error', details=str(e)), status=400)
 
