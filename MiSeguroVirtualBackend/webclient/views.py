@@ -68,9 +68,7 @@ class LoginView(TemplateView):
         except User.DoesNotExist:
             response = {'error': 'El correo no se encuentra registrado en la plataforma como influencer'}
             return JsonResponse(response, status=400)
-        print (user)
         user = authenticate(username=username, password=password)
-        print (user)
         if user is not None:
             url = reverse('webclient:profile')
             login(request, user)

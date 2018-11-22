@@ -87,7 +87,6 @@ class RequestViewSet(APIView):
             )
             request_obj.save()
         
-            print (request_obj)
             # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
             # document_request.save()
             sendMail(username, document1, document2, licence1, licence2, optionId, fisico)
@@ -129,15 +128,12 @@ class UploadPaymentProof(APIView):
         
         paymentProof = request.data['payment']
         request_code = request.data['request_code']
-        print (paymentProof)
-        print (request_code)
         
         try:
             request_obj = InsuranceRequest.objects.get(request_code=request_code)
         except InsuranceRequest.DoesNotExists:
             request_obj = None
         
-        print (request_obj)
         if request_obj:
             request_obj.payment_proof = paymentProof
             request_obj.status = InsuranceRequest.PROCESS
