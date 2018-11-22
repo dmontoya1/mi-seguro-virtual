@@ -52,6 +52,7 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = ('status', 'request_date', 'client', 'insurance','broker', 'adviser_code')
 
         def create(self, validated_data):
+            print ("Create serializer")
             request_insurance = InsuranceRequest.objects.create(**validated_data)
             return request_insurance
 
