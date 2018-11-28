@@ -1,6 +1,7 @@
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -276,7 +277,7 @@ class InsuranceRequest(models.Model):
     insurance = models.ForeignKey(
         Insurance,
         on_delete=models.CASCADE,
-        help_text='Enlace al seguro',
+        help_text='Seguro',
         verbose_name='Seguro'
     )
     client = models.ForeignKey(
@@ -412,6 +413,19 @@ class UserPolicy(models.Model):
         verbose_name='Póliza del cliente',
         blank=True, null=True
     )
+    client = models.ForeignKey(
+        get_user_model(),
+        verbose_name='Usuario',
+        blank=True, null=True,
+        on_delete=models.SET_NULL
+    )
+    insurance = models.ForeignKey(
+        Insurance,
+        on_delete=models.CASCADE,
+        help_text='Seguro',
+        verbose_name='Seguro',
+        blank=True, null=True
+    )
     insurance_file = models.FileField(
         'Documento del seguro',
         upload_to = 'Polizas',
@@ -447,7 +461,10 @@ class UserPolicy(models.Model):
         verbose_name_plural = 'Póliza clientes'
 
     def __str__(self):
-        return "Póliza %s del cliente %s" % (self.insurance_request.insurance, self.insurance_request.client)
+        try:
+            return "Póliza %s del cliente %s" % (self.insurance_request.insurance, self.insurance_request.client)
+        except:
+            return "Póliza del cliente %s" % (self.client)
 
     
     def clean(self, *args, **kwargs):
@@ -457,5 +474,6 @@ class UserPolicy(models.Model):
         if dt <= datetime.now():
             raise ValidationError('La fecha de inicio de la vigencia debe ser mayor a hoy')
         else:
-            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1) 
+            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1)
+            print (self.expiration_date)
             super(UserPolicy, self).save(*args, **kwargs)
