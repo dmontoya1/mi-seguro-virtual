@@ -70,11 +70,12 @@ class UserPolicySerializer(serializers.ModelSerializer):
     insurance_request = RequestGetSerializer(many=False, read_only=True)
     insurer = serializers.StringRelatedField(many=False)
     insurance_file_url = serializers.SerializerMethodField()
+    insurance = InsuranceSerializer(many=False, read_only=True)
 
     class Meta:
         model = UserPolicy
         fields = ('id', 'insurance_request', 'insurer', 'insurance_file_url', 'adviser_mail',
-                  'expiration_date', 'effective_date', 'licensed_plate'
+                  'expiration_date', 'effective_date', 'licensed_plate', 'insurance'
         )
 
     def get_insurance_file_url(self, obj):

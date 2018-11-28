@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 
 
@@ -113,11 +114,12 @@ class InsurerAdmin(admin.ModelAdmin):
         return super().response_change(request, obj)
 
 
-class UserPolicyAdmin(admin.StackedInline):
+class UserPolicyStackAdmin(admin.StackedInline):
 
     model = UserPolicy
     extra = 0
     readonly_fields = ["expiration_date", ]
+    exclude = ('client', 'insurance', )
 
 
 class DocumentsRequestAdmin(admin.StackedInline):
@@ -134,7 +136,7 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'client', 'status', 'request_date']
-    inlines = [DocumentsRequestAdmin, UserPolicyAdmin]
+    inlines = [DocumentsRequestAdmin, UserPolicyStackAdmin]
 
     readonly_fields = [
         'request_code', 
@@ -143,3 +145,22 @@ class InsuranceRequestAdmin(admin.ModelAdmin):
         'request_date',
         'price'
     ]
+
+
+@admin.register(UserPolicy)
+class UserPolicyAdmin(admin.ModelAdmin):
+    """
+    """
+
+    list_display = ('insurer', 'client', 'effective_date', 'expiration_date')
+    exclude = ('insurance_request',)
+    readonly_fields = ["expiration_date", ]
+
+    def get_queryset(self, request):
+        """
+        Función para reemplazar el queryset por defecto de django
+        si el request.user es un usuario CEA, entonces solo muestra la
+        empresa a la que pertenece
+        """
+        query = super(UserPolicyAdmin, self).get_queryset(request)
+        return query.filter(insurance_request=None)
