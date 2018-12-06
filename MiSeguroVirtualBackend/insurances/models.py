@@ -207,7 +207,11 @@ class Insurer(models.Model):
         max_length=50
     )
     cellphone_number = models.CharField(
-        'Numero de celular',
+        'Numero de celular de asistencia',
+        max_length=13
+    )
+    national_number = models.CharField(
+        'Linea nacional de asistencia (018000...)',
         max_length=13
     )
     email = models.EmailField(
@@ -413,12 +417,6 @@ class UserPolicy(models.Model):
         verbose_name='Póliza del cliente',
         blank=True, null=True
     )
-    client = models.ForeignKey(
-        get_user_model(),
-        verbose_name='Usuario',
-        blank=True, null=True,
-        on_delete=models.SET_NULL
-    )
     insurance = models.ForeignKey(
         Insurance,
         on_delete=models.CASCADE,
@@ -426,27 +424,52 @@ class UserPolicy(models.Model):
         verbose_name='Seguro',
         blank=True, null=True
     )
-    insurance_file = models.FileField(
-        'Documento del seguro',
-        upload_to = 'Polizas',
-        blank=True
-    ) 
+    client = models.ForeignKey(
+        get_user_model(),
+        verbose_name='Usuario',
+        blank=True, null=True,
+        on_delete=models.SET_NULL
+    )
     insurer = models.ForeignKey(
         Insurer,
         on_delete=models.CASCADE,
         help_text='Enlace a la aseguradora',
         verbose_name='Aseguradora'
     )
-    licensed_plate =models.CharField(
-        'placa',
-        max_length=8,
-        default='###-###'
-    )
     adviser_mail = models.EmailField(
         'Correo asesor',
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
+    police_number = models.CharField(
+        'Número de póliza - referencia',
+        max_length=255,
+        blank=True, null=True
+    )
+    taker_name = models.CharField(
+        'Nombre del tomador',
+        help_text='Opcional',
+        max_length=255,
+        blank=True, null=True
+    )
+    taker_document = models.CharField(
+        'Documento de identidad del tomador',
+        help_text='Opcional',
+        max_length=20,
+        blank=True, null=True
+    )
+    insurance_file = models.FileField(
+        'Documento del seguro',
+        upload_to = 'Polizas',
+        blank=True
+    ) 
+    licensed_plate =models.CharField(
+        'placa',
+        max_length=8,
+        default='###-###',
+        blank=True, null=True
+    )
+    
     effective_date = models.DateField(
         default= timezone.now,
         verbose_name="Fecha inicio de vigencia"

@@ -146,6 +146,11 @@ class InsuranceRequestAdmin(admin.ModelAdmin):
         'price'
     ]
 
+    class Media:
+        js = (
+            'js/admin/user_request_admin.js',
+        )
+
 
 @admin.register(UserPolicy)
 class UserPolicyAdmin(admin.ModelAdmin):
@@ -159,8 +164,13 @@ class UserPolicyAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """
         Función para reemplazar el queryset por defecto de django
-        si el request.user es un usuario CEA, entonces solo muestra la
-        empresa a la que pertenece
+        Muestra las polizas que no tienen una solicitud asociada
         """
         query = super(UserPolicyAdmin, self).get_queryset(request)
         return query.filter(insurance_request=None)
+
+    class Media:
+        js = (
+            'js/admin/user_policy.js',
+        )
+
