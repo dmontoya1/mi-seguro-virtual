@@ -7,7 +7,8 @@ from .models import (
     InsuranceRequest, 
     Insurance,
     Metadata,
-    MetadataChoices
+    MetadataChoices,
+    Insurer
 )
 
 class MetadataChoicesSerializer(serializers.ModelSerializer):
@@ -65,24 +66,36 @@ class RequestGetSerializer(serializers.ModelSerializer):
             return request_insurance
 
 
+class InsurerSerializer(serializers.ModelSerializer):
+    """
+    """
+
+    class Meta:
+        model = Insurer
+        fields = ('id', 'name', 'cellphone_number', 'national_number', 'email')
+
+
 class UserPolicySerializer(serializers.ModelSerializer):
     
     insurance_request = RequestGetSerializer(many=False, read_only=True)
-    insurer = serializers.StringRelatedField(many=False)
+    insurer = InsurerSerializer(many=False, read_only=True)
     insurance_file_url = serializers.SerializerMethodField()
     insurance = InsuranceSerializer(many=False, read_only=True)
 
     class Meta:
         model = UserPolicy
         fields = ('id', 'insurance_request', 'insurer', 'insurance_file_url', 'adviser_mail',
-                  'expiration_date', 'effective_date', 'licensed_plate', 'insurance'
+                  'expiration_date', 'effective_date', 'licensed_plate', 'insurance', 'police_number',
+
         )
 
     def get_insurance_file_url(self, obj):
         request = self.context.get('request')
-        insurance_file_url = obj.insurance_file.url
-        return request.build_absolute_uri(insurance_file_url)
-
+        try:
+            insurance_file_url = obj.insurance_file.url
+            return request.build_absolute_uri(insurance_file_url)
+        except:
+            return ''
 
 class InsuranceRequestSerializer(serializers.ModelSerializer):
     """

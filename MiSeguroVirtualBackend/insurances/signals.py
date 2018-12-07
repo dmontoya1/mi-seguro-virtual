@@ -23,23 +23,21 @@ def send_email_to_customer(sender, **kwargs):
             print (e)
             user = instance.client
         subject, from_email, to = 'Esta listo tu seguro', settings.EMAIL_USER, user.email
-        print (user)
         try:
             insurance = instance.insurance_request.insurance
         except:
-            insurance = ''
+            insurance = instance.insurance
         
-        print ('insurance: '+str(insurance))
-        text_content = 'Ya está listo tu seguro {}. Puedes descargarlo en el archivo que te enviamos adjunto'.format(insurance)
+        text_content = 'Ya está listo tu seguro {}. Ingresa a tu aplicacion para que puedas visualizarlo'.format(insurance)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
+        if instance.insurance.name == 'SOAT':
+            msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
         msg.send()
         
         if instance.adviser_mail:
             subject, from_email, to = 'Esta listo el seguro del cliente {}'.format(user), settings.EMAIL_USER, user.email
-            text_content = 'Ya está listo el seguro {} del cliente {}. Puedes descargarlo en el archivo que te enviamos adjunto'.format(instance.insurance_request.insurance, user)
+            text_content = 'Ya está listo el seguro {} del cliente {}.'.format(instance.insurance_request.insurance, user)
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-            msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
+            if instance.insurance.name == 'SOAT':
+                msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
             msg.send()
-        print ("MEnsaje enviado")
-        
