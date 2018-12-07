@@ -446,22 +446,10 @@ class UserPolicy(models.Model):
         max_length=255,
         blank=True, null=True
     )
-    taker_name = models.CharField(
-        'Nombre del tomador',
-        help_text='Opcional',
-        max_length=255,
-        blank=True, null=True
-    )
-    taker_document = models.CharField(
-        'Documento de identidad del tomador',
-        help_text='Opcional',
-        max_length=20,
-        blank=True, null=True
-    )
     insurance_file = models.FileField(
         'Documento del seguro',
         upload_to = 'Polizas',
-        blank=True
+        blank=True, null=True
     ) 
     licensed_plate =models.CharField(
         'placa',
