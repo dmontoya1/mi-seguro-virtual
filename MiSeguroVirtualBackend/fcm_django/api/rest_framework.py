@@ -144,5 +144,4 @@ class FCMDeviceViewSet(DeviceViewSetMixin, ModelViewSet):
 
 
 class FCMDeviceAuthorizedViewSet(AuthorizedMixin, FCMDeviceViewSet):
-    print ('llego')
     pass
