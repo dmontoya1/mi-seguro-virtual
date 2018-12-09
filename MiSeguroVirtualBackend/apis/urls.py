@@ -1,6 +1,8 @@
 from django.urls import path, include
 from django.contrib import admin
 
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
+
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -10,4 +12,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('insurances/', include('insurances.urls', namespace='insurances'), name='insurances'),
     path('users/', include('users.urls', namespace='users'), name='users'),
+    path('devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
 ]

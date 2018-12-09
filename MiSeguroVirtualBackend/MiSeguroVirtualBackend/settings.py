@@ -31,11 +31,13 @@ DJANGO_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'fcm_django',
 ]
 
 PROJECT_APPS = [
     'apis',
     'insurances',
+    'notifications',
     'users',
     'webclient'
 ]
@@ -181,4 +183,10 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=50),
 
+}
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAAuu9IJxk:APA91bHiVjxqhfnpnUj24NWEPt7gSQTVCwEiSHWmc1SzhIo7-2FsKAiTa3vp1uErRU62HgRScbRCqnrVki2N0mcHwli4j_Jdn_cdf0WJvNLFoFnpE5zwBR6DjsQoRAfuByw6GwaE_pU5",
+        "ONE_DEVICE_PER_USER": True,
+        "DELETE_INACTIVE_DEVICES": True,
 }

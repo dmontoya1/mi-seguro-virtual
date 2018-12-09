@@ -39,7 +39,7 @@ class UserPolicyDetail(generics.ListAPIView):
         )
         if queryset.exists():
             return queryset
-        return super().get_queryset()
+        return ''
 
 
 class InsuranceList(generics.ListAPIView):
