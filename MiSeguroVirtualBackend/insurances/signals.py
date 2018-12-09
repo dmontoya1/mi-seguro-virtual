@@ -9,6 +9,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from fcm_django.models import FCMDevice
+
 from insurances.models import UserPolicy
 from .models import User
 
@@ -19,7 +21,6 @@ def send_email_to_customer(sender, **kwargs):
         try:
             user = instance.insurance_request.client
         except Exception as e:
-            print ('Primera exception')
             print (e)
             user = instance.client
         subject, from_email, to = 'Esta listo tu seguro', settings.EMAIL_USER, user.email
@@ -33,7 +34,15 @@ def send_email_to_customer(sender, **kwargs):
         if instance.insurance.name == 'SOAT':
             msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
         msg.send()
-        
+        try:
+            devices = FCMDevice.objects.filter(user=user)
+            devices.send_message(
+                title='Se ha generado tu seguro',
+                body='Ya está listo tu seguro {}. Ve a la seccion "Mis seguros" para ver los detalles',
+                sound="default",
+            )
+        except:
+            pass
         if instance.adviser_mail:
             subject, from_email, to = 'Esta listo el seguro del cliente {}'.format(user), settings.EMAIL_USER, user.email
             text_content = 'Ya está listo el seguro {} del cliente {}.'.format(instance.insurance_request.insurance, user)
