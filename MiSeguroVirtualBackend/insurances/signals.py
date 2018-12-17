@@ -38,7 +38,7 @@ def send_email_to_customer(sender, **kwargs):
             devices = FCMDevice.objects.filter(user=user)
             devices.send_message(
                 title='Se ha generado tu seguro',
-                body='Ya está listo tu seguro {}. Ve a la seccion "Mis seguros" para ver los detalles',
+                body='Ya está listo tu seguro {}. Ve a la seccion "Mis seguros" para ver los detalles'.format(insurance),
                 sound="default",
             )
         except:
