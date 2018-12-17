@@ -31,7 +31,7 @@ def send_email_to_customer(sender, **kwargs):
         
         text_content = 'Ya está listo tu seguro {}. Ingresa a tu aplicacion para que puedas visualizarlo'.format(insurance)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        if instance.insurance.name == 'SOAT':
+        if insurance.name == 'SOAT':
             msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
         msg.send()
         try:
