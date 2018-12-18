@@ -441,6 +441,12 @@ class UserPolicy(models.Model):
         blank=True,
         help_text='Agregar en caso de que aplique'
     )
+    adviser_cellphone = models.CharField(
+        'Celular asesor',
+        max_length=255,
+        blank=True,
+        help_text='Agregar en caso de que aplique'
+    )
     police_number = models.CharField(
         'Número de póliza - referencia',
         max_length=255,

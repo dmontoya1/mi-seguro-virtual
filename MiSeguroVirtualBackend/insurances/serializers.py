@@ -84,7 +84,7 @@ class UserPolicySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserPolicy
-        fields = ('id', 'insurance_request', 'insurer', 'insurance_file_url', 'adviser_mail',
+        fields = ('id', 'insurance_request', 'insurer', 'insurance_file_url', 'adviser_mail', 'adviser_cellphone',
                   'expiration_date', 'effective_date', 'licensed_plate', 'insurance', 'police_number',
 
         )
