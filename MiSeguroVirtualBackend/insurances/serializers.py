@@ -72,7 +72,7 @@ class InsurerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Insurer
-        fields = ('id', 'name', 'cellphone_number', 'national_number', 'email')
+        fields = ('id', 'name', 'cellphone_number', 'national_number', 'email', 'adviser_cellphone')
 
 
 class UserPolicySerializer(serializers.ModelSerializer):
