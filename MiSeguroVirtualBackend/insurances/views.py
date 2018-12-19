@@ -16,7 +16,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from users.models import User
 
-from .models import UserPolicy, Insurance, DocumentsRequest, InsuranceRequest
+from .models import UserPolicy, Insurance, DocumentsRequest, InsuranceRequest, DomiRequestInsurer
 from .serializers import (
     UserPolicySerializer, 
     InsuranceSerializer, 
@@ -154,6 +154,41 @@ class UploadPaymentProof(APIView):
         return Response({
                 'detail': 'Ha ocurrido un error al recibir tu recibo de pago'
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DomiRequestInsuranceCreate(APIView):
+    """ Crea los datos de recogida del dinero cuando van a pagar en efectivo
+    """
+
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        
+        request_id = request.data['request_id']
+        address = request.data['address']
+        pickup_date = request.data['pickup_date']
+        pickup_time = request.data['pickup_time']
+        contact_phone = request.data['contact_phone']
+
+        request_insurance = InsuranceRequest.objects.filter(id=request_id).first()
+
+        try:
+            domi = DomiRequestInsurer(
+                request_insurance = request_insurance,
+                address=address,
+                pickup_date=pickup_date,
+                pickup_time=pickup_time,
+                contact_phone=contact_phone
+            )
+            domi.save()
+        
+            # sendMail(username, property1, property2, oldSoat, optionId, fisico)
+            return Response({'detail':'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            print ("EXception")
+            print (e)
+            return Response({'detail':'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def sendMail(username, doc1, doc2, oldSoat, optionId, fisico):

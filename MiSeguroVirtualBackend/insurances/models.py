@@ -349,6 +349,43 @@ class InsuranceRequest(models.Model):
         verbose_name_plural = 'Historial solicitudes'
 
 
+class DomiRequestInsurer(models.Model):
+    """Guarda los datos del domicilio del cliente que requiere
+    que le recogan el dinero del seguro a domicilio
+    """
+
+    request_insurance = models.ForeignKey(
+        InsuranceRequest,
+        verbose_name='Solicitud del seguro',
+        on_delete=models.CASCADE
+    )
+    address = models.CharField(
+        'Direccion de recogida',
+        max_length=255
+    )
+    pickup_date = models.DateField(
+        'Dia de recogida',
+        auto_now=False,
+        auto_now_add=False
+    )
+    pickup_time = models.TimeField(
+        'Hora de recogida',
+        auto_now_add=False
+    )
+    contact_phone = models.CharField(
+        'Número de contacto',
+        max_length=255
+    )
+
+    def __str__(self):
+        return 'Solicitud de domicilio'
+    
+
+    class Meta:
+        verbose_name = 'Solicitud de Domicilio'
+        verbose_name_plural = 'Solicitudes de Domicilio'
+
+
 class Answer(models.Model):
     """Guarda las respuestas del formulario de un paciente
     """

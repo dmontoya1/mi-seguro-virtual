@@ -16,7 +16,8 @@ from .models import (
     InsuranceRequest,
     Answer,
     DocumentsRequest,
-    UserPolicy
+    UserPolicy,
+    DomiRequestInsurer
 )
 
 
@@ -128,6 +129,12 @@ class DocumentsRequestAdmin(admin.StackedInline):
     extra = 0
 
 
+class DomiRequestInsurerAdmin(admin.StackedInline):
+
+    model = DomiRequestInsurer
+    extra = 0
+
+
 @admin.register(PointOfSale)
 class PointOfSaleAdmin(admin.ModelAdmin):
     list_display = ['name', 'mail', 'cellphone_number', 'code']
@@ -136,7 +143,7 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'client', 'status', 'request_date']
-    inlines = [DocumentsRequestAdmin, UserPolicyStackAdmin]
+    inlines = [DocumentsRequestAdmin, UserPolicyStackAdmin, DomiRequestInsurerAdmin]
 
     readonly_fields = [
         'request_code', 

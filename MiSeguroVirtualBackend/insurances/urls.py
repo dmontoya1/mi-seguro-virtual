@@ -13,4 +13,5 @@ urlpatterns = [
     path('requests/', views.Requests.as_view(), name='user_requests'),
     path('upload-payment/', views.UploadPaymentProof.as_view(), name='upload_payment'),
     path('request/<int:pk>/', views.RequestDetail.as_view(), name='user_requests_detail'),
+    path('request-domi/', views.DomiRequestInsuranceCreate.as_view(), name='create_domi'),
 ]
