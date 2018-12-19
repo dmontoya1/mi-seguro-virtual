@@ -523,7 +523,7 @@ class UserPolicy(models.Model):
     
     def clean(self, *args, **kwargs):
         " Funcion para hacer que la fecha de inicio no sea hoy ni menor a hoy "
-        if not old_instance:
+        if not self.old_insurance:
             d = self.effective_date
             dt = datetime(d.year, d.month, d.day)
             if dt <= datetime.now():
@@ -532,3 +532,6 @@ class UserPolicy(models.Model):
                 self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1)
                 print (self.expiration_date)
                 super(UserPolicy, self).save(*args, **kwargs)
+        else:
+            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1)
+            super(UserPolicy, self).save(*args, **kwargs)
