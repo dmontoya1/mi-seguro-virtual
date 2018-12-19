@@ -8,7 +8,7 @@
 
 
         $('#id_insurance').on('change', function(){
-            if ($(this).val() === '5')
+            if ($(this).val() === '1')
             {
                 $('.field-police_number').addClass('hidden');
                 $('.field-taker_name').addClass('hidden');

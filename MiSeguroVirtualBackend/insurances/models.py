@@ -497,6 +497,10 @@ class UserPolicy(models.Model):
         blank=True, null=True
     )
     
+    old_insurance = models.BooleanField(
+        'Seguro antiguo?',
+        default=False
+    )
     effective_date = models.DateField(
         default= timezone.now,
         verbose_name="Fecha inicio de vigencia"
@@ -519,11 +523,12 @@ class UserPolicy(models.Model):
     
     def clean(self, *args, **kwargs):
         " Funcion para hacer que la fecha de inicio no sea hoy ni menor a hoy "
-        d = self.effective_date
-        dt = datetime(d.year, d.month, d.day)
-        if dt <= datetime.now():
-            raise ValidationError('La fecha de inicio de la vigencia debe ser mayor a hoy')
-        else:
-            self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1)
-            print (self.expiration_date)
-            super(UserPolicy, self).save(*args, **kwargs)
+        if not old_instance:
+            d = self.effective_date
+            dt = datetime(d.year, d.month, d.day)
+            if dt <= datetime.now():
+                raise ValidationError('La fecha de inicio de la vigencia debe ser mayor a hoy')
+            else:
+                self.expiration_date = self.effective_date + relativedelta(years=1) - timezone.timedelta(days=1)
+                print (self.expiration_date)
+                super(UserPolicy, self).save(*args, **kwargs)
