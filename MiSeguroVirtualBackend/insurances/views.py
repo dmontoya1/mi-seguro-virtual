@@ -168,7 +168,6 @@ class DomiRequestInsuranceCreate(APIView):
         address = request.data['address']
         pickup_date = request.data['pickup_date']
         pickup_time = request.data['pickup_time']
-        contact_phone = request.data['contact_phone']
 
         request_insurance = InsuranceRequest.objects.filter(id=request_id).first()
 
@@ -178,7 +177,6 @@ class DomiRequestInsuranceCreate(APIView):
                 address=address,
                 pickup_date=pickup_date,
                 pickup_time=pickup_time,
-                contact_phone=contact_phone
             )
             domi.save()
         

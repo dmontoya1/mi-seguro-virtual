@@ -372,10 +372,6 @@ class DomiRequestInsurer(models.Model):
         'Hora de recogida',
         auto_now_add=False
     )
-    contact_phone = models.CharField(
-        'Número de contacto',
-        max_length=255
-    )
 
     def __str__(self):
         return 'Solicitud de domicilio'
