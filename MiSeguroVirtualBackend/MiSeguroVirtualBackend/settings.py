@@ -93,6 +93,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'insurances',
+	'USER': 'ubuntu',
+	'PASSWORD' :'apptitud2018',
+	'HOST': 'localhost',
+	'POST': '',
     }
 }
 
@@ -142,6 +146,7 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, "MiSeguroVirtualBackend/static")
 ]
