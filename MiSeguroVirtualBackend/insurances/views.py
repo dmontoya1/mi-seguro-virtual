@@ -157,10 +157,10 @@ class UploadPaymentProof(APIView):
 
 
 def sendMail(username, doc1, doc2, oldSoat, optionId, fisico):
-    subject, from_email, to = 'Solicitud de seguro', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
+    subject, from_email = 'Solicitud de seguro', settings.EMAIL_USER
     text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario {}. El codigo del seguro es {}. Este usuario ha \
     elegido la option de enviar el SOAT en fisico como {}. '.format(str(username), optionId, fisico)
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, ['yo@diegonaranjo.co', 'alukas@segurosquality.com'])
     msg.attach('propiedad1.jpeg', doc1.read(), 'image/jpeg')
     msg.attach('propiedad2.jpeg', doc2.read(), 'image/jpeg')
     if oldSoat:
@@ -168,8 +168,8 @@ def sendMail(username, doc1, doc2, oldSoat, optionId, fisico):
     msg.send()
 
 def sendPaymentMail(username, request_obj, img):
-    subject, from_email, to = 'Recibo de pago SOAT', settings.EMAIL_USER, 'dmontoya.web@gmail.com'
+    subject, from_email = 'Recibo de pago SOAT', settings.EMAIL_USER
     text_content = 'Acabas de recibir el recibo de pago del SOAT con codigo {} del usuario {}. '.format(request_obj.request_code, request_obj.client.username)
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, ['yo@diegonaranjo.co', 'alukas@segurosquality.com'])
     msg.attach('ReciboPago.jpeg', img.read(), 'image/jpeg')
     msg.send()
