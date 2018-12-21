@@ -1,0 +1,523 @@
+{% extends 'webclient/base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="service-area">
+    <div class="container profile mt-5">
+        <div class="row content-row">
+            <div class="col-12 mb-4 text-center">
+                <h1 class="my-profile-title">Mi Perfil</h1>               
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="container-fluid profile-content">
+                <div class="row p-2 mt-2 mb-5">
+                    <div class="col-12 col-lg-12 mb-4">
+                        <div class="row mb-3 ml-2">
+                            <div class="col-12">
+                                <span class="section-info">Datos Personales</span>
+                                <button class="btn-edit float-right" data-toggle="modal" data-target="#modal-basic-data">Editar</button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_name">Nombres</label>
+                                    <input type="email" class="form-control" readonly id="profile_name" placeholder="{{request.user.get_full_name|default:"Sin Nombre"}}">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_code">Mi Cófigo Influencer</label>
+                                    <input type="text" class="form-control" id="profile_code" readonly id="influencer_code" placeholder="{{request.user.code|default:"Sin código"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="doc_type_info">Tipo Documento</label>
+                                    <input type="text" class="form-control" readonly id="doc_type_info" placeholder="{{request.user.get_document_type_display|default:"Sin documento"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="doc_number">Número Documento</label>
+                                    <input type="text" class="form-control" readonly id="doc_number" placeholder="{{request.user.document_id|default:"Sin documento"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="phone_number_info">Teléfono</label>
+                                    <input type="text" class="form-control" readonly id="phone_number_info" placeholder="{{request.user.phone_number|default:"Sin teĺefono"}}">
+                                </div>
+                            </div>
+                                    
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="row p-2 mt-2 mb-2">
+                    <div class="col-12 mb-4">
+                        <div class="row mb-3 ml-2">
+                            <div class="col-12">
+                                <span class="section-info">Datos de autenticación</span>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_email">Correo Electrónico</label>
+                                    <a class="btn-edit d-inline-flex align-items-center float-right" href="#" data-toggle="modal" data-target="#modal-email">Editar</a>
+                                    <input type="email" class="form-control" readonly id="profile_email" placeholder="{{request.user.email}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_password">Contraseña</label>
+                                    <a class="btn-edit d-inline-flex align-items-center float-right" href="#" data-toggle="modal" data-target="#modal-password">Editar</a>
+                                    <input type="password" class="form-control" readonly id="profile_password" placeholder="***********">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="row p-2 mt-2 mb-2">
+                    <div class="col-12 mb-4">
+                        <div class="row mb-3 ml-2">
+                            <div class="col-12">
+                                <span class="section-info">Datos Bancarios</span>
+                                <button class="btn-edit float-right" data-toggle="modal" data-target="#modal-bank">Editar</button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_name">Banco</label>
+                                    <input type="text" class="form-control" readonly id="profile_company_name" placeholder="{{request.user.bank|default:"Sin banco"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_employees">Tipo cuenta</label>
+                                    <input type="text" class="form-control" readonly id="profile_company_employees" placeholder="{{request.user.get_account_type_display|default:"Sin cuenta"}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="profile_company_sector">Número de cuenta</label>
+                                    <input type="text" class="form-control" readonly id="profile_company_sector" placeholder="{{request.user.account_number|default:"Sin cuenta"}}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Modal Editar info básica  -->
+<div class="modal" tabindex="-1" role="dialog" id="modal-basic-data">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edita tu información básica</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data-form" class="form-horizontal">
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value={{request.user.pk}}>
+                    <div class="form-group">
+                        <label for="first_name">Nombres</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}" value="{{request.user.first_name}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Apellidos</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{request.user.last_name}}" value="{{request.user.last_name}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="code">Código Influenciador</label>
+                        <input type="text" class="form-control" id="code" name="code" value="{{request.user.code}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doc_type">Tipo de documento</label>
+                        <select class="form-control" id="doc_type" name="document_type" required>
+                            <option disabled value="">Selecciona tipo de documento</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TE">Tarjeta de identidad</option>
+                            <option value="CE">Cédula Extranjera</option>
+                            <option value="PA">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="doc_id">Número de documento</label>
+                        <input type="text" class="form-control" id="doc_id" name="document_id" placeholder="Ingresa tu número de documento" value="{{request.user.document_id}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Número de teléfono</label>
+                        <input type="text" class="form-control" id="phone_number" placeholder="ingresa tu número de teléfono" name="phone_number" value="{{request.user.phone_number}}" required>
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-action">Guardar</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Correo -->
+<div class="modal fade" id="modal-email" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cambia tu correo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" id="email_form">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value="{{request.user.pk}}">
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Email antetior:</label>
+                    <input type="email" class="form-control" name="old_email" maxlength="100"
+                        readonly placeholder="{{request.user.email}}" value="{{request.user.email}}"/>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Nuevo Email:</label>
+                    <input type="email" class="form-control" name="email" maxlength="100"
+                        data-validation="email" id="email1"
+                        data-validation-error-msg="Debes ingresar un email válido"/>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Confirmar Email:</label>
+                    <input type="email" class="form-control" name="email2" maxlength="100"
+                        id="email2" autocomplete="off"/>
+                    <span id="validEmail"></span>
+                </div>
+            
+        </div>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancaler</button>
+                <button type="submit" id="change_email_submit" class="btn btn-action">Guardar</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar contraseña -->
+<div class="modal fade" id="modal-password" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cambia tu contraseña</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" id="password_form" class="form-horizontal">
+                {% csrf_token %}
+                <input type="hidden" name="email" value={{request.user.email}}>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label class="control-label">Tu contraseña actual</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <input required type="password" class="form-control" name="old_password"/>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label class="control-label">Nueva contraseña</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <input required type="password" class="form-control" name="password" id="password_1"/>
+                        <span id="result"></span>
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group mb-3">
+                    <div class="col-xs-12">
+                        <label class="control-label"> Repetir Contraseña</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <input required type="password" class="form-control"  
+                        name="password2" id="password_2"/>
+                        <span id="valid"></span>
+                    </div>
+                </div>
+
+            
+        </div>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="Submit" disabled="disabled" id="submit_pass" class="btn btn-action">Guardar</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar datos bancarios -->
+<div class="modal fade" id="modal-bank" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edita los datos de tu empresa</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="bank_form" class="form-horizontal">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value={{request.user.pk}}>
+                <div class="form-group">
+                    <label for="company_name">Banco</label>
+                    <input type="text" class="form-control" id="bank" name="bank" placeholder="Ingresa tu banco" value="{{request.user.bank|default:''}}">
+                </div>
+                <div class="form-group">
+                    <label for="account_type">Tipo de cuenta</label>
+                    <select class="form-control" id="account_type" name="account_type">
+                        <option disabled value="">Tipo de cuenta</option>
+                        <option {% if account_type == 'AH' %}selected{% endif%} value="AH">Ahorros</option>
+                        <option {% if account_type == 'CO' %}selected{% endif%} value="CO">Corriente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sector_company">Número de cuenta</label>
+                    <input type="text" class="form-control" name="account_number" id="account_number" placeholder="Ingresa el número de cuenta" value="{{reques.user.account_number}}">
+                </div>
+        </div>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-action">Guardar</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
+
+{% block nav-script%}
+{% endblock %}
+
+{% block extra_js %}
+
+    <script>
+        function checkStrength(password) {
+            var strength = 0
+            if (password.length < 6) {
+                $('#result').removeClass()
+                $('#result').addClass('short')
+                $('#submit_pass').attr('disabled', true)
+
+                return 'Muy corta'
+            }
+            if (password.length > 7) strength += 1
+            // If password contains both lower and uppercase characters, increase strength value.
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1
+            // If it has numbers and characters, increase strength value.
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1
+            // If it has one special character, increase strength value.
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+            // If it has two special characters, increase strength value.
+            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
+            // Calculated strength value, we can return messages
+            // If value is less than 2
+            if (strength < 2) {
+                $('#result').removeClass()
+                $('#result').addClass('weak')
+                $('#submit_pass').attr('disabled', true)
+                return 'Débil'
+            } else if (strength == 2) {
+                $('#result').removeClass()
+                $('#result').addClass('good')
+                return 'Buena'
+            } else {
+                $('#result').removeClass()
+                $('#result').addClass('strong')
+                return 'Fuerte'
+                }
+        }
+        
+        function checkValid(password1, password2){
+            if (password1 != password2){
+                $('#valid').removeClass()
+                $('#valid').addClass('nopass')
+                $('#submit_pass').attr('disabled', true)
+                return 'Las contraseñas no coinciden'
+            }
+            else{
+                $('#valid').removeClass()
+                $('#submit_pass').attr('disabled', false)
+                return ''
+            }
+        }
+
+        function checkEmailValid(email1, email2){
+            if (email1 != email2){
+                $('#validEmail').removeClass()
+                $('#validEmail').addClass('nopass')
+                $('#change_email_submit').attr('disabled', true)
+                return 'Los correos no coinciden'
+            }
+            else{
+                $('#validEmail').removeClass()
+                $('#change_email_submit').attr('disabled', false)
+                return ''
+            }
+        }
+
+        $('#password_1').keyup(function() {
+            $('#result').html(checkStrength($('#password_1').val()))
+        })
+        $('#password_2').keyup(function() {
+            $('#valid').html(checkValid($('#password_1').val(), $('#password_2').val()))
+        })
+
+        $('#email2').keyup(function() {
+            $('#validEmail').html(checkEmailValid($('#email1').val(), $('#email2').val()))
+        })
+
+        $("#data-form").on('submit', function(ev){
+            ev.preventDefault()
+            data = new FormData($(this)[0])
+            axios.patch("{% url 'api:users:influencer_update' pk=request.user.pk %}", data)
+            .then(function(response){
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado la información exitosamente",
+                    hideTimeout: 5000,
+                });
+                setTimeout(function(){
+                    $('#modal-basic-data').modal('toggle')
+                    location.reload()
+                }, 1000);
+            })
+            .catch(function(error){
+                console.log(error.response)
+                console.log(error.response.data.error)
+                BootstrapAlert.warning({
+                    title: "Ups",
+                    message: "Hemos detectado un error, intenta nuevamente",
+                    hideTimeout: 5000,
+                });
+                
+            });
+        })
+
+        $("#email_form").on('submit', function(ev){
+            ev.preventDefault()
+            console.log("Submit")
+            data = $(this).serialize()
+            axios.patch("{% url 'api:users:user_change_email' %}", data)
+            .then(function(response){
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado tu correo exitosamente",
+                    hideTimeout: 5000,
+                });
+                setTimeout(function(){
+                    $('#modal-email').modal('toggle')
+                    location.reload()
+                }, 1000);
+            })
+            .catch(function(error){
+                console.log(error.response)
+                BootstrapAlert.error({
+                    title: "Ups",
+                    message: error.response.data.error,
+                    hideTimeout: 5000,
+                });
+            });
+        })
+
+        $("#password_form").on('submit', function(ev){
+            ev.preventDefault()
+            data = $(this).serialize()
+            axios.patch("{% url 'api:users:user_change_password' %}", data)
+                .then(function(response){
+                    BootstrapAlert.success({
+                        title: "Éxito",
+                        message: "Se ha actualizado tu contraseña exitosamente",
+                        hideTimeout: 5000,
+                    });
+                    BootstrapAlert.success({
+                        title: "Éxito",
+                        message: "Por favor inicia sesión nuevamente",
+                        hideTimeout: 5000,
+                    });
+                    setTimeout(function(){
+                        $('#modal-password').modal('toggle')
+                        location.reload()
+                    }, 1000);
+                })
+                .catch(function(error){
+                    console.log("Error")
+                    BootstrapAlert.error({
+                        title: "Ups",
+                        message: error.response.data.error,
+                        hideTimeout: 5000,
+                    });
+                });
+        })
+
+        $('#bank_form').on('submit',function(ev){
+            ev.preventDefault()
+            data = new FormData($(this)[0])
+            axios.patch("{% url 'api:users:influencer_bank_update' pk=request.user.pk %}", data)
+            .then(function(response){
+                BootstrapAlert.success({
+                    title: "Éxito",
+                    message: "Se ha actualizado la información bancaria exitosamente",
+                    hideTimeout: 5000,
+                });
+                setTimeout(function(){
+                    $('#modal-bank').modal('toggle')
+                    location.reload()
+                }, 1000);
+            })
+            .catch(function(error){
+                console.log(error.response)
+                console.log(error.response.data.error)
+                BootstrapAlert.warning({
+                    title: "Ups",
+                    message: "Hemos tenido un error.",
+                    hideTimeout: 5000,
+                });
+                
+            });
+            
+        })
+
+
+        $(document).ready(function(){
+
+        })
+
+
+    </script>
+
+{% endblock %}

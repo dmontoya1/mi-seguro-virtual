@@ -1,5 +1,6 @@
 import os
 import datetime
+import raven
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,7 @@ DJANGO_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'fcm_django',
+    'raven.contrib.django.raven_compat',
 ]
 
 PROJECT_APPS = [
@@ -129,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #Email settings sendGrid
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_USER = 'Mi Seguro Virtual <no-reply@mi-seguro-virtual.com>'
+EMAIL_USER = 'Mi Seguro Virtual <no-reply@quality-seguros.com>'
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
@@ -195,3 +197,11 @@ FCM_DJANGO_SETTINGS = {
         "ONE_DEVICE_PER_USER": True,
         "DELETE_INACTIVE_DEVICES": True,
 }
+
+RAVEN_CONFIG = {
+    'dsn': 'https://2b62ec64b7344dd6b77b8ba349665d70:435bf856329d4ce2834d2a1fc6b2b011@sentry.apptitud.com.co/4',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+}
+
