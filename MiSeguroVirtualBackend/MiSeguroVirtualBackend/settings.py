@@ -1,5 +1,6 @@
 import os
 import datetime
+import raven
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,7 @@ DJANGO_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'fcm_django',
+    'raven.contrib.django.raven_compat',
 ]
 
 PROJECT_APPS = [
@@ -189,4 +191,11 @@ FCM_DJANGO_SETTINGS = {
         "FCM_SERVER_KEY": "AAAAuu9IJxk:APA91bHiVjxqhfnpnUj24NWEPt7gSQTVCwEiSHWmc1SzhIo7-2FsKAiTa3vp1uErRU62HgRScbRCqnrVki2N0mcHwli4j_Jdn_cdf0WJvNLFoFnpE5zwBR6DjsQoRAfuByw6GwaE_pU5",
         "ONE_DEVICE_PER_USER": True,
         "DELETE_INACTIVE_DEVICES": True,
+}
+
+RAVEN_CONFIG = {
+    'dsn': 'https://2b62ec64b7344dd6b77b8ba349665d70:435bf856329d4ce2834d2a1fc6b2b011@sentry.apptitud.com.co/4',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
 }
