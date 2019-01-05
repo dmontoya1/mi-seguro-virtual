@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.utils import timezone
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -37,7 +37,13 @@ class CustomerViewSet(APIView):
 
     def post(self, request, format=None):
         ip_user = get_client_ip(request)
+        email = request.data['email']
+        user = User.objects.filter(email=email)
+        if user.exists():
+            return Response({'error': 'El correo ya se encuentra registrado, por favor inicia sesión'},
+                             status=status.HTTP_400_BAD_REQUEST)
         password = make_password(request.data['password'])
+
         user_data = dict(
             username=request.data['username'],
             first_name=request.data['first_name'],
@@ -60,7 +66,7 @@ class CustomerViewSet(APIView):
         except Exception as e:
             print (e)
             print ("Exception")
-            return Response(dict(status='error', details=str(e)), status=400)
+            return Response({'error': 'Ha ocurrido un error inesperado. Intenta nuevamente en unos minutos'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def get_client_ip(request):
