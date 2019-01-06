@@ -93,8 +93,8 @@ class RequestViewSet(APIView):
             )
             request_obj.save()
         
-            # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
-            # document_request.save()
+            document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
+            document_request.save()
             sendMail(username, property1, property2, oldSoat, optionId, fisico)
             return Response({'detail':'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
 
