@@ -420,13 +420,18 @@ class DocumentsRequest(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Solicitud'
     )
-    property_card = models.ImageField(
-        'Imagen',
+    property_card_front = models.ImageField(
+        'Tarjeta de propiedad frente',
         upload_to = 'Solicitudes/tarjetas',
         blank=True
     )
-    drive_license = models.ImageField(
-        'Imagen',
+    property_card_back = models.ImageField(
+        'Tarjeta de propiedad atras',
+        upload_to = 'Solicitudes/tarjetas',
+        blank=True
+    )
+    old_soat = models.ImageField(
+        'Soat Anterior',
         upload_to = 'Solicitudes/licencias',
         blank=True
     ) 

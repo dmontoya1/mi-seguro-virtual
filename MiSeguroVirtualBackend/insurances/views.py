@@ -65,10 +65,7 @@ class RequestViewSet(APIView):
         
         property1 = request.data['property1']
         property2 = request.data['property2']
-        try:
-            oldSoat = request.data['oldSoat']
-        except:
-            oldSoat = None
+        
 
         request_date = date.today()
         username = request.user
@@ -93,8 +90,20 @@ class RequestViewSet(APIView):
             )
             request_obj.save()
         
-            # document_request = DocumentsRequest.objects.create(insurance_request=request_insurance, property_card=foto1, drive_license=foto2)
-            # document_request.save()
+            document_request = DocumentsRequest.objects.create(
+                insurance_request=request_obj, 
+                property_card_front=property1,
+                property_card_back=property2
+            )
+            document_request.save()
+
+            try:
+                oldSoat = request.data['oldSoat']
+                document_request.old_soat = oldSoat
+                document_request.save()
+            except:
+                oldSoat = None
+
             sendMail(username, property1, property2, oldSoat, optionId, fisico)
             return Response({'detail':'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
 

@@ -95,10 +95,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'insurances',
-	'USER': 'ubuntu',
-	'PASSWORD' :'apptitud2018',
-	'HOST': 'localhost',
-	'POST': '',
     }
 }
 
