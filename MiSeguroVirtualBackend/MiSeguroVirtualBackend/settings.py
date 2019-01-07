@@ -39,6 +39,7 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'apis',
     'insurances',
+    'manager',
     'notifications',
     'users',
     'webclient'
