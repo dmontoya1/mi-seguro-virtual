@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 
+from users.serializers import CustomerSerializer
 from .models import (
     UserPolicy,
     Insurance, 
@@ -103,6 +104,7 @@ class InsuranceRequestSerializer(serializers.ModelSerializer):
 
     status = serializers.SerializerMethodField()
     insurance = InsuranceSerializer(many=False, read_only=True)
+    client = CustomerSerializer(many=False, read_only=True)
 
     class Meta:
         model = InsuranceRequest
