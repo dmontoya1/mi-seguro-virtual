@@ -11,6 +11,7 @@ urlpatterns = [
     path('profile/<int:pk>/bank', views.InfluencerBankUpdate.as_view(), name='influencer_bank_update'),
     path('change-email/', views.UserChangeEmail.as_view(), name='user_change_email'),
     path('change-password/', views.UserChangePassword.as_view(), name='user_change_password'),
-    path('customer/', views.CustomerDetail.as_view(), name='customer_datail')
+    path('customer/', views.CustomerDetail.as_view(), name='customer_datail'),
+    path('password-set/', views.PasswordCreateView.as_view(), name='password-set')
 
 ]
