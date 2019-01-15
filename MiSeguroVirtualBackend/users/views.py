@@ -1,9 +1,12 @@
 
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
+from django.views.generic.base import TemplateView, View
 
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -127,3 +130,54 @@ class UserChangePassword(generics.UpdateAPIView):
         email = self.request.data.get('email')
         user = User.objects.get(email=email)
         return user
+
+
+class PasswordCreateView(TemplateView):
+    """
+    Clase para la creación de la contraseña de un usuario registrado por el SuperAdmin
+    """
+    template_name = "users/password_set.html"
+
+    def get(self, request, *args, **kwargs):
+        token = request.GET.get('token', None)
+        if token is not None:
+            try:
+                user = User.objects.get(token=token)
+                return render(
+                    request,
+                    'users/password_set.html',
+                    {
+                        'token': token
+                    }
+                )
+            except User.DoesNotExist:
+                messages.add_message(self.request, messages.WARNING, 'El Token es inválido')
+                return redirect('/')
+        else:
+            messages.add_message(self.request, messages.WARNING, 'Token no enviado')
+            return redirect('/')
+
+    def post(self, request, *args, **kwargs):
+        current_site = get_current_site(request)
+        try:
+            new_password_1 = request.POST.get('new_password_1', None)
+            new_password_2 = request.POST.get('new_password_2', None)
+            user = User.objects.get(token=request.POST['token'])
+            if new_password_1 and new_password_2:
+                if new_password_1 != new_password_2:
+                    messages.add_message(self.request, messages.WARNING,
+                                         'Las contraseñas no coinciden')
+                    return redirect("http://%s%s?token=%s" % (current_site, reverse('password-set'),
+                                                              request.POST['token']))
+                else:
+                    user.set_password(new_password_1)
+                    user.token = request.POST['token']
+                    user.save()
+                    messages.add_message(self.request, messages.SUCCESS,
+                                         'Contraseña actualizada correctamente. Ahora puedes iniciar sesión desde la aplicación')
+
+            return redirect('/')
+        except User.DoesNotExist:
+            messages.add_message(self.request, messages.SUCCESS, 'Usuario no existe')
+            return redirect("http://%s%s?token=%s" % (current_site, reverse('password-set'),
+                                                      request.POST['token']))

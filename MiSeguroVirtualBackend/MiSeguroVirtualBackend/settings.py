@@ -156,6 +156,7 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, "MiSeguroVirtualBackend/media")
 
 
 AUTH_USER_MODEL = 'users.User'
+URL_SET_PASSWORD = '/users/password-set'
 
 SOCIALACCOUNT_PROVIDERS = \
     {'facebook':
