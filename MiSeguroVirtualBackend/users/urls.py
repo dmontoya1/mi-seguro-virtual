@@ -12,6 +12,6 @@ urlpatterns = [
     path('change-email/', views.UserChangeEmail.as_view(), name='user_change_email'),
     path('change-password/', views.UserChangePassword.as_view(), name='user_change_password'),
     path('customer/', views.CustomerDetail.as_view(), name='customer_datail'),
-    path('password-set/', views.PasswordCreateView.as_view(), name='password-set')
-
+    path('password-set/', views.PasswordCreateView.as_view(), name='password-set'),
+    path('password-reset/', views.ForgetPassword.as_view(), name='forget-password'),
 ]
