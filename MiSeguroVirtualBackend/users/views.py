@@ -1,7 +1,9 @@
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect, reverse
@@ -16,6 +18,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.views import ObtainJSONWebToken
 
+from core.views import send_email
 from users.models import User, TermsAcceptanceLogs
 
 from .serializers import CustomerSerializer, JWTSerializer, InfluencerSerializer, ChangePasswordSerializer,\
@@ -181,3 +184,36 @@ class PasswordCreateView(TemplateView):
             messages.add_message(self.request, messages.SUCCESS, 'Usuario no existe')
             return redirect("http://%s%s?token=%s" % (current_site, reverse('password-set'),
                                                       request.POST['token']))
+
+
+class ForgetPassword(APIView):
+    """
+    """
+
+    serializer_class = CustomerSerializer
+    permission_classes = ()
+
+    def post(self, request, format=None):
+        email = request.data['email']
+        user = User.objects.filter(email=email).first()
+        if user:
+            # return Response({'error': 'El correo ya se encuentra registrado, por favor inicia sesión'},
+            #                  status=status.HTTP_400_BAD_REQUEST)
+
+            current_site = Site.objects.get_current()
+            url = '{0}{1}/?token={2}'.format(current_site, settings.URL_SET_PASSWORD, user.token)
+            send_email(
+                subject="Recuperación contraseña Quality Seguros",
+                ctx={
+                        'title': "QUALITY Seguros - Recuperación de contraseña",
+                        'message': "Has solicitado recuperar tu contraseña en Quality Seguros. Por favor sigue el siguiente link para crear tu nueva contraseña.", 
+                        'url': url,
+                },
+                to_email=email
+            )
+            return Response({'success': 'Hemos enviado las instrucciones para que recuperes tu contraseña.'}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'error': 'El correo que ingresaste no ha sido encontrado en la base de datos. Intenta nuevamente'}, status=status.HTTP_400_BAD_REQUEST)
+
+    
