@@ -32,7 +32,7 @@ def send_email_to_customer(sender, **kwargs):
         text_content = 'Ya está listo tu seguro {}. Ingresa a tu aplicacion para que puedas visualizarlo'.format(insurance)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         if insurance.name == 'SOAT':
-            msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
+            msg.attach('seguro.pdf', instance.insurance_file.read(),  'application/pdf')
         msg.send()
         try:
             devices = FCMDevice.objects.filter(user=user)
@@ -48,5 +48,5 @@ def send_email_to_customer(sender, **kwargs):
             text_content = 'Ya está listo el seguro {} del cliente {}.'.format(instance.insurance_request.insurance, user)
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
             if instance.insurance.name == 'SOAT':
-                msg.attach('seguro.jpeg', instance.insurance_file.read(),  'image/jpeg')
+                msg.attach('seguro.pdf', instance.insurance_file.read(),  'application/pdf')
             msg.send()
