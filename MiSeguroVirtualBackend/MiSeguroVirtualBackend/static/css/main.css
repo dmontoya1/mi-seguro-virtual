@@ -1917,9 +1917,6 @@ body:after {
   width: 100%;
   height: 100%;
   position: fixed;
-  background-image: -moz-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -webkit-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -ms-linear-gradient(0deg, #e66587 0%, #f09458 100%);
   opacity: 0.6;
   z-index: -1;
 }
@@ -1973,13 +1970,11 @@ body:after {
 }
 
 .p1-gradient-bg, .primary-btn:after, .banner-area, .single-feature .icon:after, .service-area, .story-area, .single-widget .icon:after {
-  background-image: -moz-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -webkit-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -ms-linear-gradient(0deg, #e66587 0%, #f09458 100%);
+  background: #aebcdc;
 }
 
 .p1-gradient-color, .single-feature .icon span {
-  background: -webkit-linear-gradient(0deg, #e66587, #f09458);
+  background: #aebcdc;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -2492,9 +2487,6 @@ footer .copy-right-text a {
   position: absolute;
   z-index: 1;
   content: "";
-  background-image: -moz-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -webkit-linear-gradient(0deg, #e66587 0%, #f09458 100%);
-  background-image: -ms-linear-gradient(0deg, #e66587 0%, #f09458 100%);
   width: 100%;
   height: 100%;
   opacity: 0;
