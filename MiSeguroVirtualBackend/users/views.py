@@ -145,6 +145,8 @@ class PasswordCreateView(TemplateView):
         token = request.GET.get('token', None)
         if token is not None:
             try:
+                print (token)
+                print (User.objects.filter(token=token))
                 user = User.objects.filter(token=token).first()
                 return render(
                     request,
@@ -165,7 +167,8 @@ class PasswordCreateView(TemplateView):
         try:
             new_password_1 = request.POST.get('new_password_1', None)
             new_password_2 = request.POST.get('new_password_2', None)
-            user = User.objects.filter(token=request.POST['token']).first()
+            user = User.objects.filter(token=request.POST['token'])
+            print (user)
             if new_password_1 and new_password_2:
                 if new_password_1 != new_password_2:
                     messages.add_message(self.request, messages.WARNING,
@@ -195,6 +198,7 @@ class ForgetPassword(APIView):
 
     def post(self, request, format=None):
         email = request.data['email']
+        print (User.objects.filter(email=email))
         user = User.objects.filter(email=email).first()
         if user:
             # return Response({'error': 'El correo ya se encuentra registrado, por favor inicia sesión'},
