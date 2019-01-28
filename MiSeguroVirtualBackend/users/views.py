@@ -145,7 +145,7 @@ class PasswordCreateView(TemplateView):
         token = request.GET.get('token', None)
         if token is not None:
             try:
-                user = User.objects.get(token=token)
+                user = User.objects.filter(token=token).first()
                 return render(
                     request,
                     'users/password_set.html',
