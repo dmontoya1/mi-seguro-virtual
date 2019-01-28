@@ -32,6 +32,12 @@ class HomePageView(TemplateView):
     template_name = "webclient/home.html"
 
 
+
+class TestView(TemplateView):
+
+    template_name = "webclient/test.html"
+
+
 class PoliciesView(TemplateView):
 
     template_name = "webclient/policies.html"

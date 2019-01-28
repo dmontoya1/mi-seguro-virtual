@@ -170,7 +170,7 @@ class PasswordCreateView(TemplateView):
                 if new_password_1 != new_password_2:
                     messages.add_message(self.request, messages.WARNING,
                                          'Las contraseñas no coinciden')
-                    return redirect("http://%s%s?token=%s" % (current_site, reverse('password-set'),
+                    return redirect("http://%s%s?token=%s" % (current_site, reverse('users:password-set'),
                                                               request.POST['token']))
                 else:
                     user.set_password(new_password_1)
@@ -179,10 +179,10 @@ class PasswordCreateView(TemplateView):
                     messages.add_message(self.request, messages.SUCCESS,
                                          'Contraseña actualizada correctamente. Ahora puedes iniciar sesión desde la aplicación')
 
-            return redirect('/')
+            return redirect('/next')
         except User.DoesNotExist:
             messages.add_message(self.request, messages.SUCCESS, 'Usuario no existe')
-            return redirect("http://%s%s?token=%s" % (current_site, reverse('password-set'),
+            return redirect("http://%s%s?token=%s" % (current_site, reverse('users:password-set'),
                                                       request.POST['token']))
 
 
