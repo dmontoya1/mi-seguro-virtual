@@ -165,7 +165,7 @@ class PasswordCreateView(TemplateView):
         try:
             new_password_1 = request.POST.get('new_password_1', None)
             new_password_2 = request.POST.get('new_password_2', None)
-            user = User.objects.get(token=request.POST['token'])
+            user = User.objects.filter(token=request.POST['token']).first()
             if new_password_1 and new_password_2:
                 if new_password_1 != new_password_2:
                     messages.add_message(self.request, messages.WARNING,
