@@ -50,12 +50,12 @@ class UserAdmin(django_user_admin):
             'js/admin/utils_admin.js',
         )
 
-    def get_queryset(self, request):
-        """
-        Función para reemplazar el queryset por defecto de django.
-        """
-        query = super(UserAdmin, self).get_queryset(request)
-        return query.all().exclude(is_superuser=True)
+    # def get_queryset(self, request):
+    #     """
+    #     Función para reemplazar el queryset por defecto de django.
+    #     """
+    #     query = super(UserAdmin, self).get_queryset(request)
+    #     return query.all().exclude(is_superuser=True)
  
 
 @admin.register(TermsAcceptanceLogs)
