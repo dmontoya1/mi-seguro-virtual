@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -12,7 +10,6 @@ from django.dispatch import receiver
 from fcm_django.models import FCMDevice
 
 from insurances.models import UserPolicy
-from .models import User
 
 @receiver(post_save, sender=UserPolicy)
 def send_email_to_customer(sender, **kwargs):

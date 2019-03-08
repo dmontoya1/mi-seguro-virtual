@@ -8,9 +8,6 @@ from django.db import models
 from django.utils import timezone
 
 
-from users.models import User
-
-
 class Category(models.Model):
     """Almacena las categorias que tendran los seguros
     """

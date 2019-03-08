@@ -1,11 +1,19 @@
 (function($) {
     $(document).ready(function(){
-        $('.field-police_number').addClass('hidden');
-        $('.field-taker_name').addClass('hidden');
-        $('.field-taker_document').addClass('hidden');
-        $('.field-insurance_file').addClass('hidden');
-        $('.field-licensed_plate').addClass('hidden');
-
+        if ($('#id_insurance option:selected').val() === '1'){
+            $('.field-police_number').addClass('hidden');
+            $('.field-taker_name').addClass('hidden');
+            $('.field-taker_document').addClass('hidden');
+            $('.field-insurance_file').removeClass('hidden');
+            $('.field-licensed_plate').removeClass('hidden');
+        }
+        else{
+            $('.field-police_number').addClass('hidden');
+            $('.field-taker_name').addClass('hidden');
+            $('.field-taker_document').addClass('hidden');
+            $('.field-insurance_file').addClass('hidden');
+            $('.field-licensed_plate').addClass('hidden');
+        }
 
         $('#id_insurance').on('change', function(){
             if ($(this).val() === '1')
