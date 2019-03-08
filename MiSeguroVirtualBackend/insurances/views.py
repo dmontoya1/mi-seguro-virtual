@@ -2,13 +2,10 @@
 from datetime import date
 
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q
-from django.utils import timezone
 
 from rest_framework import generics, status
-from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
