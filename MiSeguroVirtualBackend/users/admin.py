@@ -2,11 +2,9 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from django.contrib import messages
 from django.contrib.auth.admin import UserAdmin as django_user_admin
 from django.contrib.auth.forms import UserChangeForm as django_change_form
 from django.utils.translation import ugettext, ugettext_lazy as _
-from .models import User
 
 
 from .models import (

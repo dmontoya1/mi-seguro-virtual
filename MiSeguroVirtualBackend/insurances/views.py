@@ -1,5 +1,5 @@
 
-from datetime import date
+from datetime import date, datetime
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -13,12 +13,20 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from users.models import User
 
-from .models import UserPolicy, Insurance, DocumentsRequest, InsuranceRequest, DomiRequestInsurer
+from .models import (
+    UserPolicy,
+    Insurance,
+    DocumentsRequest,
+    InsuranceRequest,
+    DomiRequestInsurer,
+    Metadata,
+    MetadataChoices,
+    Answer,
+)
 from .serializers import (
     UserPolicySerializer, 
     InsuranceSerializer, 
     RequestSerializer, 
-    RequestGetSerializer,
     InsuranceDetailSerializer,
     InsuranceRequestSerializer
 )
@@ -62,7 +70,6 @@ class RequestViewSet(APIView):
         
         property1 = request.data['property1']
         property2 = request.data['property2']
-        
 
         request_date = date.today()
         username = request.user
@@ -102,12 +109,12 @@ class RequestViewSet(APIView):
                 oldSoat = None
 
             sendMail(username, property1, property2, oldSoat, optionId, fisico)
-            return Response({'detail':'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
+            return Response({'detail': 'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             print ("EXception")
             print (e)
-            return Response({'detail':'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Requests(generics.ListAPIView):
@@ -195,6 +202,53 @@ class DomiRequestInsuranceCreate(APIView):
             return Response({'detail':'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class AnswerCreate(APIView):
+    """Api para crear las respuestas de un formulario de un paciente
+    """
+
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,)
+
+    def post(self, request):
+        data = request.data.copy()
+        insurance = data[0]
+        data.pop(0)
+        insurance = Insurance.objects.get(pk=insurance['insurance'])
+        user = request.user
+        insurance_request = InsuranceRequest(
+            insurance=insurance,
+            client=user,
+            request_date=datetime.now()
+        )
+        insurance_request.save()
+        print(insurance_request)
+
+        for answer in data:
+            metadata = Metadata.objects.get(pk=answer['question'])
+            if metadata.field_type != Metadata.SELECT:
+                instance = Answer(
+                    insurance_request=insurance_request,
+                    field=metadata,
+                    value=answer['value']
+                )
+                instance.save()
+            else:
+                choice = MetadataChoices.objects.get(pk=answer['value'])
+                if choice.risk.weight > risk:
+                    risk = choice.risk.weight
+                instance = Answer(
+                    insurance_request=insurance_request,
+                    field=metadata,
+                    value=str(choice.value),
+                    choice=answer['value']
+                )
+                instance.save()
+
+        response = {'request_code': insurance_request.request_code}
+
+        return Response(response, status=status.HTTP_201_CREATED)
+
+
 def sendMail(username, doc1, doc2, oldSoat, optionId, fisico):
     subject, from_email = 'Solicitud de seguro', settings.EMAIL_USER
     text_content = 'Acabas de recibir una nueva solicitud de seguro del usuario {}. El codigo del seguro es {}. Este usuario ha \
@@ -205,6 +259,7 @@ def sendMail(username, doc1, doc2, oldSoat, optionId, fisico):
     if oldSoat:
         msg.attach('Soat-antetior.jpeg', oldSoat.read(), 'image/jpeg')
     msg.send()
+
 
 def sendPaymentMail(username, request_obj, img):
     subject, from_email = 'Recibo de pago SOAT', settings.EMAIL_USER
