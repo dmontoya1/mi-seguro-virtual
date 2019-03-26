@@ -104,7 +104,6 @@ class Metadata(models.Model):
         (SELECT, 'Seleccion')
     )
 
-
     insurance = models.ForeignKey(
         Insurance, 
         verbose_name="Seguro",
@@ -128,7 +127,6 @@ class Metadata(models.Model):
     class Meta:
         verbose_name = 'Campo del seguro'
         verbose_name_plural = 'Campos de los seguros'
-
 
     def __str__(self):
         return '{} del seguro {}'.format(self.name, self.insurance.name)

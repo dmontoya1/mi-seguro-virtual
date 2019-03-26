@@ -135,6 +135,12 @@ class DomiRequestInsurerAdmin(admin.StackedInline):
     extra = 0
 
 
+class AnswerStackedAdmin(admin.StackedInline):
+
+    model = Answer
+    extra = 0
+
+
 @admin.register(PointOfSale)
 class PointOfSaleAdmin(admin.ModelAdmin):
     list_display = ['name', 'mail', 'cellphone_number', 'code']
@@ -143,7 +149,7 @@ class PointOfSaleAdmin(admin.ModelAdmin):
 @admin.register(InsuranceRequest)
 class InsuranceRequestAdmin(admin.ModelAdmin):
     list_display = ['insurance', 'client', 'status', 'request_date']
-    inlines = [DocumentsRequestAdmin, UserPolicyStackAdmin, DomiRequestInsurerAdmin]
+    inlines = [DocumentsRequestAdmin, UserPolicyStackAdmin, DomiRequestInsurerAdmin, AnswerStackedAdmin]
 
     readonly_fields = [
         'request_code', 
@@ -180,4 +186,3 @@ class UserPolicyAdmin(admin.ModelAdmin):
         js = (
             'js/admin/user_policy.js',
         )
-
