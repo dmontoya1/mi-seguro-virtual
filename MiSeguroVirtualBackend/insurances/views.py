@@ -112,8 +112,8 @@ class RequestViewSet(APIView):
             return Response({'detail': 'Solicitud creada exitosamente'}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            print ("EXception")
-            print (e)
+            print("EXception")
+            print(e)
             return Response({'detail': 'Ha ocurrido un error al crear la solicitud'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -221,28 +221,29 @@ class AnswerCreate(APIView):
             request_date=datetime.now()
         )
         insurance_request.save()
-        print(insurance_request)
 
         for answer in data:
             metadata = Metadata.objects.get(pk=answer['question'])
             if metadata.field_type != Metadata.SELECT:
-                instance = Answer(
+                instance = Answer.objects.create(
                     insurance_request=insurance_request,
                     field=metadata,
                     value=answer['value']
                 )
-                instance.save()
+            elif metadata.field_type == Metadata.IMAGE:
+                instance = Answer.objects.create(
+                    insurance_request=insurance_request,
+                    field=metadata,
+                    image=answer['value']
+                )
             else:
                 choice = MetadataChoices.objects.get(pk=answer['value'])
-                if choice.risk.weight > risk:
-                    risk = choice.risk.weight
-                instance = Answer(
+                instance = Answer.objects.create(
                     insurance_request=insurance_request,
                     field=metadata,
                     value=str(choice.value),
                     choice=answer['value']
                 )
-                instance.save()
 
         response = {'request_code': insurance_request.request_code}
 
