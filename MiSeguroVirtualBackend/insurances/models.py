@@ -393,8 +393,21 @@ class Answer(models.Model):
     value = models.TextField(
         verbose_name="Respueta",
         help_text='Esta respuesta puede ser de texto abierto, un numero, un booleano,\
-            o un id de una respuesta')
-    choice = models.CharField("Id de la respuesta", max_length=255, blank=True, null=True)
+            o un id de una respuesta',
+        null=True,
+        blank=True
+    )
+    choice = models.CharField(
+        "Id de la respuesta",
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    image = models.ImageField(
+        'Imágen',
+        upload_to='Solicitudes/imagenes',
+        blank=True, null=True
+    )
     
     class Meta:
         verbose_name = "Respuesta"
